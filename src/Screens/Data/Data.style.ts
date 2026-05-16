@@ -1,27 +1,38 @@
 import { StyleSheet } from "react-native";
 
-const C = {
-  bg: "#FFFDF7",
-  bgWarm: "#FFF9ED",
-  bgCard: "#FFFFFF",
-  bgGray: "#F5F3EE",
+// ─── Theme Palette ────────────────────────────────────────────────────────────
+// Identical to Home screen: peach gradient, warm card surfaces, orange accents
+// Primary: #F47B20 | Cards: #FFFAF6 | Borders: #F0DED0 | Shadow: #F47B20
 
-  textDark: "#0F1923",
-  text: "#1B2838",
-  textSec: "#5A6B7E",
-  textLight: "#9CA8B7",
+export const GRADIENT = {
+  top: "#FFE0C2",
+  mid: "#FFF0E4",
+  bottom: "#FFFFFF",
+};
+
+const C = {
+  bg: "#FFFFFF",
+  bgCard: "#FFFAF6",
+  bgCardAlt: "#FFF5EC",
+  bgGray: "#F5EDE0",
+  bgPeach: "#FFE0C2",
+
+  textDark: "#0F1A22",
+  text: "#1C2B36",
+  textSec: "#7A8A98",
+  textLight: "#B0BECA",
   textOnDark: "#FFFFFF",
 
-  primary: "#F5A623",
-  primaryLight: "#FFF8EC",
-  primaryMuted: "#FFE8C2",
+  primary: "#F47B20",
+  primaryDark: "#D96A12",
+  primaryLight: "#FFF3E8",
+  primaryMuted: "#FFE0C2",
 
-  secondary: "#1B2838",
-  accent: "#FF6B35",
+  secondary: "#1C2B36",
 
-  border: "#EDE8DF",
-  borderLight: "#F5F0E8",
-  divider: "#F0EBE3",
+  border: "#F0DED0",
+  borderLight: "#FAF0E8",
+  divider: "#F5E8DC",
 
   success: "#2ECC71",
   error: "#EF4444",
@@ -30,30 +41,34 @@ const C = {
 };
 
 export const dataStyles = StyleSheet.create({
-  // ─── Shell ─────────────────────────────────────────────────────
+
+  // ─── Shell ───────────────────────────────────────────────────────────────
   container: {
     flex: 1,
-    backgroundColor: C.bg,
+    backgroundColor: C.bgPeach,
   },
   body: {
     flex: 1,
+    backgroundColor: C.bg,
   },
   contentContainer: {
     paddingHorizontal: 16,
     paddingBottom: 110,
+    paddingTop: 8,
   },
 
-  // ─── Header ────────────────────────────────────────────────────
+  // ─── Header ──────────────────────────────────────────────────────────────
   headerContainer: {
     paddingHorizontal: 20,
     paddingTop: 8,
-    paddingBottom: 8,
+    paddingBottom: 20,
+    backgroundColor: C.bgPeach,
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: "800",
+    fontWeight: "900",
     color: C.textDark,
-    letterSpacing: -0.5,
+    letterSpacing: -1,
   },
   headerSubtitle: {
     fontSize: 14,
@@ -62,17 +77,148 @@ export const dataStyles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  // ─── Weight Progress Card ──────────────────────────────────────
+  // ─── Section Card ────────────────────────────────────────────────────────
+  section: {
+    backgroundColor: C.bgCard,
+    borderRadius: 28,
+    padding: 22,
+    marginTop: 12,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: C.border,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 17,
+    fontWeight: "800",
+    color: C.textDark,
+    letterSpacing: -0.3,
+  },
+  sectionSubtitle: {
+    fontSize: 13,
+    color: C.textSec,
+    marginTop: 2,
+  },
+
+  // ─── Data Cards ──────────────────────────────────────────────────────────
+  dataCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 10,
+    elevation: 2,
+  },
+  dataCardLeft: {
+    flex: 1,
+  },
+  dataCardLabel: {
+    fontSize: 11,
+    color: C.primary,
+    fontWeight: "700",
+    marginBottom: 4,
+    textTransform: "uppercase",
+    letterSpacing: 1.2,
+  },
+  dataCardValue: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: C.textDark,
+    letterSpacing: -0.5,
+  },
+  dataCardUnit: {
+    fontSize: 14,
+    color: C.textLight,
+    fontWeight: "500",
+  },
+  updateButton: {
+    backgroundColor: C.primary,
+    paddingHorizontal: 22,
+    paddingVertical: 11,
+    borderRadius: 50,
+    minWidth: 80,
+    alignItems: "center",
+    shadowColor: "#D96A12",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  updateButtonText: {
+    color: C.textOnDark,
+    fontSize: 13,
+    fontWeight: "700",
+    letterSpacing: 0.2,
+  },
+
+  // ─── BMI Card ────────────────────────────────────────────────────────────
+  bmiCard: {
+    borderRadius: 18,
+    padding: 18,
+    elevation: 2,
+  },
+  bmiHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  bmiScore: {
+    fontSize: 40,
+    fontWeight: "800",
+    color: C.textDark,
+    letterSpacing: -1,
+  },
+  bmiCategory: {
+    fontSize: 13,
+    fontWeight: "700",
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 20,
+    overflow: "hidden",
+  },
+  bmiDescription: {
+    fontSize: 13,
+    color: C.textSec,
+    lineHeight: 20,
+    marginTop: 8,
+  },
+  bmiScale: {
+    flexDirection: "row",
+    height: 8,
+    borderRadius: 6,
+    overflow: "hidden",
+    marginTop: 14,
+    gap: 3,
+  },
+  bmiScaleSegment: {
+    flex: 1,
+    borderRadius: 6,
+  },
+
+  // ─── Weight Progress Card ─────────────────────────────────────────────────
   weightProgressCard: {
     backgroundColor: C.bgCard,
-    borderRadius: 24,
-    marginTop: 16,
-    padding: 20,
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 16,
-    elevation: 4,
+    borderRadius: 28,
+    marginTop: 12,
+    padding: 22,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: C.border,
   },
   progressHeader: {
     flexDirection: "row",
@@ -81,17 +227,20 @@ export const dataStyles = StyleSheet.create({
     marginBottom: 20,
   },
   progressTitle: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "800",
     color: C.textDark,
+    letterSpacing: -0.3,
   },
   trendBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: `${C.success}15`,
+    backgroundColor: "#E8FBF2",
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 14,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#B8F0D8",
   },
   trendText: {
     fontSize: 12,
@@ -121,6 +270,7 @@ export const dataStyles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "800",
     color: C.textDark,
+    letterSpacing: -0.5,
   },
   weightUnit: {
     fontSize: 14,
@@ -132,163 +282,50 @@ export const dataStyles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   progressBar: {
-    height: 8,
+    height: 10,
     backgroundColor: C.borderLight,
-    borderRadius: 4,
+    borderRadius: 6,
     overflow: "hidden",
   },
   progressBarFill: {
     height: "100%",
     backgroundColor: C.primary,
-    borderRadius: 4,
+    borderRadius: 6,
   },
   progressPercentage: {
-    fontSize: 13,
+    fontSize: 12,
     color: C.primary,
     fontWeight: "700",
     textAlign: "center",
     marginTop: 8,
   },
 
-  // ─── Section Styles ────────────────────────────────────────────
-  section: {
-    backgroundColor: C.bgCard,
-    borderRadius: 24,
-    padding: 20,
-    marginTop: 16,
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 16,
-    elevation: 4,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 17,
-    fontWeight: "800",
-    color: C.textDark,
-  },
-  sectionSubtitle: {
-    fontSize: 13,
-    color: C.textSec,
-    marginTop: 2,
-  },
-
-  // ─── Data Cards ────────────────────────────────────────────────
-  dataCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+  // ─── Note Card ───────────────────────────────────────────────────────────
+  noteCard: {
     borderRadius: 16,
-    padding: 16,
-    marginBottom: 10,
-    backgroundColor: C.bgWarm,
-    borderWidth: 1,
-    borderColor: C.borderLight,
+    padding: 8,
+    marginTop: 16,
   },
-  dataCardLeft: {
-    flex: 1,
-  },
-  dataCardLabel: {
-    fontSize: 12,
-    color: C.textSec,
-    fontWeight: "700",
-    marginBottom: 4,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-  },
-  dataCardValue: {
-    fontSize: 26,
-    fontWeight: "800",
-    color: C.textDark,
-  },
-  dataCardUnit: {
-    fontSize: 14,
-    color: C.textLight,
+  noteText: {
+    fontSize: 9,
+    color: "black",
+    lineHeight: 20,
     fontWeight: "500",
   },
-  updateButton: {
-    backgroundColor: C.secondary,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 50,
-    minWidth: 80,
-    alignItems: "center",
-    shadowColor: C.secondary,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  updateButtonText: {
-    color: C.textOnDark,
-    fontSize: 13,
-    fontWeight: "700",
-  },
 
-  // ─── BMI Card ──────────────────────────────────────────────────
-  bmiCard: {
-    borderRadius: 16,
-    padding: 16,
-    backgroundColor: C.bgWarm,
-    borderWidth: 1,
-    borderColor: C.borderLight,
-  },
-  bmiHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  bmiScore: {
-    fontSize: 38,
-    fontWeight: "800",
-    color: C.textDark,
-    letterSpacing: -0.5,
-  },
-  bmiCategory: {
-    fontSize: 13,
-    fontWeight: "700",
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 14,
-    overflow: "hidden",
-  },
-  bmiDescription: {
-    fontSize: 13,
-    color: C.textSec,
-    lineHeight: 20,
-    marginTop: 8,
-  },
-  bmiScale: {
-    flexDirection: "row",
-    height: 8,
-    borderRadius: 4,
-    overflow: "hidden",
-    marginTop: 14,
-    gap: 3,
-  },
-  bmiScaleSegment: {
-    flex: 1,
-    borderRadius: 4,
-  },
-
-  // ─── Nutrition Overview ────────────────────────────────────────
+  // ─── Nutrition Overview Card ──────────────────────────────────────────────
   nutritionOverviewCard: {
     backgroundColor: C.bgCard,
-    borderRadius: 24,
-    padding: 20,
-    marginTop: 16,
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 16,
-    elevation: 4,
+    borderRadius: 28,
+    padding: 22,
+    marginTop: 12,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: C.border,
   },
   nutritionGrid: {
     flexDirection: "row",
@@ -298,32 +335,33 @@ export const dataStyles = StyleSheet.create({
   nutritionItem: {
     flex: 1,
     minWidth: "48%",
-    backgroundColor: C.bgWarm,
-    borderRadius: 16,
+    backgroundColor: C.bgCardAlt,
+    borderRadius: 18,
     padding: 14,
     borderWidth: 1,
-    borderColor: C.borderLight,
+    borderColor: C.border,
   },
   nutritionIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 13,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 8,
+    marginBottom: 10,
   },
   nutritionLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: C.textSec,
     fontWeight: "700",
     marginBottom: 4,
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
   },
   nutritionValue: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "800",
     color: C.textDark,
+    letterSpacing: -0.5,
   },
   nutritionUnit: {
     fontSize: 12,
@@ -331,74 +369,60 @@ export const dataStyles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  // ─── Note Card ─────────────────────────────────────────────────
-  noteCard: {
-    backgroundColor: C.primaryLight,
-    borderRadius: 14,
-    padding: 14,
-    marginTop: 14,
-    borderWidth: 1,
-    borderColor: C.primaryMuted,
-  },
-  noteText: {
-    fontSize: 13,
-    color: C.textSec,
-    lineHeight: 20,
-    fontWeight: "500",
-  },
-
-  // ─── Modal ─────────────────────────────────────────────────────
+  // ─── Modal ───────────────────────────────────────────────────────────────
   modalOverlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(15, 25, 35, 0.5)",
+    backgroundColor: "rgba(15, 26, 34, 0.55)",
   },
   modalContent: {
     backgroundColor: C.bgCard,
     borderRadius: 28,
-    padding: 24,
+    padding: 26,
     width: "85%",
     maxWidth: 360,
-    shadowColor: "#000",
+    shadowColor: "#F47B20",
     shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    elevation: 12,
+    shadowOpacity: 0.18,
+    shadowRadius: 28,
+    elevation: 14,
+    borderWidth: 1,
+    borderColor: C.border,
   },
   modalTitle: {
     fontSize: 22,
     fontWeight: "800",
     marginBottom: 6,
     color: C.textDark,
-    letterSpacing: -0.3,
+    letterSpacing: -0.5,
   },
   modalSubtitle: {
     fontSize: 14,
     color: C.textSec,
-    marginBottom: 20,
+    marginBottom: 22,
     lineHeight: 21,
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 22,
   },
   inputLabel: {
-    fontSize: 12,
-    color: C.textSec,
+    fontSize: 11,
+    color: C.primary,
     fontWeight: "700",
     marginBottom: 8,
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 1.2,
   },
   textInput: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderColor: C.border,
     borderRadius: 16,
     padding: 16,
     fontSize: 18,
     color: C.textDark,
     fontWeight: "700",
-    backgroundColor: C.bgWarm,
+    backgroundColor: C.bgCardAlt,
     textAlign: "center",
   },
   textInputFocused: {
@@ -419,27 +443,28 @@ export const dataStyles = StyleSheet.create({
   cancelButtonText: {
     color: C.textSec,
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   confirmButton: {
     flex: 1,
-    backgroundColor: C.secondary,
+    backgroundColor: C.primary,
     paddingVertical: 16,
     borderRadius: 50,
     alignItems: "center",
-    shadowColor: C.secondary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowColor: "#D96A12",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 14,
+    elevation: 7,
   },
   confirmButtonText: {
     color: C.textOnDark,
     fontSize: 15,
     fontWeight: "700",
+    letterSpacing: 0.3,
   },
 
-  // ─── Loading ───────────────────────────────────────────────────
+  // ─── Loading ─────────────────────────────────────────────────────────────
   loadingContainer: {
     padding: 20,
     alignItems: "center",
@@ -449,5 +474,74 @@ export const dataStyles = StyleSheet.create({
     fontSize: 14,
     color: C.textSec,
     fontWeight: "600",
+  },
+
+  // ─── Citation / Disclaimer (moved from inline in Data.tsx) ────────────────
+  citationRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 4,
+    gap: 8,
+  },
+  citationText: {
+    fontSize: 12,
+    color: C.textSec,
+    fontWeight: "500",
+    textDecorationLine: "underline",
+    flex: 1,
+  },
+
+  // Disclaimer card — collapsible dropdown
+  disclaimerCard: {
+    backgroundColor: C.bgCardAlt,
+    borderRadius: 24,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: C.border,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.07,
+    shadowRadius: 10,
+    elevation: 2,
+    overflow: "hidden",
+  },
+  // Tappable header row that toggles the dropdown
+  disclaimerTrigger: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 18,
+  },
+  disclaimerTriggerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    flex: 1,
+  },
+  disclaimerTitle: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: C.textDark,
+  },
+  // Expanded content area — only visible when open
+  disclaimerBody: {
+    paddingHorizontal: 18,
+    paddingBottom: 16,
+    borderTopWidth: 1,
+    borderTopColor: C.border,
+  },
+  disclaimerText: {
+    fontSize: 12,
+    color: C.textSec,
+    lineHeight: 19,
+    marginTop: 14,
+    marginBottom: 12,
+  },
+  sourcesContainer: {
+    borderTopWidth: 1,
+    borderTopColor: C.border,
+    paddingTop: 8,
+    gap: 2,
   },
 });

@@ -14,22 +14,22 @@ export const IMAGE_PICKER_OPTIONS = {
 };
 
 export const IMAGE_MANIPULATION_OPTIONS = {
-  RESIZE_WIDTH: 2048,
-  PRIMARY_COMPRESS: 0.9,
-  FALLBACK_COMPRESS: 0.85,
+  RESIZE_WIDTH: 1200,        // smaller max width — good for food photos
+  PRIMARY_COMPRESS: 0.75,    // 75% quality — noticeably smaller, still looks great
+  FALLBACK_COMPRESS: 0.65,   // 65% fallback
 };
 
 export const OPTION_CONFIGS = {
   CAMERA: {
-    title: "Take a Photo",
-    subtitle: "Capture your meal with camera",
+    title: "Camera",
+    subtitle: "Take a picture of your meal",
     icon: "camera",
     iconColor: "#3B82F6",
     iconBgColor: "#DBEAFE",
   },
   GALLERY: {
-    title: "Choose from Gallery",
-    subtitle: "Select an existing photo",
+    title: "Gallery",
+    subtitle: "Pick an existing picture",
     icon: "images",
     iconColor: "#10B981",
     iconBgColor: "#DCFCE7",
@@ -39,7 +39,6 @@ export const OPTION_CONFIGS = {
 export const UI_TEXT = {
   ANALYZING: "Analyzing image...",
   IMAGE_SELECTED: "Image selected",
-  ANALYZING_NUTRITION: "Analyzing nutrition...",
 } as const;
 
 export const ALERT_MESSAGES = {

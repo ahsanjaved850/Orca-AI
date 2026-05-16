@@ -1,4 +1,4 @@
-# 🥗BiteLens AI
+# 🥗Orca AI
 
 > **Your AI-powered nutrition companion** snap a photo of any meal and instantly get a full nutritional breakdown, track your daily macros, and stay on top of your health goals.
 
@@ -6,7 +6,7 @@
 
 ## 📱 Overview
 
-BiteLens AI is a cross-platform mobile application built with **React Native (Expo)** that combines AI-powered meal analysis with a clean, intuitive nutrition tracking experience. Users simply photograph their food, and the app uses a backend AI model (via Supabase Edge Functions) to identify the meal, estimate its nutritional content, and log everything automatically.
+Orca AI is a cross-platform mobile application built with **React Native (Expo)** that combines AI-powered meal analysis with a clean, intuitive nutrition tracking experience. Users simply photograph their food, and the app uses a backend AI model (via Supabase Edge Functions) to identify the meal, estimate its nutritional content, and log everything automatically.
 
 ---
 

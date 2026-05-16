@@ -1,9 +1,11 @@
+import { NUTRITION_ICONS } from "@/src/Screens/Home/Home.static";
 export interface NutrientConfig {
   label: string;
   value: string;
   icon: string;
   iconColor: string;
   iconBgColor: string;
+  iconKey: keyof typeof NUTRITION_ICONS;
 }
 
 export const NUTRIENTS_CONFIG: Omit<NutrientConfig, "value">[] = [
@@ -12,18 +14,21 @@ export const NUTRIENTS_CONFIG: Omit<NutrientConfig, "value">[] = [
     icon: "ice-cream-outline",
     iconColor: "#E11D48",
     iconBgColor: "#FDE2E4",
+    iconKey: "sugar",
   },
   {
     label: "Sodium",
     icon: "diamond",
     iconColor: "#4F46E5",
     iconBgColor: "#E0E7FF",
+    iconKey: "sodium",
   },
   {
     label: "Fiber",
     icon: "leaf",
     iconColor: "#059669",
     iconBgColor: "#D1FAE5",
+    iconKey: "fiber",
   },
 ];
 
@@ -34,6 +39,7 @@ export const MACROS_CONFIG = [
     iconColor: "#EF4444",
     iconBgColor: "#FEE2E2",
     key: "protein",
+    iconKey: "protein" as keyof typeof NUTRITION_ICONS,
   },
   {
     label: "Carbs",
@@ -41,6 +47,7 @@ export const MACROS_CONFIG = [
     iconColor: "#3B82F6",
     iconBgColor: "#DBEAFE",
     key: "carbs",
+    iconKey: "carbs" as keyof typeof NUTRITION_ICONS,
   },
   {
     label: "Fats",
@@ -48,6 +55,7 @@ export const MACROS_CONFIG = [
     iconColor: "#F59E0B",
     iconBgColor: "#FEF3C7",
     key: "fat",
+    iconKey: "fat" as keyof typeof NUTRITION_ICONS,
   },
 ] as const;
 

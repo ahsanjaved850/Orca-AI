@@ -1,5 +1,8 @@
 export interface LoginScreenProps {
   onLogin: () => void;
+  // "signin" — shows only login form, no signup toggle
+  // "signup" — shows only signup form, no signin toggle
+  mode?: "signin" | "signup";
 }
 
 export interface ValidationErrors {
@@ -31,23 +34,23 @@ export const PLACEHOLDERS = {
 } as const;
 
 export const FORM_TITLES = {
-  SIGN_IN: "Welcome Back",
+  SIGN_IN: "Log In",
   SIGN_UP: "Create Account",
 } as const;
 
 export const FORM_SUBTITLES = {
-  SIGN_IN: "Sign in to continue your journey",
+  SIGN_IN: "",
   SIGN_UP: "Sign up to start your wellness journey",
 } as const;
 
 export const BUTTON_LABELS = {
-  SIGN_IN: "Sign In",
+  SIGN_IN: "Log In",
   SIGN_UP: "Create Account",
 } as const;
 
 export const TOGGLE_TEXTS = {
   TO_SIGN_IN: "Already have an account?",
-  TO_SIGN_UP: "New to GreenBite AI?",
+  TO_SIGN_UP: "New to Orca?",
 } as const;
 
 export const TOGGLE_LINKS = {
@@ -74,7 +77,7 @@ export const ALERT_MESSAGES = {
 } as const;
 
 export const APP_INFO = {
-  NAME: "BiteLens",
+  NAME: "Orca",
   TAGLINE: "Your AI Nutrition Assistant",
 } as const;
 

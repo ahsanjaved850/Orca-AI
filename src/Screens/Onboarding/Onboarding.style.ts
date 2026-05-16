@@ -1,62 +1,60 @@
-import {
-  Dimensions,
-  StyleSheet
-} from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
 // ─── Eato-inspired Color Palette ───────────────────────────────────
 export const COLORS = {
-  // Primary warm palette
-  primary: "#F5A623", // Warm amber/orange (Eato accent)
-  primaryDark: "#E8951A",
-  primaryLight: "#FFF8EC", // Very light warm cream
-  primaryMuted: "#FFE8C2",
+  // Primary — matches app-wide theme exactly
+  primary: "#F47B20", // brand orange
+  primaryDark: "#D96A12",
+  primaryLight: "#FFF3E8",
+  primaryMuted: "#FFE0C2",
 
   // Secondary
-  secondary: "#1B2838", // Dark navy (buttons, text)
+  secondary: "#1C2B36", // dark navy
   secondaryLight: "#2C3E50",
 
-  // Accent colors
-  accent: "#FF6B35", // Bold orange for highlights
-  accentGreen: "#4CAF50",
-  accentRed: "#FF4757",
-  accentBlue: "#2196F3",
+  // Accent
+  accent: "#F47B20",
+  accentGreen: "#2ECC71",
+  accentRed: "#EF4444",
+  accentBlue: "#3B82F6",
 
-  // Background spectrum
-  background: "#FFFDF7", // Warm off-white
-  backgroundWarm: "#FFF9ED", // Slightly warmer
-  backgroundCard: "#FFFFFF",
-  backgroundGradientTop: "#FFF4D6", // Yellow gradient top
-  backgroundGradientBottom: "#FFFDF7",
-  backgroundGray: "#F5F3EE",
+  // Backgrounds — warm off-white surfaces
+  background: "#FFFFFF",
+  backgroundWarm: "#FFF5EC",
+  backgroundCard: "#FFFAF6", // warm off-white card surface
+  backgroundGradientTop: "#FFE0C2", // peach — matches app gradient top
+  backgroundGradientMid: "#FFF0E4", // warm cream mid
+  backgroundGradientBottom: "#FFFFFF",
+  backgroundGray: "#F5EDE0", // warm gray
 
   // Text hierarchy
-  text: "#1B2838",
-  textSecondary: "#5A6B7E",
-  textLight: "#9CA8B7",
-  textDark: "#0F1923",
+  text: "#1C2B36",
+  textSecondary: "#7A8A98",
+  textLight: "#B0BECA",
+  textDark: "#0F1A22",
   textOnDark: "#FFFFFF",
-  textAccent: "#F5A623",
+  textAccent: "#F47B20",
   textGreen: "#2ECC71",
 
-  // UI elements
-  border: "#EDE8DF",
-  borderLight: "#F5F0E8",
-  borderFocused: "#F5A623",
-  divider: "#F0EBE3",
+  // UI elements — warm peach-tinted borders
+  border: "#F0DED0",
+  borderLight: "#FAF0E8",
+  borderFocused: "#F47B20",
+  divider: "#F5E8DC",
 
-  // Status colors
+  // Status
   success: "#2ECC71",
-  error: "#FF4757",
-  warning: "#F5A623",
-  info: "#2196F3",
+  error: "#EF4444",
+  warning: "#F59E0B",
+  info: "#3B82F6",
 
   // Base
   white: "#FFFFFF",
   black: "#000000",
-  overlay: "rgba(27, 40, 56, 0.06)",
-  overlayDark: "rgba(27, 40, 56, 0.5)",
+  overlay: "rgba(244, 123, 32, 0.06)", // orange-tinted overlay
+  overlayDark: "rgba(15, 26, 34, 0.5)",
 };
 
 // ─── Spacing System ────────────────────────────────────────────────
@@ -154,32 +152,32 @@ export const TYPOGRAPHY = {
 // ─── Shadow System ─────────────────────────────────────────────────
 export const SHADOWS = {
   small: {
-    shadowColor: "#1B2838",
+    shadowColor: "#F47B20",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
+    shadowOpacity: 0.07,
+    shadowRadius: 6,
     elevation: 2,
   },
   medium: {
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.12,
     shadowRadius: 16,
-    elevation: 4,
+    elevation: 5,
   },
   large: {
-    shadowColor: "#1B2838",
+    shadowColor: "#F47B20",
     shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.16,
     shadowRadius: 24,
     elevation: 8,
   },
   button: {
-    shadowColor: "#1B2838",
+    shadowColor: "#D96A12",
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 6,
+    shadowOpacity: 0.35,
+    shadowRadius: 14,
+    elevation: 8,
   },
 };
 
@@ -684,36 +682,46 @@ export const onboardingLoadingStyle = StyleSheet.create({
 
 // ─── Onboarding Shell Styles ───────────────────────────────────────
 export const onboardingStyles = StyleSheet.create({
+  // Outer white wrapper — same pattern as Home/Data/Settings
+  // prevents the peach gradient showing at the bottom
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.backgroundGradientTop, // peach top inset
   },
 
-  // Top bar
+  // Top bar — sits on the peach gradient area
   topBar: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.sm,
-    backgroundColor: COLORS.background,
+    backgroundColor: "transparent",
   },
   backButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
+    backgroundColor: "rgba(255,255,255,0.85)",
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 2,
   },
   backButtonHidden: {
     opacity: 0,
   },
   backButtonText: {
-    fontSize: 22,
+    fontSize: 20,
     color: COLORS.textDark,
-    fontWeight: "600",
+    fontWeight: "700",
   },
 
-  // Progress bar (replaces dots)
+  // Progress bar — brand orange fill on warm border track
   progressBarContainer: {
     flex: 1,
     height: 6,
@@ -728,15 +736,16 @@ export const onboardingStyles = StyleSheet.create({
     borderRadius: 3,
   },
 
-  // Bottom bar
+  // Bottom bar — white background, matches scroll body
   bottomBar: {
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.md,
     paddingBottom: SPACING.lg,
     backgroundColor: COLORS.background,
   },
+  // Continue button — brand orange pill
   nextButton: {
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primary,
     paddingVertical: SPACING.md + 2,
     borderRadius: 50,
     ...SHADOWS.button,
@@ -745,7 +754,7 @@ export const onboardingStyles = StyleSheet.create({
     minHeight: 58,
   },
   button: {
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.xl,
     paddingVertical: SPACING.md,
     borderRadius: 50,
@@ -761,22 +770,21 @@ export const onboardingStyles = StyleSheet.create({
     elevation: 0,
   },
   doneButton: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.secondary,
     paddingHorizontal: SPACING.xl,
     minWidth: 160,
   },
   buttonText: {
     color: COLORS.textOnDark,
-    ...TYPOGRAPHY.bodySemibold,
     fontSize: 17,
     fontWeight: "700",
-    letterSpacing: 0.2,
+    letterSpacing: 0.3,
   },
   buttonTextDisabled: {
     color: COLORS.textLight,
   },
 
-  // Dots (kept for compatibility but progress bar is primary)
+  // Dots (compatibility)
   dotsContainer: {
     flexDirection: "row",
     alignItems: "center",

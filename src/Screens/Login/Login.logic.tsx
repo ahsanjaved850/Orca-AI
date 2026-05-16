@@ -9,10 +9,11 @@ import {
   ValidationErrors,
 } from "./Login.static";
 
-export const useLogin = ({ onLogin }: LoginScreenProps) => {
+export const useLogin = ({ onLogin, mode = "signin" }: LoginScreenProps) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [newUser, setNewUser] = useState<boolean>(false);
+  // Initialize from mode prop — signup screen starts locked to signup
+  const [newUser, setNewUser] = useState<boolean>(mode === "signup");
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [focusedField, setFocusedField] = useState<string>("");
@@ -57,11 +58,9 @@ export const useLogin = ({ onLogin }: LoginScreenProps) => {
     try {
       if (newUser) {
         await signUp(email, password);
-        Alert.alert(
-          ALERT_MESSAGES.SIGNUP_SUCCESS.title,
-          ALERT_MESSAGES.SIGNUP_SUCCESS.message,
-          [{ text: ALERT_MESSAGES.SIGNUP_SUCCESS.button }]
-        );
+        // After signup Supabase fires onAuthStateChange which handles navigation.
+        // Call onLogin so parent can also react if needed.
+        onLogin();
       } else {
         await signIn(email, password);
         onLogin();
@@ -81,7 +80,7 @@ export const useLogin = ({ onLogin }: LoginScreenProps) => {
               ? ALERT_MESSAGES.SIGNUP_FAILED.button
               : ALERT_MESSAGES.LOGIN_FAILED.button,
           },
-        ]
+        ],
       );
     } finally {
       setLoading(false);

@@ -29,7 +29,7 @@ export const presentPaywall = async (): Promise<boolean> => {
  * @param entitlementId - The entitlement identifier (default: "pro")
  */
 export const presentPaywallIfNeeded = async (
-  entitlementId: string = "BiteLens AI Premium"
+  entitlementId: string = "Orca AI Premium"
 ): Promise<boolean> => {
   try {
     const paywallResult: PAYWALL_RESULT =

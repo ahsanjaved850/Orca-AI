@@ -22,4 +22,4 @@ export const configureRevenueCat = async () => {
   }
 };
 
-export const ENTITLEMENT_ID = "BiteLens AI Premium";
+export const ENTITLEMENT_ID = "Orca AI Premium";

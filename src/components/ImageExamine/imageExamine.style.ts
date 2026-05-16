@@ -1,55 +1,130 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+
+const { width: SW } = Dimensions.get("window");
+
+// ─── Theme tokens — identical to the rest of the app ──────────────────────
+const C = {
+  bg: "#FFFFFF",
+  bgCard: "#FFFAF6",
+  bgCardAlt: "#FFF5EC",
+  bgGray: "#F5EDE0",
+
+  textDark: "#0F1A22",
+  textSec: "#7A8A98",
+  textLight: "#B0BECA",
+
+  primary: "#F47B20",
+  primaryDark: "#D96A12",
+  primaryLight: "#FFF3E8",
+  primaryMuted: "#FFE0C2",
+
+  border: "#F0DED0",
+  borderLight: "#FAF0E8",
+
+  success: "#2ECC71",
+  successLight: "#EDFBF4",
+  successBorder: "#B8F0D8",
+
+  error: "#EF4444",
+  white: "#FFFFFF",
+};
 
 export const imageExamineStyles = StyleSheet.create({
+
   container: {
-    gap: 16,
+    gap: 14,
   },
 
-  // Instruction Section
+  // ─── Instruction banner ─────────────────────────────────────────────────
+  // Warm on-brand — replaces the cold blue box
   instructionContainer: {
-    backgroundColor: "#F0F9FF",
-    borderRadius: 12,
+    backgroundColor: C.bgCardAlt,
+    borderRadius: 16,
     padding: 16,
-    marginBottom: 8,
+    marginBottom: 4,
     borderWidth: 1,
-    borderColor: "#DBEAFE",
-  },
-  instructionTitle: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: "#1A1A1A",
-    marginBottom: 6,
-  },
-  instructionText: {
-    fontSize: 13,
-    color: "#666",
-    lineHeight: 20,
-  },
-
-  // Option Buttons
-  optionButton: {
+    borderColor: C.border,
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 18,
-    paddingHorizontal: 16,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    gap: 12,
   },
-  optionButtonPressed: {
-    backgroundColor: "#F9FAFB",
-    transform: [{ scale: 0.98 }],
-  },
-
-  // Icon Container
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  instructionIconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: C.primaryLight,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 14,
+    borderWidth: 1,
+    borderColor: C.primaryMuted,
+  },
+  instructionTitle: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: C.textDark,
+    marginBottom: 3,
+    letterSpacing: -0.2,
+  },
+  instructionText: {
+    fontSize: 12,
+    color: C.textSec,
+    lineHeight: 18,
+    fontWeight: "500",
+  },
+
+  // ─── Two-card grid (Camera + Gallery) ──────────────────────────────────
+  optionsGrid: {
+    flexDirection: "row",
+    gap: 12,
+  },
+
+  // Base card — both options share this
+  optionCard: {
+    flex: 1,
+    backgroundColor: C.bgCardAlt,
+    borderRadius: 22,
+    padding: 20,
+    alignItems: "center",
+    borderWidth: 1.5,
+    borderColor: C.border,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.09,
+    shadowRadius: 12,
+    elevation: 4,
+    gap: 10,
+  },
+
+  // Camera card — primary action, slightly warmer tint
+  cameraCard: {
+    backgroundColor: C.bgCardAlt,
+    borderColor: C.border,
+    borderWidth: 1.5,
+  },
+
+  // Gallery card — secondary action
+  galleryCard: {
+    backgroundColor: C.bgCardAlt,
+  },
+
+  // Press state — physical scale down
+  optionCardPressed: {
+    transform: [{ scale: 0.96 }],
+    shadowOpacity: 0.04,
+    elevation: 1,
+  },
+
+  // 3D icon tile — lifted square with shadow
+  iconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   cameraIconContainer: {
     backgroundColor: "#DBEAFE",
@@ -58,125 +133,237 @@ export const imageExamineStyles = StyleSheet.create({
     backgroundColor: "#DCFCE7",
   },
 
-  // Option Text
-  optionTextContainer: {
-    flex: 1,
-  },
   optionTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#1A1A1A",
-    marginBottom: 4,
+    fontSize: 14,
+    fontWeight: "800",
+    color: C.textDark,
+    textAlign: "center",
     letterSpacing: -0.3,
   },
   optionSubtitle: {
-    fontSize: 13,
-    color: "#666",
-    lineHeight: 18,
+    fontSize: 11,
+    color: C.textSec,
+    textAlign: "center",
+    lineHeight: 16,
     fontWeight: "500",
   },
 
-  // Chevron
+  // ─── "Recommended" badge on camera card ─────────────────────────────────
+  recommendedBadge: {
+    backgroundColor: C.primary,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+  },
+  recommendedText: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: C.white,
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
+  },
+
+  // ─── Legacy row button (kept for compatibility) ─────────────────────────
+  optionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 18,
+    paddingHorizontal: 16,
+    backgroundColor: C.bgCard,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: C.border,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  optionButtonPressed: {
+    backgroundColor: C.bgCardAlt,
+    transform: [{ scale: 0.98 }],
+  },
+  optionTextContainer: {
+    flex: 1,
+  },
   chevronContainer: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: C.bgGray,
     alignItems: "center",
     justifyContent: "center",
   },
   chevronIcon: {
-    color: "#999",
+    color: C.textLight,
   },
 
-  // Image Preview
+  // ─── Image Preview ──────────────────────────────────────────────────────
+  // Full-width, tall — feels premium like a story card
   imagePreviewContainer: {
-    marginTop: 8,
-    alignItems: "center",
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
+    borderRadius: 24,
+    overflow: "hidden",
     borderWidth: 1.5,
-    borderColor: "#E5E7EB",
-    borderStyle: "dashed",
+    borderColor: C.border,
+    backgroundColor: C.bgCardAlt,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.12,
+    shadowRadius: 20,
+    elevation: 6,
   },
+
+  // Status bar at top of image preview
   previewHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    gap: 8,
+    backgroundColor: C.bgCard,
+    borderBottomWidth: 1,
+    borderBottomColor: C.borderLight,
+  },
+  previewStatusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: C.success,
   },
   previewLabel: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#1A1A1A",
-    marginLeft: 8,
+    fontSize: 13,
+    fontWeight: "700",
+    color: C.textDark,
+    flex: 1,
+    letterSpacing: -0.2,
   },
+
+  // Full-width image — no small square
   previewImageWrapper: {
     position: "relative",
-    borderRadius: 12,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    width: "100%",
+    height: 260,
   },
   previewImage: {
-    width: 180,
-    height: 180,
-    borderRadius: 12,
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
+
+  // Remove button — orange circle, top-right
   removeButton: {
     position: "absolute",
-    top: 8,
-    right: 8,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    top: 12,
+    right: 12,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: C.primary,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: "#C05010",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 5,
   },
+
+  // Processing overlay — warm white with orange spinner
   processingOverlay: {
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: "rgba(255, 250, 246, 0.92)",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 12,
+    gap: 14,
+  },
+  processingIconWrap: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    backgroundColor: C.primaryLight,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: C.primaryMuted,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 5,
   },
   processingText: {
-    marginTop: 12,
     fontSize: 14,
-    fontWeight: "600",
-    color: "#1A1A1A",
+    fontWeight: "700",
+    color: C.textDark,
+    letterSpacing: -0.2,
+    textAlign: "center",
+  },
+  processingSubtext: {
+    fontSize: 12,
+    color: C.textSec,
+    fontWeight: "500",
   },
 
-  // Tips Section
+  // ─── Tips banner ─────────────────────────────────────────────────────────
+  // Warm orange-tinted — replaces the yellow box
   tipsContainer: {
-    backgroundColor: "#FEF3C7",
-    borderRadius: 12,
+    backgroundColor: C.primaryLight,
+    borderRadius: 16,
     padding: 14,
-    marginTop: 8,
+    marginTop: 4,
+    borderWidth: 1,
+    borderColor: C.primaryMuted,
     borderLeftWidth: 4,
-    borderLeftColor: "#F59E0B",
+    borderLeftColor: C.primary,
+    gap: 4,
   },
   tipsTitle: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#92400E",
-    marginBottom: 6,
-    flexDirection: "row",
-    alignItems: "center",
+    fontSize: 12,
+    fontWeight: "700",
+    color: C.primary,
+    marginBottom: 4,
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
   },
   tipItem: {
     fontSize: 12,
-    color: "#92400E",
+    color: C.textSec,
     lineHeight: 18,
-    marginBottom: 4,
+    fontWeight: "500",
+  },
+
+  // ─── Cancel Button ────────────────────────────────────────────────────────
+  // Active: orange bg — clearly tappable, on-brand.
+  // Disabled (processing): grey bg — signals "not available right now".
+  cancelButton: {
+    paddingVertical: 15,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: C.primary,
+    shadowColor: "#C05010",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 5,
+    borderWidth: 0,
+  },
+  cancelButtonDisabled: {
+    backgroundColor: "#D4D8DC",   // neutral grey — clearly inactive
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: C.white,
+    letterSpacing: 0.3,
+  },
+  cancelButtonTextDisabled: {
+    color: "#9AA0A6",             // muted grey text on grey button
   },
 });
