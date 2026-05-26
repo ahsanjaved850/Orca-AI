@@ -6,10 +6,9 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { homeStyles } from "../Home/Home.style";
 import { useSetting } from "./Setting.logic";
 import {
   APP_VERSION,
@@ -43,8 +42,8 @@ export const Setting = (): JSX.Element => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor="#3B82F6"
-            colors={["#3B82F6"]}
+            tintColor="#F5A623"
+            colors={["#F5A623"]}
           />
         }
         showsVerticalScrollIndicator={false}
@@ -61,7 +60,7 @@ export const Setting = (): JSX.Element => {
           </Text>
         </View>
 
-        {/* Personal Information Section */}
+        {/* Personal Information */}
         <View style={settingStyles.section}>
           <View style={settingStyles.sectionHeader}>
             <Text style={settingStyles.sectionTitle}>
@@ -75,7 +74,7 @@ export const Setting = (): JSX.Element => {
                 <Ionicons
                   name={SETTINGS_ITEMS.FULL_NAME.icon as any}
                   size={18}
-                  color="#666"
+                  color="#5A6B7E"
                 />
               </View>
               <View style={settingStyles.settingItemContent}>
@@ -95,7 +94,7 @@ export const Setting = (): JSX.Element => {
                 <Ionicons
                   name={SETTINGS_ITEMS.AGE.icon as any}
                   size={18}
-                  color="#666"
+                  color="#5A6B7E"
                 />
               </View>
               <View style={settingStyles.settingItemContent}>
@@ -119,7 +118,7 @@ export const Setting = (): JSX.Element => {
                 <Ionicons
                   name={SETTINGS_ITEMS.GENDER.icon as any}
                   size={18}
-                  color="#666"
+                  color="#5A6B7E"
                 />
               </View>
               <View style={settingStyles.settingItemContent}>
@@ -134,7 +133,7 @@ export const Setting = (): JSX.Element => {
           </View>
         </View>
 
-        {/* Physical Details Section */}
+        {/* Physical Details */}
         <View style={settingStyles.section}>
           <View style={settingStyles.sectionHeader}>
             <Text style={settingStyles.sectionTitle}>
@@ -148,7 +147,7 @@ export const Setting = (): JSX.Element => {
                 <Ionicons
                   name={SETTINGS_ITEMS.WEIGHT.icon as any}
                   size={18}
-                  color="#666"
+                  color="#5A6B7E"
                 />
               </View>
               <View style={settingStyles.settingItemContent}>
@@ -172,7 +171,7 @@ export const Setting = (): JSX.Element => {
                 <Ionicons
                   name={SETTINGS_ITEMS.HEIGHT.icon as any}
                   size={18}
-                  color="#666"
+                  color="#5A6B7E"
                 />
               </View>
               <View style={settingStyles.settingItemContent}>
@@ -198,7 +197,7 @@ export const Setting = (): JSX.Element => {
                 <Ionicons
                   name={SETTINGS_ITEMS.GOAL_WEIGHT.icon as any}
                   size={18}
-                  color="#666"
+                  color="#5A6B7E"
                 />
               </View>
               <View style={settingStyles.settingItemContent}>
@@ -215,73 +214,6 @@ export const Setting = (): JSX.Element => {
               </Text>
             </View>
           </View>
-        </View>
-
-        {/* Support & Legal Section */}
-        <View style={settingStyles.section}>
-          <View style={settingStyles.sectionHeader}>
-            <Text style={settingStyles.sectionTitle}>
-              {SECTION_TITLES.SUPPORT_LEGAL}
-            </Text>
-          </View>
-
-          <TouchableOpacity
-            style={settingStyles.settingItem}
-            activeOpacity={0.7}
-            onPress={handleSettingItemPress}
-          >
-            <View style={settingStyles.settingItemLeft}>
-              <View style={settingStyles.settingIconContainer}>
-                <Ionicons
-                  name={SETTINGS_ITEMS.HELP_CENTER.icon as any}
-                  size={18}
-                  color="#666"
-                />
-              </View>
-              <View style={settingStyles.settingItemContent}>
-                <Text style={settingStyles.settingItemLabel}>
-                  {SETTINGS_ITEMS.HELP_CENTER.label}
-                </Text>
-                <Text style={settingStyles.settingItemValue}>
-                  {SETTINGS_ITEMS.HELP_CENTER.description}
-                </Text>
-              </View>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              style={settingStyles.chevronIcon}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={settingStyles.settingItem}
-            activeOpacity={0.7}
-            onPress={handleSettingItemPress}
-          >
-            <View style={settingStyles.settingItemLeft}>
-              <View style={settingStyles.settingIconContainer}>
-                <Ionicons
-                  name={SETTINGS_ITEMS.TERMS.icon as any}
-                  size={18}
-                  color="#666"
-                />
-              </View>
-              <View style={settingStyles.settingItemContent}>
-                <Text style={settingStyles.settingItemLabel}>
-                  {SETTINGS_ITEMS.TERMS.label}
-                </Text>
-                <Text style={settingStyles.settingItemValue}>
-                  {SETTINGS_ITEMS.TERMS.description}
-                </Text>
-              </View>
-            </View>
-            <Ionicons
-              name="chevron-forward"
-              size={20}
-              style={settingStyles.chevronIcon}
-            />
-          </TouchableOpacity>
         </View>
 
         {/* Danger Zone */}
@@ -315,13 +247,11 @@ export const Setting = (): JSX.Element => {
 
         {/* App Info */}
         <View style={settingStyles.appInfoSection}>
-          <View style={homeStyles.logo}>
-            <Image 
-              source={require("@/assets/images/nutritrack-app-icon-1024.png")} 
-              style={{ width: 50, height: 50 }}
-              resizeMode="contain"
-            />
-          </View>
+          <Image
+            source={require("@/assets/images/nutritrack-app-icon-1024.png")}
+            style={{ width: 44, height: 44, borderRadius: 12 }}
+            resizeMode="contain"
+          />
           <Text style={settingStyles.appVersion}>{APP_VERSION}</Text>
         </View>
       </ScrollView>

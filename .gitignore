@@ -33,7 +33,17 @@ yarn-error.*
 # local env files
 .env*.local
 .env
+.env.production
 
 # typescript
 *.tsbuildinfo
 *.expo-env.d.ts
+
+# generated native folders
+ios/
+ios 2/
+android/
+
+*.ipa
+*.apk
+*.aab
