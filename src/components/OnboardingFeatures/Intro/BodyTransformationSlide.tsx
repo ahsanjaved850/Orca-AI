@@ -12,49 +12,45 @@ import {
   View,
 } from "react-native";
 
-const { width: SW, height: SH } = Dimensions.get("window");
+const { width: SW } = Dimensions.get("window");
 
 // ─── 3 transformation stages ──────────────────────────────────────────────
 const STAGES = [
   {
     image: require("@/assets/images/Onboarding/trans1.png"),
     label: "Start",
-    day: "Day 0",
-    dayColor: "#EF4444", // red — beginning
+    color: "#EF4444", // red — beginning
+    tint: "#FEE2E2", // soft red bg for label pill
   },
   {
     image: require("@/assets/images/Onboarding/trans2.png"),
     label: "Progress",
-    day: "Day 15",
-    dayColor: "#F59E0B", // amber — halfway
+    color: "#F59E0B", // amber — halfway
+    tint: "#FEF3C7",
   },
   {
     image: require("@/assets/images/Onboarding/trans3.png"),
     label: "Goal",
-    day: "Day 28",
-    dayColor: "#2ECC71", // green — achieved
+    color: "#10B981", // green — achieved
+    tint: "#D1FAE5",
   },
 ] as const;
+
+// ─── Layout math ──────────────────────────────────────────────────────────
+const H_PADDING = SPACING.lg * 2;
+const ARROW_SIZE = 28;
+const GAP = 8;
+const CARD_W = Math.floor(SW - H_PADDING - ARROW_SIZE * 9 - GAP * 4);
+const CARD_H = Math.round(CARD_W * 3.2);
 
 // ─── Single image stage card ───────────────────────────────────────────────
 const StageCard: React.FC<{
   image: any;
   label: string;
-  day: string;
-  dayColor: string;
+  color: string;
+  tint: string;
   anim: Animated.Value;
-  delay: number;
-}> = ({ image, label, day, dayColor, anim, delay }) => {
-  useEffect(() => {
-    Animated.spring(anim, {
-      toValue: 1,
-      tension: 48,
-      friction: 8,
-      delay,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
+}> = ({ image, label, color, tint, anim }) => {
   return (
     <Animated.View
       style={[
@@ -68,30 +64,49 @@ const StageCard: React.FC<{
                 outputRange: [24, 0],
               }),
             },
+            {
+              scale: anim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0.95, 1],
+              }),
+            },
           ],
         },
       ]}
     >
-      {/* Image card */}
+      {/* Image card — rounded, clipped, soft shadow */}
       <View style={s.imageCard}>
         <Image source={image} style={s.bodyImage} resizeMode="cover" />
-
-        {/* Day badge — overlaid top-right on the image */}
-        <View style={[s.dayBadge, { backgroundColor: dayColor }]}>
-          <Text style={s.dayBadgeText}>{day}</Text>
-        </View>
       </View>
 
-      {/* Label below image */}
-      <Text style={s.stageLabel}>{label}</Text>
+      {/* Label pill below — tinted to match stage color */}
+      <View style={[s.labelPill, { backgroundColor: tint }]}>
+        <View style={[s.labelDot, { backgroundColor: color }]} />
+        <Text style={[s.labelText, { color }]}>{label}</Text>
+      </View>
     </Animated.View>
   );
 };
 
 // ─── Arrow between stages ──────────────────────────────────────────────────
 const Arrow: React.FC<{ anim: Animated.Value }> = ({ anim }) => (
-  <Animated.View style={[s.arrowWrap, { opacity: anim }]}>
-    <Ionicons name="chevron-forward" size={20} color={COLORS.primary} />
+  <Animated.View
+    style={[
+      s.arrowWrap,
+      {
+        opacity: anim,
+        transform: [
+          {
+            scale: anim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0.6, 1],
+            }),
+          },
+        ],
+      },
+    ]}
+  >
+    <Ionicons name="chevron-forward" size={16} color={COLORS.primary} />
   </Animated.View>
 );
 
@@ -104,16 +119,36 @@ export const BodyTransformationSlide: React.FC = () => {
   const arrowAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.stagger(100, [
+    Animated.sequence([
       Animated.spring(titleAnim, {
         toValue: 1,
         tension: 50,
         friction: 8,
         useNativeDriver: true,
       }),
+      Animated.stagger(140, [
+        Animated.spring(card1Anim, {
+          toValue: 1,
+          tension: 48,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.spring(card2Anim, {
+          toValue: 1,
+          tension: 48,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.spring(card3Anim, {
+          toValue: 1,
+          tension: 48,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+      ]),
       Animated.timing(arrowAnim, {
         toValue: 1,
-        duration: 400,
+        duration: 350,
         useNativeDriver: true,
       }),
     ]).start();
@@ -149,13 +184,11 @@ export const BodyTransformationSlide: React.FC = () => {
                 }),
               },
             ],
+            alignItems: "center",
           }}
         >
-          <Text style={s.headline}>
-            Lets make your goal a reality{"\n"}a reality
-          </Text>
-
-          <Text style={s.subtitle}>{""}</Text>
+          <Text style={s.headline}>Let's make your goal{"\n"}a reality</Text>
+          <Text style={s.subtitle}>See the transformation, step by step</Text>
         </Animated.View>
 
         {/* ── 3 stage images with arrows ── */}
@@ -163,10 +196,9 @@ export const BodyTransformationSlide: React.FC = () => {
           <StageCard
             image={STAGES[0].image}
             label={STAGES[0].label}
-            day={STAGES[0].day}
-            dayColor={STAGES[0].dayColor}
+            color={STAGES[0].color}
+            tint={STAGES[0].tint}
             anim={card1Anim}
-            delay={200}
           />
 
           <Arrow anim={arrowAnim} />
@@ -174,10 +206,9 @@ export const BodyTransformationSlide: React.FC = () => {
           <StageCard
             image={STAGES[1].image}
             label={STAGES[1].label}
-            day={STAGES[1].day}
-            dayColor={STAGES[1].dayColor}
+            color={STAGES[1].color}
+            tint={STAGES[1].tint}
             anim={card2Anim}
-            delay={350}
           />
 
           <Arrow anim={arrowAnim} />
@@ -185,10 +216,9 @@ export const BodyTransformationSlide: React.FC = () => {
           <StageCard
             image={STAGES[2].image}
             label={STAGES[2].label}
-            day={STAGES[2].day}
-            dayColor={STAGES[2].dayColor}
+            color={STAGES[2].color}
+            tint={STAGES[2].tint}
             anim={card3Anim}
-            delay={500}
           />
         </View>
       </View>
@@ -197,9 +227,6 @@ export const BodyTransformationSlide: React.FC = () => {
 };
 
 // ─── Styles ────────────────────────────────────────────────────────────────
-const CARD_W = (SW - SPACING.lg * 2 - 44 * 2 - 12 * 4) / 3; // 3 cards + 2 arrows + gaps
-const CARD_H = CARD_W * 1.55;
-
 const s = StyleSheet.create({
   root: {
     flex: 1,
@@ -213,29 +240,28 @@ const s = StyleSheet.create({
   },
 
   // ─── Header ────────────────────────────────────────────────────
-  badge: {
-    alignSelf: "center",
+  eyebrow: {
     color: COLORS.primary,
     fontSize: 11,
     fontWeight: "800",
-    letterSpacing: 1.2,
-    marginBottom: SPACING.sm,
+    letterSpacing: 1.4,
+    marginBottom: 8,
     textTransform: "uppercase",
   },
   headline: {
     color: COLORS.textDark,
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     letterSpacing: -0.8,
     lineHeight: 36,
-    marginBottom: SPACING.sm,
+    marginBottom: 8,
     textAlign: "center",
   },
   subtitle: {
     color: COLORS.textSecondary,
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "500",
-    lineHeight: 22,
+    lineHeight: 20,
     marginBottom: SPACING.xl,
     textAlign: "center",
   },
@@ -243,92 +269,94 @@ const s = StyleSheet.create({
   // ─── Stages row ────────────────────────────────────────────────
   stagesRow: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "center",
     width: "100%",
-    gap: 6,
+    gap: GAP,
+    marginTop: SPACING.md,
   },
 
-  // Single stage wrapper
+  // Single stage wrapper — relative parent for badge absolute positioning
   stageWrap: {
     alignItems: "center",
-    gap: 10,
+    width: CARD_W,
   },
 
-  // Image card — warm off-white surface, orange border, shadow
+  // Image card — rounded, clipped so image respects corners, soft shadow
   imageCard: {
-    width: 105,
-    height: 350,
-    elevation: 5,
-    marginTop: 16,
+    width: CARD_W,
+    height: CARD_H,
+
+    // iOS shadow
+
+    // Android
+    elevation: 6,
+    // subtle border for definition on light bg
   },
   bodyImage: {
     width: "100%",
     height: "100%",
   },
 
-  // Day badge overlaid top-right on each image
+  // Day badge — positioned relative to stageWrap so it sits cleanly
+  // on the top-right corner of the image card without clipping
   dayBadge: {
     position: "absolute",
-    top: -10,
-    right: 8,
-    borderRadius: 20,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    top: -8,
+    right: 0,
+    borderRadius: 12,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    // pop it forward
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.18,
+    shadowRadius: 4,
+    elevation: 4,
+    // crisp white outline so it reads on any image
+    borderWidth: 2,
+    borderColor: "#FFFFFF",
   },
   dayBadgeText: {
     fontSize: 10,
     fontWeight: "800",
     color: "#FFFFFF",
-    letterSpacing: 0.3,
+    letterSpacing: 0.4,
   },
 
-  // Label below each image card
-  stageLabel: {
-    fontSize: 13,
+  // Label pill below — soft tinted bg + colored dot + colored text
+  // replaces the hard black hairline border with something cohesive
+  labelPill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    marginTop: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12,
+  },
+  labelDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  labelText: {
+    fontSize: 12,
     fontWeight: "700",
-    color: COLORS.textDark,
-    letterSpacing: -0.2,
-    borderRadius: 16,
-    borderColor: "#171717",
-    borderWidth: 1,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    letterSpacing: -0.1,
   },
 
-  // Arrow between cards
+  // Arrow between cards — sized to align with image vertical center
   arrowWrap: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: ARROW_SIZE,
+    height: ARROW_SIZE,
+    borderRadius: ARROW_SIZE / 2,
     backgroundColor: "#FFF3E8",
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
     borderColor: "#F0DED0",
-    marginBottom: 24, // align vertically with image center
-  },
-
-  // ─── Bottom note ───────────────────────────────────────────────
-  noteCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    backgroundColor: "#FFF3E8",
-    borderRadius: 16,
-    padding: 14,
-    marginTop: SPACING.xl,
-    width: "100%",
-    borderWidth: 1,
-    borderColor: "#F0DED0",
-    borderLeftWidth: 4,
-    borderLeftColor: COLORS.primary,
-  },
-  noteText: {
-    flex: 1,
-    fontSize: 13,
-    fontWeight: "600",
-    color: COLORS.textSecondary,
-    lineHeight: 19,
+    // align with image center: half of card height minus half of arrow
+    marginTop: CARD_H / 2 - ARROW_SIZE / 2,
   },
 });

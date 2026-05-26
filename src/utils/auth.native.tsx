@@ -1,165 +1,148 @@
-import {
-  clearOnboardingData,
-  getOnboardingData,
-} from "@/src/utils/onboardingStorage";
+import { finalizeNewAccount } from "@/backend/auth";
 import { supabase } from "@/src/utils/supabase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Purchases from "react-native-purchases";
-import { dataAnalysis } from "./dataAnalysis";
+import * as AppleAuthentication from "expo-apple-authentication";
+import { Alert, Platform } from "react-native";
 
-// ─── Sign In ───────────────────────────────────────────────────────────────
-export const signIn = async (email: string, password: string) => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  if (error) throw error;
+interface AuthProps {
+  onLogin?: () => void;
+  mode?: "signin" | "signup";
+}
 
-  await AsyncStorage.setItem("session", JSON.stringify(data.session));
-
-  // Link RevenueCat to the signed-in user so their subscription follows them
-  try {
-    await Purchases.logIn(data.user.id);
-  } catch (e) {
-    console.warn("RevenueCat logIn failed (sign in):", e);
+export function Auth({ onLogin, mode = "signin" }: AuthProps) {
+  if (Platform.OS !== "ios") {
+    return null;
   }
 
-  return data.user;
-};
+  const isSignup = mode === "signup";
 
-// ─── Sign Up ───────────────────────────────────────────────────────────────
-// Complete flow — everything happens here before the user reaches Home:
-//
-//  1. Create Supabase account
-//  2. Read onboarding data from AsyncStorage
-//  3. Write profile row (name, gender, goal, age, height, weight, target)
-//  4. Call dataAnalysis edge function:
-//       → edge function calls OpenAI
-//       → edge function saves BMI + macro targets to initial_details table
-//     (we do NOT save initial_details ourselves — the edge function does it)
-//  5. Mark onboarding: true on the profile
-//  6. Link RevenueCat subscription to real UUID
-//  7. Clear AsyncStorage
-//
-// The user only navigates to Home after ALL steps complete successfully.
-export const signUp = async (email: string, password: string) => {
-  // ── Step 1: Create account ─────────────────────────────────────────────
-  const { data, error } = await supabase.auth.signUp({ email, password });
-  if (error) throw error;
+  return (
+    <AppleAuthentication.AppleAuthenticationButton
+      buttonType={
+        isSignup
+          ? AppleAuthentication.AppleAuthenticationButtonType.SIGN_UP
+          : AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+      }
+      buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+      cornerRadius={50}
+      style={{ width: "100%", height: 50, borderRadius: 50 }}
+      onPress={async () => {
+        try {
+          const credential = await AppleAuthentication.signInAsync({
+            requestedScopes: [
+              AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+              AppleAuthentication.AppleAuthenticationScope.EMAIL,
+            ],
+          });
 
-  const user = data.user;
-  if (!user) throw new Error("Sign up succeeded but no user returned.");
+          if (!credential.identityToken) {
+            throw new Error("No identityToken.");
+          }
 
-  // Save session immediately — the edge function needs it to auth the request
-  if (data.session) {
-    await AsyncStorage.setItem("session", JSON.stringify(data.session));
-  }
+          // ── Authenticate with Supabase via Apple ID token ──────────────
+          const {
+            error,
+            data: { user },
+          } = await supabase.auth.signInWithIdToken({
+            provider: "apple",
+            token: credential.identityToken,
+          });
 
-  // ── Step 2: Read everything from AsyncStorage ──────────────────────────
-  const od = await getOnboardingData();
+          if (error) throw error;
+          if (!user) {
+            throw new Error(
+              "Apple authentication succeeded, but no Supabase user was returned.",
+            );
+          }
 
-  // ── Step 3: Write profile to Supabase ─────────────────────────────────
-  const { error: profileError } = await supabase.from("profile").upsert({
-    id: user.id,
-    full_name: od.full_name ?? null,
-    gender: od.gender ?? null,
-    goal: od.goal ?? null,
-    age: od.age ?? null,
-    height: od.height ?? null,
-    weight: od.weight ?? null,
-    target_weight: od.target_weight ?? null,
-    onboarding: false,
-  });
+          // ── Extract Apple's full name (only returned on first auth) ────
+          const nameParts = credential.fullName
+            ? [
+                credential.fullName.givenName,
+                credential.fullName.middleName,
+                credential.fullName.familyName,
+              ].filter(Boolean)
+            : [];
 
-  if (profileError) {
-    console.error("Profile flush failed:", profileError.message);
-    throw profileError;
-  }
+          const appleFullName =
+            nameParts.length > 0 ? nameParts.join(" ") : null;
 
-  // ── Step 4: Run edge function ──────────────────────────────────────────
-  // The edge function does two things:
-  //   a) Calls OpenAI to calculate BMI + daily calorie/macro targets
-  //   b) Saves those results directly to the initial_details table
-  // We do NOT save initial_details here — the edge function owns that write.
-  // If any data is missing we skip this — user can recalculate from Settings.
-  if (
-    od.weight &&
-    od.height &&
-    od.age &&
-    od.target_weight &&
-    od.gender &&
-    od.goal
-  ) {
-    try {
-      await dataAnalysis(
-        od.weight,
-        od.height,
-        od.age,
-        od.target_weight,
-        od.gender,
-        od.goal,
-      );
-    } catch (e) {
-      // Non-fatal — the user still gets into the app.
-      // Home will show 0 for goals until they recalculate from Settings.
-      console.warn("dataAnalysis failed during signup:", e);
-    }
-  }
+          // Apple only returns the user's full name the first time they
+          // authenticate, so persist it in Supabase auth metadata immediately.
+          if (appleFullName) {
+            const { error: updateUserError } = await supabase.auth.updateUser({
+              data: {
+                full_name: appleFullName,
+                given_name: credential.fullName?.givenName ?? null,
+                family_name: credential.fullName?.familyName ?? null,
+              },
+            });
 
-  // ── Step 5: Mark onboarding complete ──────────────────────────────────
-  // Must happen after analysis so the routing guard (useOnboardingDone)
-  // keeps the user from reaching Home if something failed earlier.
-  const { error: onboardingError } = await supabase
-    .from("profile")
-    .update({ onboarding: true })
-    .eq("id", user.id);
+            if (updateUserError) {
+              console.error(
+                "Error updating Apple user metadata:",
+                updateUserError.message,
+              );
+            }
+          }
 
-  if (onboardingError) {
-    console.warn("Onboarding flag update failed:", onboardingError.message);
-  }
+          // ── Branch: signup vs signin ───────────────────────────────────
+          if (isSignup) {
+            // First-time Apple signup → mirror the email/pw signUp() flow:
+            // flush onboarding data, run dataAnalysis, link RevenueCat, etc.
+            const fullName =
+              appleFullName ||
+              user.user_metadata?.full_name ||
+              user.user_metadata?.name ||
+              null;
 
-  // ── Step 6: Link RevenueCat purchase to permanent UUID ─────────────────
-  // User subscribed pre-signup (paywall before signup screen).
-  // logIn() transfers the subscription from anonymous ID to real UUID.
-  try {
-    await Purchases.logIn(user.id);
-  } catch (e) {
-    console.warn("RevenueCat logIn failed (sign up):", e);
-  }
+            await finalizeNewAccount(user, fullName);
+          } else {
+            // Returning Apple sign-in → just make sure the profile row exists
+            // and link RevenueCat. No onboarding-data flush — there is no
+            // onboarding data for a returning user.
+            const fullName =
+              appleFullName ||
+              user.user_metadata?.full_name ||
+              user.user_metadata?.name ||
+              null;
 
-  // ── Step 7: Clear AsyncStorage — all data is now in Supabase ──────────
-  await clearOnboardingData();
+            const { error: profileError } = await supabase
+              .from("profile")
+              .upsert(
+                {
+                  id: user.id,
+                  full_name: fullName,
+                },
+                { onConflict: "id" },
+              );
 
-  return user;
-};
+            if (profileError) throw profileError;
 
-// ─── Sign Out ──────────────────────────────────────────────────────────────
-export const signOut = async () => {
-  await AsyncStorage.removeItem("session");
-  await supabase.auth.signOut();
-  try {
-    await Purchases.logOut();
-  } catch (e) {
-    console.warn("RevenueCat logOut failed:", e);
-  }
-};
+            // Link RevenueCat for the returning user
+            try {
+              const Purchases = (await import("react-native-purchases"))
+                .default;
+              await Purchases.logIn(user.id);
+            } catch (e) {
+              console.warn("RevenueCat logIn failed (Apple signin):", e);
+            }
+          }
 
-// ─── Helpers ───────────────────────────────────────────────────────────────
-export const getSession = async () => {
-  const sessionStr = await AsyncStorage.getItem("session");
-  if (sessionStr) {
-    const session = JSON.parse(sessionStr);
-    supabase.auth.setSession(session);
-    return session;
-  }
-  return null;
-};
+          onLogin?.();
+        } catch (e: any) {
+          if (e?.code === "ERR_REQUEST_CANCELED") {
+            return;
+          }
 
-export const getCurrentUser = async () => {
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-  if (error) throw error;
-  return user?.id;
-};
+          console.error("Apple auth error:", e?.message || e);
+
+          Alert.alert(
+            isSignup ? "Apple Signup Failed" : "Apple Login Failed",
+            e?.message || "Something went wrong. Please try again.",
+            [{ text: "OK" }],
+          );
+        }
+      }}
+    />
+  );
+}

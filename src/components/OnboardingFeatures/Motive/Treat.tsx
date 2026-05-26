@@ -3,12 +3,12 @@ import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 interface MealsPerDayProps {
@@ -120,7 +120,7 @@ const s = StyleSheet.create({
   // ─── Title ───────────────────────────────────────────────────────
   title: {
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -0.8,
     lineHeight: 38,

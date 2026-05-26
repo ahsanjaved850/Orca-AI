@@ -45,7 +45,6 @@ const C = {
 };
 
 export const homeStyles = StyleSheet.create({
-
   // ─── Shell ───────────────────────────────────────────────────────────────
   container: {
     flex: 1,

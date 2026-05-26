@@ -53,12 +53,6 @@ export function LoginScreen({ onLogin, mode = "signin" }: LoginScreenProps) {
     <SafeAreaView style={loginStyles.safeArea} edges={["top"]}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.gradientTop} />
 
-      {/*
-       * Full-screen gradient: soft peach-orange (#FFE0C2) at top
-       * melts through warm cream (#FFF0E4) into pure white (#FFFFFF) at bottom.
-       * locations={[0, 0.4, 1]} keeps the colour rich at the top
-       * and transitions quickly to white in the lower half.
-       */}
       <LinearGradient
         colors={[COLORS.gradientTop, COLORS.gradientMid, COLORS.gradientBottom]}
         locations={[0, 0.4, 1]}
@@ -80,12 +74,12 @@ export function LoginScreen({ onLogin, mode = "signin" }: LoginScreenProps) {
               keyboardShouldPersistTaps="handled"
             >
               <View style={loginStyles.contentContainer}>
-                {/* ── Logo — text wordmark ── */}
+                {/* Logo */}
                 <View style={loginStyles.logoContainer}>
                   <Text style={loginStyles.wordmark}>orca</Text>
                 </View>
 
-                {/* ── Form ── */}
+                {/* Form */}
                 <View style={loginStyles.formContainer}>
                   <Text style={loginStyles.formTitle}>
                     {newUser ? FORM_TITLES.SIGN_UP : FORM_TITLES.SIGN_IN}
@@ -198,19 +192,20 @@ export function LoginScreen({ onLogin, mode = "signin" }: LoginScreenProps) {
                     )}
                   </TouchableOpacity>
 
-                  {/* ── Divider + Apple — only on sign in screen ── */}
-                  {mode === "signin" && (
-                    <>
-                      <View style={loginStyles.dividerContainer}>
-                        <View style={loginStyles.dividerLine} />
-                        <Text style={loginStyles.dividerText}>or</Text>
-                        <View style={loginStyles.dividerLine} />
-                      </View>
-                      <View style={loginStyles.appleButtonContainer}>
-                        <Auth onLogin={onLogin} />
-                      </View>
-                    </>
-                  )}
+                  {/* Divider + Apple */}
+                  <View style={loginStyles.dividerContainer}>
+                    <View style={loginStyles.dividerLine} />
+                    <Text style={loginStyles.dividerText}>or</Text>
+                    <View style={loginStyles.dividerLine} />
+                  </View>
+
+                  <View style={loginStyles.appleButtonContainer}>
+                    <Auth
+                      onLogin={onLogin}
+                      mode={newUser ? "signup" : "signin"}
+                    />
+                  </View>
+
                   {/* Toggle — hidden when mode is locked to signin or signup */}
                   {!mode && (
                     <View style={loginStyles.toggleContainer}>

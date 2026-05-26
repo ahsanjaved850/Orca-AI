@@ -1,5 +1,5 @@
-import { saveOnboardingData } from "@/src/utils/onboardingStorage";
 import { COLORS, SPACING } from "@/src/Screens/Onboarding/Onboarding.style";
+import { saveOnboardingData } from "@/src/utils/onboardingStorage";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -224,7 +224,7 @@ const s = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     textAlign: "center",
     letterSpacing: -0.8,
@@ -241,6 +241,7 @@ const s = StyleSheet.create({
   // ─── Options ─────────────────────────────────────────────────────
   optionsContainer: {
     gap: SPACING.md,
+    marginTop: 180,
   },
 
   optionCard: {

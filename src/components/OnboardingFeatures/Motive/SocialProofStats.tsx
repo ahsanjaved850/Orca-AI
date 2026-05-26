@@ -1,13 +1,9 @@
-import {
-  COLORS,
-  SPACING,
-} from "@/src/Screens/Onboarding/Onboarding.style";
+import { COLORS, SPACING } from "@/src/Screens/Onboarding/Onboarding.style";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Easing,
-  Image,
   StatusBar,
   StyleSheet,
   Text,
@@ -16,9 +12,9 @@ import {
 
 // ─── Stats data ────────────────────────────────────────────────────────────
 const STATS = [
-  { value: 97,  label: "of users feel more in control\nof their eating habits"  },
-  { value: 91,  label: "of users achieved noticeable\nhealth gains in 30 days"  },
-  { value: 89,  label: "of users saw real progress\nin their very first month"  },
+  { value: 97, label: "of users feel more in control\nof their eating habits" },
+  { value: 91, label: "of users achieved noticeable\nhealth gains in 30 days" },
+  { value: 89, label: "of users saw real progress\nin their very first month" },
 ] as const;
 
 // ─── Animated counter ──────────────────────────────────────────────────────
@@ -57,12 +53,14 @@ const StatRow: React.FC<{
         !isLast && s.statRowBorder,
         {
           opacity: rowAnim,
-          transform: [{
-            translateX: rowAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [-30, 0],
-            }),
-          }],
+          transform: [
+            {
+              translateX: rowAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [-30, 0],
+              }),
+            },
+          ],
         },
       ]}
     >
@@ -80,36 +78,46 @@ const StatRow: React.FC<{
 
 // ─── Main Component ────────────────────────────────────────────────────────
 export const SocialProofStats: React.FC = () => {
-  const titleAnim  = useRef(new Animated.Value(0)).current;
-  const cardAnim   = useRef(new Animated.Value(0)).current;
+  const titleAnim = useRef(new Animated.Value(0)).current;
+  const cardAnim = useRef(new Animated.Value(0)).current;
   const footerAnim = useRef(new Animated.Value(0)).current;
-  const rowAnims   = useRef(STATS.map(() => new Animated.Value(0))).current;
+  const rowAnims = useRef(STATS.map(() => new Animated.Value(0))).current;
 
   useEffect(() => {
     // UI entrance — native driver
     Animated.stagger(140, [
       Animated.spring(titleAnim, {
-        toValue: 1, tension: 50, friction: 8, useNativeDriver: true,
+        toValue: 1,
+        tension: 50,
+        friction: 8,
+        useNativeDriver: true,
       }),
       Animated.spring(cardAnim, {
-        toValue: 1, tension: 44, friction: 8, useNativeDriver: true,
+        toValue: 1,
+        tension: 44,
+        friction: 8,
+        useNativeDriver: true,
       }),
       Animated.spring(footerAnim, {
-        toValue: 1, tension: 48, friction: 8, useNativeDriver: true,
+        toValue: 1,
+        tension: 48,
+        friction: 8,
+        useNativeDriver: true,
       }),
     ]).start();
 
     // Row slide-ins — staggered, native driver
     const t = setTimeout(() => {
-      Animated.stagger(200,
+      Animated.stagger(
+        200,
         rowAnims.map((anim) =>
           Animated.timing(anim, {
             toValue: 1,
             duration: 500,
             easing: Easing.out(Easing.cubic),
             useNativeDriver: true,
-          })
-        )
+          }),
+        ),
       ).start();
     }, 400);
 
@@ -118,7 +126,10 @@ export const SocialProofStats: React.FC = () => {
 
   return (
     <View style={s.root}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.backgroundGradientTop} />
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor={COLORS.backgroundGradientTop}
+      />
 
       <LinearGradient
         colors={[
@@ -131,19 +142,20 @@ export const SocialProofStats: React.FC = () => {
       />
 
       <View style={s.content}>
-
         {/* ── Title ── */}
         <Animated.Text
           style={[
             s.title,
             {
               opacity: titleAnim,
-              transform: [{
-                translateY: titleAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [20, 0],
-                }),
-              }],
+              transform: [
+                {
+                  translateY: titleAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [20, 0],
+                  }),
+                },
+              ],
             },
           ]}
         >
@@ -156,12 +168,14 @@ export const SocialProofStats: React.FC = () => {
             s.card,
             {
               opacity: cardAnim,
-              transform: [{
-                scale: cardAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0.94, 1],
-                }),
-              }],
+              transform: [
+                {
+                  scale: cardAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.94, 1],
+                  }),
+                },
+              ],
             },
           ]}
         >
@@ -183,12 +197,7 @@ export const SocialProofStats: React.FC = () => {
         </Animated.View>
 
         {/* ── Validation note ── */}
-        <Animated.Text
-          style={[
-            s.footnote,
-            { opacity: footerAnim },
-          ]}
-        >
+        <Animated.Text style={[s.footnote, { opacity: footerAnim }]}>
           Validated by independent surveys and real user testimonials
         </Animated.Text>
 
@@ -198,26 +207,33 @@ export const SocialProofStats: React.FC = () => {
             s.peopleWrap,
             {
               opacity: footerAnim,
-              transform: [{
-                translateY: footerAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [30, 0],
-                }),
-              }],
+              transform: [
+                {
+                  translateY: footerAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [30, 0],
+                  }),
+                },
+              ],
             },
           ]}
         >
           {/* Diverse avatars rendered as emoji crowd — replace with your image if available */}
           <View style={s.avatarRow}>
             {["👩🏿", "👨🏻‍🦱", "👩🏽", "👩🏾", "👨🏽‍🦳", "👩🏻‍🦰", "👨🏾"].map((em, i) => (
-              <View key={i} style={[s.avatar, { zIndex: 10 - i, marginLeft: i > 0 ? -14 : 0 }]}>
+              <View
+                key={i}
+                style={[
+                  s.avatar,
+                  { zIndex: 10 - i, marginLeft: i > 0 ? -14 : 0 },
+                ]}
+              >
                 <Text style={s.avatarEmoji}>{em}</Text>
               </View>
             ))}
           </View>
           <Text style={s.avatarLabel}>500K+ people tracking smarter</Text>
         </Animated.View>
-
       </View>
     </View>
   );
@@ -238,7 +254,7 @@ const s = StyleSheet.create({
   // Title
   title: {
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -0.8,
     lineHeight: 38,
@@ -304,8 +320,8 @@ const s = StyleSheet.create({
   },
   statNum: {
     fontSize: 52,
-    fontWeight: "900",
-    color: COLORS.primary,        // brand orange — replaces reference's green
+    fontWeight: "700",
+    color: COLORS.primary, // brand orange — replaces reference's green
     letterSpacing: -2,
     lineHeight: 58,
   },

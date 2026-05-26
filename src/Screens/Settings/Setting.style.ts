@@ -40,7 +40,6 @@ const C = {
 };
 
 export const settingStyles = StyleSheet.create({
-
   // ─── Shell ───────────────────────────────────────────────────────────────
   container: {
     flex: 1,
@@ -65,7 +64,7 @@ export const settingStyles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 30,
-    fontWeight: "900",
+    fontWeight: "700",
     color: C.textDark,
     letterSpacing: -1,
   },
@@ -161,7 +160,7 @@ export const settingStyles = StyleSheet.create({
   sectionTitle: {
     fontSize: 11,
     fontWeight: "700",
-    color: C.primary,               // orange section labels — matches Login/Data
+    color: C.primary, // orange section labels — matches Login/Data
     textTransform: "uppercase",
     letterSpacing: 1.2,
   },
@@ -188,7 +187,7 @@ export const settingStyles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 13,
-    backgroundColor: C.bgGray,      // warm gray — matches Home nutrient icons
+    backgroundColor: C.bgGray, // warm gray — matches Home nutrient icons
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
@@ -330,7 +329,7 @@ export const settingStyles = StyleSheet.create({
   // Text wordmark replacing image logo
   appWordmark: {
     fontSize: 26,
-    fontWeight: "900",
+    fontWeight: "700",
     color: C.textDark,
     letterSpacing: -1,
     includeFontPadding: false,

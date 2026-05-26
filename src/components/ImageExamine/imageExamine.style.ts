@@ -30,7 +30,6 @@ const C = {
 };
 
 export const imageExamineStyles = StyleSheet.create({
-
   container: {
     gap: 14,
   },
@@ -353,7 +352,7 @@ export const imageExamineStyles = StyleSheet.create({
     borderWidth: 0,
   },
   cancelButtonDisabled: {
-    backgroundColor: "#D4D8DC",   // neutral grey — clearly inactive
+    backgroundColor: "#D4D8DC", // neutral grey — clearly inactive
     shadowOpacity: 0,
     elevation: 0,
   },
@@ -364,6 +363,6 @@ export const imageExamineStyles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   cancelButtonTextDisabled: {
-    color: "#9AA0A6",             // muted grey text on grey button
+    color: "#9AA0A6", // muted grey text on grey button
   },
 });

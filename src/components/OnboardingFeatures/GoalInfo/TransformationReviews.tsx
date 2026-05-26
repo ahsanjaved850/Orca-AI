@@ -207,7 +207,7 @@ const s = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     textAlign: "center",
     letterSpacing: -0.8,
@@ -281,7 +281,7 @@ const s = StyleSheet.create({
   },
   lossValue: {
     fontSize: 16,
-    fontWeight: "900",
+    fontWeight: "700",
     color: "#FFFFFF",
     letterSpacing: -0.5,
   },

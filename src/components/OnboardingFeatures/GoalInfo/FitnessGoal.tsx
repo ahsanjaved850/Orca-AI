@@ -1,5 +1,5 @@
-import { saveOnboardingData } from "@/src/utils/onboardingStorage";
 import { COLORS, SPACING } from "@/src/Screens/Onboarding/Onboarding.style";
+import { saveOnboardingData } from "@/src/utils/onboardingStorage";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -24,19 +24,19 @@ const CONTENT = {
   },
   options: [
     {
-      label: "Gain",
+      label: "Get healthier",
       icon: require("@/assets/images/icons/gain.png"),
       accent: "#EF4444",
       accentLight: "#FEE2E2",
     },
     {
-      label: "Maintain",
+      label: "Stay in shape",
       icon: require("@/assets/images/icons/mainntain.png"),
       accent: "#3B82F6",
       accentLight: "#DBEAFE",
     },
     {
-      label: "Loose",
+      label: "Lose weight",
       icon: require("@/assets/images/icons/loose.png"),
       accent: "#2ECC71",
       accentLight: "#DCFCE7",
@@ -153,7 +153,7 @@ export const FitnessGoal: React.FC<FitnessGoalProps> = ({
                       s.optionLabel,
                       isSelected && {
                         color: COLORS.textDark,
-                        fontWeight: "800",
+                        fontWeight: "600",
                       },
                     ]}
                   >
@@ -198,7 +198,7 @@ const s = StyleSheet.create({
   },
   badge: {
     fontSize: 11,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.primary,
     letterSpacing: 1.2,
     textTransform: "uppercase",
@@ -206,7 +206,7 @@ const s = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     textAlign: "center",
     letterSpacing: -0.8,
@@ -223,6 +223,7 @@ const s = StyleSheet.create({
   // ─── Options ─────────────────────────────────────────────────────
   optionsContainer: {
     gap: SPACING.md,
+    marginTop: 180,
   },
 
   optionCard: {
@@ -250,8 +251,8 @@ const s = StyleSheet.create({
   },
 
   iconImage: {
-    width: 96,
-    height: 96,
+    width: 66,
+    height: 66,
   },
 
   optionText: {
@@ -259,8 +260,8 @@ const s = StyleSheet.create({
     paddingRight: SPACING.md,
   },
   optionLabel: {
-    fontSize: 17,
-    fontWeight: "700",
+    fontSize: 18,
+    fontWeight: "600",
     color: COLORS.textDark,
     letterSpacing: -0.3,
     marginBottom: 3,
@@ -284,7 +285,7 @@ const s = StyleSheet.create({
   checkmarkText: {
     color: "#FFFFFF",
     fontSize: 15,
-    fontWeight: "800",
+    fontWeight: "600",
   },
 
   // ─── Hint ────────────────────────────────────────────────────────

@@ -41,7 +41,6 @@ const C = {
 };
 
 export const dataStyles = StyleSheet.create({
-
   // ─── Shell ───────────────────────────────────────────────────────────────
   container: {
     flex: 1,
@@ -66,7 +65,7 @@ export const dataStyles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     color: C.textDark,
     letterSpacing: -1,
   },

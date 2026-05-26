@@ -4,18 +4,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import {
-  ActivityIndicator,
-  Image,
-  Modal,
-  RefreshControl,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Image,
+    Modal,
+    RefreshControl,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import {
-  SafeAreaView,
-  useSafeAreaInsets,
+    SafeAreaView,
+    useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { useHome } from "./Home.logic";
 import { MACRO_CARDS_CONFIG, NUTRITION_ICONS } from "./Home.static";
@@ -127,12 +127,66 @@ export const Home = () => {
             <Text
               style={{
                 fontSize: 40,
-                fontWeight: "900",
+                fontWeight: "700",
                 color: "#0F1A22",
                 letterSpacing: -2,
                 includeFontPadding: false,
                 lineHeight: 48,
               }}
+            >
+              orca
+            </Text>
+          </View>
+        </LinearGradient>
+
+        <ScrollView
+          style={homeStyles.body}
+          contentContainerStyle={homeStyles.contentContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor="#F47B20"
+              colors={["#F47B20"]}
+            />
+            <Text style={homeStyles.logoName}>BiteLens AI</Text>
+          </View>
+        </View>
+      </View>
+
+      <ScrollView
+        style={homeStyles.body}
+        contentContainerStyle={homeStyles.contentContainer}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor="#F5A623"
+            colors={["#F5A623"]}
+          />
+        }
+        showsVerticalScrollIndicator={false}
+      >
+        {/* ── Calorie Card ── */}
+        <View style={homeStyles.dailySummaryCard}>
+          {/* Card Header */}
+          <View style={homeStyles.summaryHeader}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={homeStyles.summaryTitleEmoji}>🔥</Text>
+              <Text style={homeStyles.summaryTitle}>Calorie</Text>
+            </View>
+         
+          </View>
+
+          {/* Calorie Ring — centered, clean */}
+          <View style={homeStyles.progressContainer}>
+            <View
+              style={[
+                homeStyles.calorieRingOuter,
+                {
+                  borderColor: caloriePercent > 5 ? ringColor : "#E8E4DD",
+                },
+              ]}
             >
               orca
             </Text>

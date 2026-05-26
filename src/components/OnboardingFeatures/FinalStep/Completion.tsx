@@ -1,34 +1,28 @@
 import {
-    COLORS,
-    SHADOWS,
-    SPACING,
-    TYPOGRAPHY,
+  COLORS,
+  SHADOWS,
+  SPACING,
+  TYPOGRAPHY,
 } from "@/src/Screens/Onboarding/Onboarding.style";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useRef, useState } from "react";
 import {
-    Animated,
-    Dimensions,
-    Easing,
-    StyleSheet,
-    Text,
-    View,
+  Animated,
+  Dimensions,
+  Easing,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 const { width: SW } = Dimensions.get("window");
 
-// ────────────────────────────────────────────────────────────────────
-// Props (unchanged — drop-in replacement)
-// ────────────────────────────────────────────────────────────────────
 type CompletionProps = {
   startAnimation?: boolean;
   onAnimationComplete?: () => void;
   isSubmitting?: boolean;
 };
 
-// ────────────────────────────────────────────────────────────────────
-// Config
-// ────────────────────────────────────────────────────────────────────
 const STEPS = [
   { label: "Analyzing your profile", emoji: "🔍", duration: 1200 },
   { label: "Building your calorie target", emoji: "🎯", duration: 1400 },
@@ -36,24 +30,36 @@ const STEPS = [
 ];
 
 const PROMISES = [
-  { emoji: "📸", title: "AI-powered logging", desc: "Snap a photo, get instant macros" },
-  { emoji: "📊", title: "Adaptive targets", desc: "Goals that evolve with your progress" },
-  { emoji: "🧠", title: "Smart coaching", desc: "Weekly insights, not daily guilt" },
+  {
+    emoji: "📸",
+    title: "AI-powered logging",
+    desc: "Snap a photo, get instant macros",
+  },
+  {
+    emoji: "📊",
+    title: "Adaptive targets",
+    desc: "Goals that evolve with your progress",
+  },
+  {
+    emoji: "🧠",
+    title: "Smart coaching",
+    desc: "Weekly insights, not daily guilt",
+  },
 ];
 
 const PARTICLE_COLORS = [
-  "#F47B20", "#FFB347", "#FF6B6B", "#C084FC",
-  "#FFE0C2", "#60A5FA", "#D96A12", "#F472B6",
+  "#F47B20",
+  "#FFB347",
+  "#FF6B6B",
+  "#C084FC",
+  "#FFE0C2",
+  "#60A5FA",
+  "#D96A12",
+  "#F472B6",
 ];
 
-// ────────────────────────────────────────────────────────────────────
-// Utility
-// ────────────────────────────────────────────────────────────────────
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-// ────────────────────────────────────────────────────────────────────
-// Confetti Particle
-// ────────────────────────────────────────────────────────────────────
 const ConfettiParticle: React.FC<{
   delay: number;
   angle: number;
@@ -90,18 +96,30 @@ const ConfettiParticle: React.FC<{
           outputRange: [0, 1, 0],
         }),
         transform: [
-          { translateX: anim.interpolate({ inputRange: [0, 1], outputRange: [0, tx] }) },
-          { translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [0, ty] }) },
-          { scale: anim.interpolate({ inputRange: [0, 0.5, 1], outputRange: [0, 1.2, 0.6] }) },
+          {
+            translateX: anim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, tx],
+            }),
+          },
+          {
+            translateY: anim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, ty],
+            }),
+          },
+          {
+            scale: anim.interpolate({
+              inputRange: [0, 0.5, 1],
+              outputRange: [0, 1.2, 0.6],
+            }),
+          },
         ],
       }}
     />
   );
 };
 
-// ────────────────────────────────────────────────────────────────────
-// Step Card (loading phase)
-// ────────────────────────────────────────────────────────────────────
 const StepCard: React.FC<{
   label: string;
   emoji: string;
@@ -127,7 +145,7 @@ const StepCard: React.FC<{
           duration: 1500,
           easing: Easing.linear,
           useNativeDriver: true,
-        })
+        }),
       ).start();
     }
   }, [visible]);
@@ -156,8 +174,18 @@ const StepCard: React.FC<{
         {
           opacity: entranceAnim,
           transform: [
-            { translateY: entranceAnim.interpolate({ inputRange: [0, 1], outputRange: [30, 0] }) },
-            { scale: entranceAnim.interpolate({ inputRange: [0, 1], outputRange: [0.92, 1] }) },
+            {
+              translateY: entranceAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [30, 0],
+              }),
+            },
+            {
+              scale: entranceAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0.92, 1],
+              }),
+            },
           ],
         },
       ]}
@@ -170,7 +198,11 @@ const StepCard: React.FC<{
           <Text style={[s.stepLabel, done && s.stepLabelDone]}>{label}</Text>
           <View style={s.progressTrack}>
             <Animated.View
-              style={[s.progressFill, { width: widthInterpolated }, done && s.progressFillDone]}
+              style={[
+                s.progressFill,
+                { width: widthInterpolated },
+                done && s.progressFillDone,
+              ]}
             />
             {!done && (
               <Animated.View
@@ -199,7 +231,10 @@ const StepCard: React.FC<{
               transform: [
                 {
                   scale: done
-                    ? checkAnim.interpolate({ inputRange: [0, 1], outputRange: [0.3, 1] })
+                    ? checkAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0.3, 1],
+                      })
                     : 1,
                 },
               ],
@@ -230,11 +265,9 @@ const StepCard: React.FC<{
     </Animated.View>
   );
 };
-
-// ────────────────────────────────────────────────────────────────────
-// Success Celebration
-// ────────────────────────────────────────────────────────────────────
-const SuccessCelebration: React.FC<{ onFinished: () => void }> = ({ onFinished }) => {
+const SuccessCelebration: React.FC<{ onFinished: () => void }> = ({
+  onFinished,
+}) => {
   const circleAnim = useRef(new Animated.Value(0)).current;
   const checkAnim = useRef(new Animated.Value(0)).current;
   const textAnim = useRef(new Animated.Value(0)).current;
@@ -242,10 +275,29 @@ const SuccessCelebration: React.FC<{ onFinished: () => void }> = ({ onFinished }
 
   useEffect(() => {
     Animated.sequence([
-      Animated.spring(circleAnim, { toValue: 1, tension: 40, friction: 6, useNativeDriver: true }),
-      Animated.spring(checkAnim, { toValue: 1, tension: 80, friction: 5, useNativeDriver: true }),
-      Animated.timing(textAnim, { toValue: 1, duration: 400, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
-      Animated.timing(subAnim, { toValue: 1, duration: 300, useNativeDriver: true }),
+      Animated.spring(circleAnim, {
+        toValue: 1,
+        tension: 40,
+        friction: 6,
+        useNativeDriver: true,
+      }),
+      Animated.spring(checkAnim, {
+        toValue: 1,
+        tension: 80,
+        friction: 5,
+        useNativeDriver: true,
+      }),
+      Animated.timing(textAnim, {
+        toValue: 1,
+        duration: 400,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(subAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
     ]).start(() => setTimeout(onFinished, 1000));
   }, []);
 
@@ -260,7 +312,11 @@ const SuccessCelebration: React.FC<{ onFinished: () => void }> = ({ onFinished }
   return (
     <View style={s.celebrationContainer}>
       <LinearGradient
-        colors={[COLORS.backgroundGradientTop, COLORS.backgroundGradientMid, COLORS.backgroundGradientBottom]}
+        colors={[
+          COLORS.backgroundGradientTop,
+          COLORS.backgroundGradientMid,
+          COLORS.backgroundGradientBottom,
+        ]}
         locations={[0, 0.45, 1]}
         style={StyleSheet.absoluteFill}
       />
@@ -274,7 +330,14 @@ const SuccessCelebration: React.FC<{ onFinished: () => void }> = ({ onFinished }
         style={[
           s.successCircle,
           {
-            transform: [{ scale: circleAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 1] }) }],
+            transform: [
+              {
+                scale: circleAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 1],
+                }),
+              },
+            ],
             opacity: circleAnim,
           },
         ]}
@@ -284,8 +347,18 @@ const SuccessCelebration: React.FC<{ onFinished: () => void }> = ({ onFinished }
             s.successCheck,
             {
               transform: [
-                { scale: checkAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 1] }) },
-                { rotate: checkAnim.interpolate({ inputRange: [0, 1], outputRange: ["-30deg", "0deg"] }) },
+                {
+                  scale: checkAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 1],
+                  }),
+                },
+                {
+                  rotate: checkAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ["-30deg", "0deg"],
+                  }),
+                },
               ],
               opacity: checkAnim,
             },
@@ -297,7 +370,14 @@ const SuccessCelebration: React.FC<{ onFinished: () => void }> = ({ onFinished }
       <Animated.View
         style={{
           opacity: textAnim,
-          transform: [{ translateY: textAnim.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }],
+          transform: [
+            {
+              translateY: textAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [20, 0],
+              }),
+            },
+          ],
         }}
       >
         <Text style={s.successTitle}>You're all set!</Text>
@@ -339,8 +419,8 @@ const ReadyScreen: React.FC = () => {
           friction: 9,
           delay: 400,
           useNativeDriver: true,
-        })
-      )
+        }),
+      ),
     ).start();
 
     // Footer
@@ -366,7 +446,7 @@ const ReadyScreen: React.FC = () => {
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
         }),
-      ])
+      ]),
     ).start();
   }, []);
 
@@ -379,7 +459,12 @@ const ReadyScreen: React.FC = () => {
           {
             opacity: heroAnim,
             transform: [
-              { translateY: heroAnim.interpolate({ inputRange: [0, 1], outputRange: [30, 0] }) },
+              {
+                translateY: heroAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [30, 0],
+                }),
+              },
             ],
           },
         ]}
@@ -387,10 +472,10 @@ const ReadyScreen: React.FC = () => {
         <View style={s.readyEmojiWrap}>
           <Text style={s.readyEmojiText}>🚀</Text>
         </View>
-        <Text style={s.readyTitle}>Ready to transform{"\n"}your nutrition?</Text>
-        <Text style={s.readySubtitle}>
-          Here's what Orca will build for you
+        <Text style={s.readyTitle}>
+          Ready to transform{"\n"}your nutrition?
         </Text>
+        <Text style={s.readySubtitle}>Here's what Orca will build for you</Text>
       </Animated.View>
 
       {/* Promise cards */}
@@ -438,25 +523,22 @@ const ReadyScreen: React.FC = () => {
         ]}
       >
         <Text style={s.readyFooterText}>
-          Tap{" "}
-          <Text style={s.readyFooterBold}>Get Started</Text>
-          {" "}to begin ↓
+          Tap <Text style={s.readyFooterBold}>Get Started</Text> to begin ↓
         </Text>
       </Animated.View>
     </View>
   );
 };
 
-// ────────────────────────────────────────────────────────────────────
-// Main Completion Component
-// ────────────────────────────────────────────────────────────────────
 export const Completion: React.FC<CompletionProps> = ({
   startAnimation = false,
   onAnimationComplete,
   isSubmitting = false,
 }) => {
   // Phase tracking
-  const [phase, setPhase] = useState<"ready" | "loading" | "celebration">("ready");
+  const [phase, setPhase] = useState<"ready" | "loading" | "celebration">(
+    "ready",
+  );
 
   // Cross-fade between ready → loading
   const readyOpacity = useRef(new Animated.Value(1)).current;
@@ -553,7 +635,7 @@ export const Completion: React.FC<CompletionProps> = ({
   const animateStep = (
     animatedValue: Animated.Value,
     duration: number,
-    onDone: () => void
+    onDone: () => void,
   ): Promise<void> => {
     return new Promise((resolve) => {
       Animated.sequence([
@@ -578,16 +660,18 @@ export const Completion: React.FC<CompletionProps> = ({
 
   // ── Phase: Celebration ──
   if (phase === "celebration") {
-    return (
-      <SuccessCelebration onFinished={() => onAnimationComplete?.()} />
-    );
+    return <SuccessCelebration onFinished={() => onAnimationComplete?.()} />;
   }
 
   // ── Phase: Ready + Loading (layered with cross-fade) ──
   return (
     <View style={s.container}>
       <LinearGradient
-        colors={[COLORS.backgroundGradientTop, COLORS.backgroundGradientMid, COLORS.backgroundGradientBottom]}
+        colors={[
+          COLORS.backgroundGradientTop,
+          COLORS.backgroundGradientMid,
+          COLORS.backgroundGradientBottom,
+        ]}
         locations={[0, 0.45, 1]}
         style={StyleSheet.absoluteFill}
       />
@@ -604,7 +688,10 @@ export const Completion: React.FC<CompletionProps> = ({
       {/* Loading screen (fades in after tap) */}
       {phase === "loading" && (
         <Animated.View
-          style={[s.phaseLayer, { opacity: Animated.multiply(loadingOpacity, loadingFadeOut) }]}
+          style={[
+            s.phaseLayer,
+            { opacity: Animated.multiply(loadingOpacity, loadingFadeOut) },
+          ]}
         >
           <View style={s.loadingInner}>
             {/* Hero */}
@@ -614,7 +701,12 @@ export const Completion: React.FC<CompletionProps> = ({
                 {
                   opacity: heroAnim,
                   transform: [
-                    { translateY: heroAnim.interpolate({ inputRange: [0, 1], outputRange: [30, 0] }) },
+                    {
+                      translateY: heroAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [30, 0],
+                      }),
+                    },
                   ],
                 },
               ]}
@@ -658,8 +750,8 @@ export const Completion: React.FC<CompletionProps> = ({
               {isSubmitting
                 ? "Almost there..."
                 : allDone
-                ? "Finishing up..."
-                : "This only takes a moment"}
+                  ? "Finishing up..."
+                  : "This only takes a moment"}
             </Text>
           </View>
         </Animated.View>
@@ -668,9 +760,6 @@ export const Completion: React.FC<CompletionProps> = ({
   );
 };
 
-// ────────────────────────────────────────────────────────────────────
-// Styles
-// ────────────────────────────────────────────────────────────────────
 const s = StyleSheet.create({
   /* ── Layout ── */
   container: {

@@ -2,7 +2,6 @@ import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-
 export const COLORS = {
   // Gradient endpoints — pass these into <LinearGradient colors={[...]}>
   gradientTop: "#FFE0C2",
@@ -75,7 +74,7 @@ export const loginStyles = StyleSheet.create({
   // "orca" text rendered in heavy weight — matches the brand logo style
   wordmark: {
     fontSize: 52,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -2,
     includeFontPadding: false,
@@ -93,7 +92,7 @@ export const loginStyles = StyleSheet.create({
     marginTop: 4,
   },
 
-  // Form 
+  // Form
   formContainer: {
     flex: 1,
     justifyContent: "center",
@@ -168,7 +167,7 @@ export const loginStyles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  // ─── Forgot 
+  // ─── Forgot
   forgotPasswordContainer: {
     alignItems: "flex-end",
     marginTop: 8,

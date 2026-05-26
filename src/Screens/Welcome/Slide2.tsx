@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   headlineAccent: {
     fontSize: 54,
-    fontWeight: "900",
+    fontWeight: "700",
     color: "#FC6146",
     textAlign: "center",
     letterSpacing: -1.5,

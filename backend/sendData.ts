@@ -6,11 +6,16 @@ export const updateBodyStats = async (age: string, height: string) => {
 
   const { data, error } = await supabase
     .from("profile")
-    .upsert({
-      id: userId,
-      age: age ? Number(age) : null,
-      height: height ? Number(height) : null,
-    })
+    .upsert(
+      {
+        id: userId,
+        age: age ? Number(age) : null,
+        height: height ? Number(height) : null,
+      },
+      {
+        onConflict: "id",
+      },
+    )
     .select()
     .single();
 
@@ -24,27 +29,33 @@ export const updateBodyStats = async (age: string, height: string) => {
 
 export const updateWeightStats = async (
   weight: string,
-  targetWeight: string
+  targetWeight: string,
 ) => {
   const userId = await getCurrentUser();
 
   const { data, error } = await supabase
     .from("profile")
-    .upsert({
-      id: userId,
-      weight: weight ? Number(weight) : null,
-      target_weight: targetWeight ? Number(targetWeight) : null,
-    })
+    .upsert(
+      {
+        id: userId,
+        weight: weight ? Number(weight) : null,
+        target_weight: targetWeight ? Number(targetWeight) : null,
+      },
+      {
+        onConflict: "id",
+      },
+    )
     .select()
     .single();
 
   if (error) {
-    console.error("Error saving physique:", error.message);
+    console.error("Error saving weight stats:", error.message);
     throw error;
   }
 
   return data;
 };
+
 export const sendInitialDetails = async (
   BMI: number,
   Category: string,
@@ -54,30 +65,37 @@ export const sendInitialDetails = async (
   fat: number,
   sugar: number,
   sodium: number,
-  fiber: number
+  fiber: number,
 ) => {
   const userId = await getCurrentUser();
 
   const { data, error } = await supabase
     .from("initial-details")
-    .upsert({
-      id: userId,
-      calories: calories ? Number(calories) : null,
-      carbs: carbs ? Number(carbs) : null,
-      protein: proteins ? Number(proteins) : null,
-      fat: fat ? Number(fat) : null,
-      sugar: sugar ? Number(sugar) : null,
-      sodium: sodium ? Number(sodium) : null,
-      fiber: fiber ? Number(fiber) : null,
-      bmi: BMI,
-      "bmi-category": Category,
-    })
+    .upsert(
+      {
+        id: userId,
+        calories: calories ? Number(calories) : null,
+        carbs: carbs ? Number(carbs) : null,
+        protein: proteins ? Number(proteins) : null,
+        fat: fat ? Number(fat) : null,
+        sugar: sugar ? Number(sugar) : null,
+        sodium: sodium ? Number(sodium) : null,
+        fiber: fiber ? Number(fiber) : null,
+        bmi: BMI,
+        "bmi-category": Category,
+      },
+      {
+        onConflict: "id",
+      },
+    )
     .select()
     .single();
+
   if (error) {
     console.error("Error saving initial details:", error.message);
     throw error;
   }
+
   return data;
 };
 
@@ -86,21 +104,48 @@ export const updateGender = async (gender: string) => {
 
   const { data, error } = await supabase
     .from("profile")
-    .update({ gender })
-    .eq("id", userId);
+    .upsert(
+      {
+        id: userId,
+        gender,
+      },
+      {
+        onConflict: "id",
+      },
+    )
+    .select()
+    .single();
 
-  if (error) throw error;
+  if (error) {
+    console.error("Error saving gender:", error.message);
+    throw error;
+  }
+
   return data;
 };
+
 export const updateName = async (full_name: string) => {
   const userId = await getCurrentUser();
 
   const { data, error } = await supabase
     .from("profile")
-    .update({ full_name })
-    .eq("id", userId);
+    .upsert(
+      {
+        id: userId,
+        full_name,
+      },
+      {
+        onConflict: "id",
+      },
+    )
+    .select()
+    .single();
 
-  if (error) throw error;
+  if (error) {
+    console.error("Error saving name:", error.message);
+    throw error;
+  }
+
   return data;
 };
 
@@ -109,12 +154,26 @@ export const updateGoal = async (goal: string) => {
 
   const { data, error } = await supabase
     .from("profile")
-    .update({ goal })
-    .eq("id", userId);
+    .upsert(
+      {
+        id: userId,
+        goal,
+      },
+      {
+        onConflict: "id",
+      },
+    )
+    .select()
+    .single();
 
-  if (error) throw error;
+  if (error) {
+    console.error("Error saving goal:", error.message);
+    throw error;
+  }
+
   return data;
 };
+
 export const updateDailyIntake = async (
   mealCalories: number,
   mealProtein: number,
@@ -122,12 +181,12 @@ export const updateDailyIntake = async (
   mealFat: number,
   mealSugar: number,
   mealSodium: number,
-  mealFiber: number
+  mealFiber: number,
 ) => {
   const userId = await getCurrentUser();
   const today = new Date().toISOString().split("T")[0];
 
-  // First, get today's existing intake
+  // First, get today's existing intake.
   const { data: existingData, error: fetchError } = await supabase
     .from("daily_intake")
     .select("*")
@@ -138,26 +197,32 @@ export const updateDailyIntake = async (
     .limit(1);
 
   if (fetchError) {
-    console.error("Error fetching existing intake:", fetchError);
+    console.error("Error fetching existing intake:", fetchError.message);
+    throw fetchError;
   }
 
-  // Calculate new totals
   const currentIntake =
     existingData && existingData.length > 0 ? existingData[0] : null;
 
   const newTotals = {
     id: userId,
-    total_calories: (currentIntake?.total_calories || 0) + mealCalories,
-    total_carbs: (currentIntake?.total_carbs || 0) + mealCarbs,
-    total_protein: (currentIntake?.total_protein || 0) + mealProtein,
-    total_fat: (currentIntake?.total_fat || 0) + mealFat,
-    total_sugar: (currentIntake?.total_sugar || 0) + mealSugar,
-    total_sodium: (currentIntake?.total_sodium || 0) + mealSodium,
-    total_fiber: (currentIntake?.total_fiber || 0) + mealFiber,
+    total_calories: Number(currentIntake?.total_calories || 0) + mealCalories,
+    total_carbs: Number(currentIntake?.total_carbs || 0) + mealCarbs,
+    total_protein: Number(currentIntake?.total_protein || 0) + mealProtein,
+    total_fat: Number(currentIntake?.total_fat || 0) + mealFat,
+    total_sugar: Number(currentIntake?.total_sugar || 0) + mealSugar,
+    total_sodium: Number(currentIntake?.total_sodium || 0) + mealSodium,
+    total_fiber: Number(currentIntake?.total_fiber || 0) + mealFiber,
     created_at: new Date().toISOString(),
   };
 
-  // Insert or update today's intake
+  /**
+   * This keeps your existing schema behavior:
+   * one `daily_intake` row per user based on `id`.
+   *
+   * Later, if you want real daily history, add a `date` column
+   * and change onConflict to something like "id,date".
+   */
   const { data, error } = await supabase
     .from("daily_intake")
     .upsert(newTotals, {
@@ -180,13 +245,22 @@ export const updateOnboading = async (onboarding: boolean) => {
 
   const { data, error } = await supabase
     .from("profile")
-    .upsert({
-      id: userId,
-      onboarding,
-    })
+    .upsert(
+      {
+        id: userId,
+        onboarding,
+      },
+      {
+        onConflict: "id",
+      },
+    )
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    console.error("Error updating onboarding:", error.message);
+    throw error;
+  }
+
   return data;
 };

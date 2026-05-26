@@ -1,4 +1,3 @@
-import { saveOnboardingData } from "@/src/utils/onboardingStorage";
 import {
   COLORS,
   SHADOWS,
@@ -31,6 +30,7 @@ const ITEM_H = 68;
 const PAD = ITEM_H * 3;
 const WEIGHTS = Array.from({ length: 171 }, (_, i) => 30 + i); // 30–200 kg
 const SAVE_DEBOUNCE = 1000;
+const DEFAULT_W = 70;
 
 export const TargetWeight: React.FC<TargetWeightProps> = ({
   onValidationChange,
@@ -59,8 +59,9 @@ export const TargetWeight: React.FC<TargetWeightProps> = ({
     return () => clearTimeout(t);
   }, []);
 
-  // Save to backend
+  // Update global + save to AsyncStorage
   useEffect(() => {
+    setGlobalTargetWeight(selected);
     savedRef.current = false;
     const timer = setTimeout(() => {
       try {
@@ -214,6 +215,13 @@ export const TargetWeight: React.FC<TargetWeightProps> = ({
       </View>
     </View>
   );
+};
+
+// ── Shared target weight global — read by WeightGoalCelebration ──────
+let _targetWeight = DEFAULT_W;
+export const getGlobalTargetWeight = () => _targetWeight;
+export const setGlobalTargetWeight = (w: number) => {
+  _targetWeight = w;
 };
 
 // ── Styles ─────────────────────────────────────────────────────────

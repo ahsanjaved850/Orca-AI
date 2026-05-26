@@ -2,13 +2,13 @@ import { COLORS, SPACING } from "@/src/Screens/Onboarding/Onboarding.style";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useRef } from "react";
 import {
-    Animated,
-    Dimensions,
-    Image,
-    StatusBar,
-    StyleSheet,
-    Text,
-    View,
+  Animated,
+  Dimensions,
+  Image,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 const { width: SW, height: SH } = Dimensions.get("window");
@@ -105,7 +105,7 @@ const s = StyleSheet.create({
   },
   wordmark: {
     fontSize: 36,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -1.5,
     includeFontPadding: false,
@@ -113,7 +113,7 @@ const s = StyleSheet.create({
   },
   headline: {
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     textAlign: "center",
     letterSpacing: -0.8,

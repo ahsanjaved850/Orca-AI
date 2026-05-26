@@ -3,11 +3,11 @@ import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 interface PastExperienceProps {
@@ -104,7 +104,7 @@ const s = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -0.8,
     lineHeight: 40,
@@ -172,6 +172,6 @@ const s = StyleSheet.create({
     letterSpacing: -0.3,
   },
   optionLabelSelected: {
-    fontWeight: "900",
+    fontWeight: "700",
   },
 });

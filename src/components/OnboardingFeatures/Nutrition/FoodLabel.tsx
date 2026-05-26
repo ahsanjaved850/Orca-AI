@@ -117,7 +117,7 @@ const s = StyleSheet.create({
   // ─── Title ───────────────────────────────────────────────────────
   title: {
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -0.8,
     lineHeight: 38,

@@ -149,7 +149,7 @@ const macroStyles = StyleSheet.create({
 
   value: {
     fontSize: 22,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -0.4,
   },
@@ -288,18 +288,16 @@ export const PersonalizedPlan: React.FC = () => {
             label="Protein"
             value={plan.protein}
             unit="g"
-            color="#F47B20"
+            color="#2196F3"
             delay={1000}
           />
-
           <MacroCard
             label="Carbs"
             value={plan.carbs}
             unit="g"
-            color="#1C2B36"
+            color="#8BC34A"
             delay={1150}
           />
-
           <MacroCard
             label="Fat"
             value={plan.fat}
@@ -448,7 +446,7 @@ const styles = StyleSheet.create({
 
   calValue: {
     fontSize: 58,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.white,
     letterSpacing: -2,
   },
@@ -499,7 +497,7 @@ const styles = StyleSheet.create({
 
   statValue: {
     fontSize: 30,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -0.5,
   },

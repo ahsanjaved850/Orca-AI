@@ -44,6 +44,7 @@ export function OnboardingScreen() {
     return (
       <View style={{ width }}>
         <PageComponent
+          isActive={index === currentIndex}
           onValidationChange={(isValid: boolean) =>
             handleUpdateValidation(index, isValid)
           }

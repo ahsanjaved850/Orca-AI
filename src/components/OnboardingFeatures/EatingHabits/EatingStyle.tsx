@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 30,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     textAlign: "center",
     letterSpacing: -0.8,

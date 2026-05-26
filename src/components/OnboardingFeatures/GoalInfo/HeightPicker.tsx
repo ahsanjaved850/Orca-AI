@@ -1,4 +1,3 @@
-import { saveOnboardingData } from "@/src/utils/onboardingStorage";
 import {
   COLORS,
   SHADOWS,

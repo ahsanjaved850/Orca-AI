@@ -106,7 +106,11 @@ const s = StyleSheet.create({
   },
   wordmark: {
     fontSize: 36,
+<<<<<<< HEAD
     fontWeight: "900",
+=======
+    fontWeight: "700",
+>>>>>>> 8839650 (first commit)
     color: COLORS.textDark,
     letterSpacing: -1.5,
     includeFontPadding: false,

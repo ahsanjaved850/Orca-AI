@@ -1,25 +1,17 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useRef } from "react";
-import {
-  Dimensions,
-  Image,
-  ImageSourcePropType,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import ConfettiCannon from "react-native-confetti-cannon";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
-// 🖼 Make sure these paths match your project structure.
-// If your `assets` folder lives at a different depth relative to this file,
-// only the relative `../../../../` portion needs adjustment.
-const ICON_CAMERA = require("@/assets/images/icons/camera.png");
-const ICON_PROGRESS = require("@/assets/images/icons/progress.png");
-const ICON_TARGET = require("@/assets/images/icons/target.png");
+// ─── Stats ─────────────────────────────────────────────────────────────────
+const STATS = [
+  { value: "1K+", label: "Total Users" },
+  { value: "100k+", label: "Total Food Scanned" },
+  { value: "1M+", label: "Calories Tracked" },
+] as const;
 
 interface Props {
   isActive: boolean;
@@ -27,43 +19,32 @@ interface Props {
   onLogin: () => void;
 }
 
-interface StepCardProps {
-  number: string;
-  icon: ImageSourcePropType;
-  title: string;
-  subtitle: string;
+// ─── Laurel SVG as text emoji block ────────────────────────────────────────
+// Uses the wheat emoji which looks identical to the reference laurel
+const Laurel = ({ flip = false }: { flip?: boolean }) => (
+  <Text style={[st.laurel, flip && { transform: [{ scaleX: -1 }] }]}>🌾</Text>
+);
+
+// ─── Single stat row ───────────────────────────────────────────────────────
+const StatRow: React.FC<{
+  value: string;
+  label: string;
   delay: number;
-}
-
-const StepCard: React.FC<StepCardProps> = ({
-  number,
-  icon,
-  title,
-  subtitle,
-  delay,
-}) => (
+}> = ({ value, label, delay }) => (
   <Animated.View
-    entering={FadeInUp.duration(500).delay(delay)}
-    style={styles.card}
+    entering={FadeInUp.duration(520).delay(delay)}
+    style={st.statRow}
   >
-    {/* Icon circle with small step badge */}
-    <View style={styles.iconWrap}>
-      <View style={styles.iconCircle}>
-        <Image source={icon} style={styles.iconImage} resizeMode="contain" />
-      </View>
-      <View style={styles.stepBadge}>
-        <Text style={styles.stepBadgeText}>{number}</Text>
-      </View>
+    <Laurel />
+    <View style={st.statCenter}>
+      <Text style={st.statValue}>{value}</Text>
+      <Text style={st.statLabel}>{label}</Text>
     </View>
-
-    {/* Text */}
-    <View style={styles.cardContent}>
-      <Text style={styles.cardTitle}>{title}</Text>
-      <Text style={styles.cardSubtitle}>{subtitle}</Text>
-    </View>
+    <Laurel flip />
   </Animated.View>
 );
 
+// ─── Main Component ────────────────────────────────────────────────────────
 export const Slide3: React.FC<Props> = ({
   isActive,
   onGetStarted,
@@ -75,102 +56,93 @@ export const Slide3: React.FC<Props> = ({
   useEffect(() => {
     if (isActive && !hasFiredRef.current) {
       hasFiredRef.current = true;
-      const t = setTimeout(() => {
-        confettiRef.current?.start();
-      }, 250);
+      const t = setTimeout(() => confettiRef.current?.start(), 300);
       return () => clearTimeout(t);
     }
   }, [isActive]);
 
   return (
-    <View style={styles.container}>
+    <View style={st.container}>
+      {/* Gradient — peach top fades to white — matches app theme */}
       <LinearGradient
-        colors={["#FFF4C2", "#FFFBEA", "#FFFFFF"]}
-        locations={[0, 0.55, 1]}
+        colors={["#FFE0C2", "#FFF5EC", "#FFFFFF"]}
+        locations={[0, 0.4, 1]}
         style={StyleSheet.absoluteFill}
       />
 
-      {/* Confetti — fires once when slide becomes active */}
+      {/* Confetti */}
       {isActive && (
         <ConfettiCannon
           ref={(ref) => {
             confettiRef.current = ref;
           }}
-          count={140}
+          count={120}
           origin={{ x: SCREEN_W / 2, y: -10 }}
           autoStart={false}
           fadeOut
-          fallSpeed={3200}
-          explosionSpeed={400}
-          colors={["#FC6146", "#FFB627", "#FFD93D", "#0A1A3D", "#FF8A1F"]}
+          fallSpeed={3000}
+          explosionSpeed={380}
+          colors={["#F47B20", "#FFB347", "#FF6B6B", "#C084FC", "#60A5FA"]}
         />
       )}
 
-      <View style={styles.content}>
-        {/* Headline */}
+      <View style={st.content}>
+        {/* ── Headline ── */}
         {isActive && (
           <Animated.View
             entering={FadeInDown.duration(600)}
-            style={styles.headlineBlock}
+            style={st.headlineBlock}
           >
-            <Text style={styles.headlineSmall}>Let's start the</Text>
-            <Text style={styles.headlineHuge}>EASIER</Text>
-            <Text style={styles.headlineHugeNavy}>Weight Loss Journey</Text>
+            <Text style={st.headlineSmall}>Let weight loss be</Text>
+            <Text style={st.headlineHuge}>EASIER</Text>
+            <Text style={st.headlineNavy}>EVER</Text>
           </Animated.View>
         )}
 
-        {/* Three-step recap */}
+        {/* ── Stats — laurel on each side, clean dividers ── */}
         {isActive && (
-          <View style={styles.stepsBlock}>
-            <StepCard
-              number="1"
-              icon={ICON_CAMERA}
-              title="Snap your meal"
-              subtitle="AI recognizes the food instantly"
-              delay={300}
-            />
-            <StepCard
-              number="2"
-              icon={ICON_PROGRESS}
-              title="Track your day"
-              subtitle="See calories, macros, and progress"
-              delay={450}
-            />
-            <StepCard
-              number="3"
-              icon={ICON_TARGET}
-              title="Hit your goal"
-              subtitle="Lose weight"
-              delay={600}
-            />
+          <View style={st.statsBlock}>
+            {STATS.map((s, i) => (
+              <React.Fragment key={s.value}>
+                <StatRow
+                  value={s.value}
+                  label={s.label}
+                  delay={300 + i * 160}
+                />
+                {i < STATS.length - 1 && (
+                  <Animated.View
+                    entering={FadeInUp.duration(300).delay(440 + i * 160)}
+                    style={st.divider}
+                  />
+                )}
+              </React.Fragment>
+            ))}
           </View>
         )}
 
-        {/* CTA */}
+        {/* ── CTAs ── */}
         {isActive && (
           <Animated.View
-            entering={FadeInUp.duration(500).delay(800)}
-            style={styles.ctaBlock}
+            entering={FadeInUp.duration(500).delay(900)}
+            style={st.ctaBlock}
           >
+            {/* Get Started — dark navy pill matching reference */}
             <Pressable
               onPress={onGetStarted}
               style={({ pressed }) => [
-                styles.ctaButton,
-                pressed && { transform: [{ scale: 0.98 }], opacity: 0.95 },
+                st.getStartedBtn,
+                pressed && { opacity: 0.88, transform: [{ scale: 0.98 }] },
               ]}
-              android_ripple={{ color: "rgba(255,255,255,0.15)" }}
             >
-              <Text style={styles.ctaText}>Get Started</Text>
+              <Text style={st.getStartedText}>Get Started</Text>
             </Pressable>
 
-            <Pressable
-              onPress={onLogin}
-              style={({ pressed }) => [
-                styles.loginButton,
-                pressed && { transform: [{ scale: 0.98 }], opacity: 0.9 },
-              ]}
-            >
-              <Text style={styles.loginButtonText}>Already a user?</Text>
+            {/* Already a user — matches reference: plain text + orange link */}
+            <Pressable onPress={onLogin} hitSlop={12}>
+              <Text style={st.loginRow}>
+                Already have an account?{" "}
+                <Text style={st.loginLink}>Log in</Text>
+              </Text>
             </Pressable>
           </Animated.View>
         )}
@@ -179,7 +151,8 @@ export const Slide3: React.FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create({
+// ─── Styles ────────────────────────────────────────────────────────────────
+const st = StyleSheet.create({
   container: {
     width: SCREEN_W,
     height: SCREEN_H,
@@ -187,164 +160,109 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: SCREEN_H * 0.08,
-    paddingBottom: 40,
+    paddingHorizontal: 28,
+    paddingTop: SCREEN_H * 0.1,
+    paddingBottom: 48,
     justifyContent: "space-between",
   },
 
-  // Headline
+  // ── Headline ────────────────────────────────────────────────────
   headlineBlock: {
     alignItems: "center",
-    marginTop: 8,
   },
   headlineSmall: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "700",
-    color: "#0A1A3D",
-    marginBottom: 6,
-  },
-  headlineHuge: {
-    fontSize: 56,
-    fontWeight: "900",
-    color: "#FC6146",
-    letterSpacing: -1.5,
-    lineHeight: 60,
-  },
-  headlineHugeNavy: {
-    fontSize: 30,
-    fontWeight: "900",
-    color: "#0A1A3D",
-    letterSpacing: -1,
-    lineHeight: 38,
-    marginTop: 4,
-  },
-
-  // Steps
-  stepsBlock: {
-    gap: 14,
-    marginVertical: 12,
-  },
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    padding: 16,
-    paddingRight: 20,
-    gap: 16,
-    shadowColor: "#0A1A3D",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: "rgba(10, 26, 61, 0.06)",
-  },
-
-  // Icon + badge composition
-  iconWrap: {
-    width: 56,
-    height: 56,
-    position: "relative",
-  },
-  iconCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 28,
-    // backgroundColor: "#FFF1ED", // soft tint of the orange
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1.5,
-    borderColor: "rgba(252, 97, 70, 0.18)",
-  },
-  iconImage: {
-    width: 40,
-    height: 40,
-  },
-  stepBadge: {
-    position: "absolute",
-    top: -8,
-    right: -8,
-    minWidth: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: "#FC6146",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 6,
-    borderWidth: 2,
-    borderColor: "#FFFFFF",
-    shadowColor: "#FC6146",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.35,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  stepBadgeText: {
-    fontSize: 12,
-    fontWeight: "900",
-    color: "#FFFFFF",
-    lineHeight: 14,
-  },
-
-  // Card text
-  cardContent: {
-    flex: 1,
-  },
-  cardTitle: {
-    fontSize: 17,
-    fontWeight: "800",
-    color: "#0A1A3D",
+    color: "#0F1A22",
     letterSpacing: -0.2,
     marginBottom: 2,
   },
-  cardSubtitle: {
-    fontSize: 13,
-    fontWeight: "500",
-    color: "#6B7280",
-    lineHeight: 18,
+  headlineHuge: {
+    fontSize: 68,
+    fontWeight: "900",
+    color: "#F47B20", // brand orange
+    letterSpacing: -2.5,
+    lineHeight: 72,
+  },
+  headlineNavy: {
+    fontSize: 52,
+    fontWeight: "900",
+    color: "#1C2B36", // dark navy
+    letterSpacing: -2,
+    lineHeight: 56,
   },
 
-  // CTA
+  // ── Stats ────────────────────────────────────────────────────────
+  statsBlock: {
+    gap: 0,
+  },
+  statRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 20,
+    paddingHorizontal: 8,
+  },
+  laurel: {
+    fontSize: 48,
+  },
+  statCenter: {
+    flex: 1,
+    alignItems: "center",
+  },
+  statValue: {
+    fontSize: 38,
+    fontWeight: "900",
+    color: "#F47B20",
+    letterSpacing: -1.5,
+    lineHeight: 44,
+  },
+  statLabel: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#1C2B36",
+    letterSpacing: -0.3,
+    marginTop: 2,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "rgba(240, 222, 208, 0.8)",
+    marginHorizontal: 16,
+  },
+
+  // ── CTAs ────────────────────────────────────────────────────────
   ctaBlock: {
     alignItems: "center",
-    gap: 16,
+    gap: 18,
   },
-  ctaButton: {
-    backgroundColor: "#0A1A3D",
+  // Dark navy pill — exact match to reference screenshot
+  getStartedBtn: {
+    backgroundColor: "#0F1A22",
     width: "100%",
-    paddingVertical: 20,
-    borderRadius: 32,
+    paddingVertical: 22,
+    borderRadius: 50,
     alignItems: "center",
-    shadowColor: "#0A1A3D",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 6,
+    shadowColor: "#0F1A22",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.28,
+    shadowRadius: 18,
+    elevation: 8,
   },
-  ctaText: {
+  getStartedText: {
     color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "700",
     letterSpacing: 0.3,
   },
-  loginButton: {
-    width: "100%",
-    paddingVertical: 18,
-    borderRadius: 32,
-    alignItems: "center",
-    backgroundColor: "#F47B20",
-    shadowColor: "#D96A12",
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.35,
-    shadowRadius: 12,
-    elevation: 6,
+  // Plain text row with orange link — exact match to reference
+  loginRow: {
+    fontSize: 15,
+    fontWeight: "500",
+    color: "#7A8A98",
   },
-  loginButtonText: {
-    fontSize: 16,
+  loginLink: {
+    color: "#F47B20",
     fontWeight: "700",
-    color: "#FFFFFF",
-    letterSpacing: 0.2,
+    textDecorationLine: "underline",
   },
 });

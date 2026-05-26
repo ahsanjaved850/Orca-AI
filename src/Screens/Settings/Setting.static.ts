@@ -80,7 +80,6 @@ export const DELETE_ACCOUNT_ALERT = {
   confirmText: "Yes, Delete",
 } as const;
 
-
 // Health Information Sources (Apple Guideline 1.4.1 compliance)
 
 export const HEALTH_SOURCES = [
@@ -101,10 +100,11 @@ export const HEALTH_SOURCES = [
   },
   {
     title: "Weight Management Guidelines",
-    source: "National Institute of Diabetes and Digestive and Kidney Diseases (NIH)",
+    source:
+      "National Institute of Diabetes and Digestive and Kidney Diseases (NIH)",
     url: "https://www.niddk.nih.gov/health-information/weight-management",
   },
 ] as const;
 
 export const HEALTH_DISCLAIMER_TEXT =
-  "NutriTrack provides health and nutrition information for general wellness purposes only. All calculations are based on established scientific formulas and published research (see sources below). This app does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional before making significant changes to your diet, exercise routine, or health plan.";
+  "Orca provides health and nutrition information for general wellness purposes only. All calculations are based on established scientific formulas and published research (see sources below). This app does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional before making significant changes to your diet, exercise routine, or health plan.";

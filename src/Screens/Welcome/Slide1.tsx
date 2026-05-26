@@ -1,9 +1,6 @@
 import React from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
-import Animated, {
-  FadeInUp,
-  ZoomIn,
-} from "react-native-reanimated";
+import Animated, { FadeInUp, ZoomIn } from "react-native-reanimated";
 import { FloatingAvatar, FloatingCircle } from "./FloatingCircle";
 
 const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
@@ -156,7 +153,7 @@ const styles = StyleSheet.create({
   },
   headline: {
     fontSize: 38,
-    fontWeight: "900",
+    fontWeight: "700",
     color: "#0A1A3D",
     textAlign: "center",
     lineHeight: 44,
@@ -191,7 +188,7 @@ const styles = StyleSheet.create({
   },
   bigNumber: {
     fontSize: 38,
-    fontWeight: "900",
+    fontWeight: "700",
     color: "#FFFFFF",
     letterSpacing: -1,
     lineHeight: 42,

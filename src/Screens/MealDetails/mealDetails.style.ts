@@ -29,7 +29,6 @@ const C = {
 };
 
 export const mealDetailStyles = StyleSheet.create({
-
   // ─── Shell ─────────────────────────────────────────────────────────────
   container: {
     flex: 1,

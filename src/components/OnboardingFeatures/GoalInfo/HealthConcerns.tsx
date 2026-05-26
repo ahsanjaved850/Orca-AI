@@ -51,9 +51,13 @@ export const HealthConcerns: React.FC<HealthConcernsProps> = ({
 
     setSelected((prev) => {
       if (isNone) {
+        // If "none" is tapped, clear everything and select only "none"
         return prev.includes(label) ? [] : [label];
       }
+
+      // If any other option is tapped, remove "none" if present
       const withoutNone = prev.filter((s) => s !== "I don't have any of these");
+
       if (withoutNone.includes(label)) {
         return withoutNone.filter((s) => s !== label);
       }
@@ -141,7 +145,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 30,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     textAlign: "center",
     letterSpacing: -0.8,

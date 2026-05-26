@@ -65,15 +65,20 @@ const CalorieRing: React.FC<{ animValue: Animated.Value }> = ({
 };
 
 //  Animated counter
-const useCountUp = (target: number, duration: number, delay: number) => {
+const useCountUp = (
+  target: number,
+  duration: number,
+  delay: number,
+  resetKey: number,
+) => {
   const [value, setValue] = useState(0);
   useEffect(() => {
+    setValue(0); // reset to 0 before replaying
     const timeout = setTimeout(() => {
       const start = Date.now();
       const tick = () => {
         const elapsed = Date.now() - start;
         const progress = Math.min(elapsed / duration, 1);
-        // ease out cubic
         const eased = 1 - Math.pow(1 - progress, 3);
         setValue(Math.round(eased * target));
         if (progress < 1) requestAnimationFrame(tick);
@@ -81,25 +86,38 @@ const useCountUp = (target: number, duration: number, delay: number) => {
       requestAnimationFrame(tick);
     }, delay);
     return () => clearTimeout(timeout);
-  }, [target, duration, delay]);
+  }, [target, duration, delay, resetKey]);
   return value;
 };
 
 // Main Component
-export const AppIntro2: React.FC = () => {
+interface AppIntro2Props {
+  isActive?: boolean;
+}
+
+export const AppIntro2: React.FC<AppIntro2Props> = ({ isActive = true }) => {
+  const [animKey, setAnimKey] = React.useState(0);
   const headerAnim = useRef(new Animated.Value(0)).current;
   const cardAnim = useRef(new Animated.Value(0)).current;
   const noteAnim = useRef(new Animated.Value(0)).current;
   const ringAnim = useRef(new Animated.Value(0)).current;
 
   // Animated counters
-  const displayRemaining = useCountUp(REMAINING, 1200, 600);
-  const displayIntake = useCountUp(INTAKE_CAL, 1200, 600);
-  const displayGoal = useCountUp(GOAL_CAL, 1000, 600);
+  const displayRemaining = useCountUp(REMAINING, 1200, 600, animKey);
+  const displayIntake = useCountUp(INTAKE_CAL, 1200, 600, animKey);
+  const displayGoal = useCountUp(GOAL_CAL, 1000, 600, animKey);
 
   useEffect(() => {
+    if (!isActive) return;
+
+    // Reset all animated values so they replay from scratch
+    headerAnim.setValue(0);
+    cardAnim.setValue(0);
+    noteAnim.setValue(0);
+    ringAnim.setValue(0);
+    setAnimKey((k) => k + 1);
+
     // ── UI entrance animations — useNativeDriver: true ──────────────
-    // Must be completely separate from ring animation which needs false.
     Animated.stagger(150, [
       Animated.spring(headerAnim, {
         toValue: 1,
@@ -134,7 +152,7 @@ export const AppIntro2: React.FC = () => {
     }, 500);
 
     return () => clearTimeout(ringTimeout);
-  }, []);
+  }, [isActive]);
 
   return (
     <View style={s.root}>
@@ -265,7 +283,7 @@ const s = StyleSheet.create({
   // ─── Title ────────────────────────────────────────────────────────
   title: {
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -0.8,
     lineHeight: 38,
@@ -311,7 +329,7 @@ const s = StyleSheet.create({
   },
   ringValue: {
     fontSize: 52,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -2,
     lineHeight: 58,
@@ -348,7 +366,7 @@ const s = StyleSheet.create({
   },
   statValue: {
     fontSize: 20,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -0.5,
   },
@@ -385,7 +403,7 @@ const s = StyleSheet.create({
   },
   noteHighlight: {
     color: COLORS.primary,
-    fontWeight: "800",
+    fontWeight: "700",
   },
   noteEmoji: {
     fontSize: 44,
