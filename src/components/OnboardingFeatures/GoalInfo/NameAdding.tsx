@@ -193,7 +193,7 @@ const s = StyleSheet.create({
   badge: {
     // CHANGED: was missing entirely — added orange uppercase badge
     fontSize: 11,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.primary, // #F47B20
     letterSpacing: 1.2,
     textTransform: "uppercase",
@@ -235,7 +235,7 @@ const s = StyleSheet.create({
     borderWidth: 1.5, // CHANGED: was 2 — matches Login input
     borderColor: COLORS.border, // #F0DED0 warm peach border
     borderRadius: 16,
-    padding: SPACING.md,
+    padding: SPACING.lg,
     fontSize: 18,
     fontWeight: "600",
     color: COLORS.textDark,

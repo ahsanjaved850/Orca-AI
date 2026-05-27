@@ -3,10 +3,6 @@ import { Stack } from "expo-router";
 import { useEffect } from "react";
 
 export default function RootLayout() {
-  const onboardingDone = useOnboardingDone();
-
-  console.log(onboardingDone, "from main layout");
-
   useEffect(() => {
     configureRevenueCat();
   }, []);

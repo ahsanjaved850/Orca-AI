@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     marginLeft: SPACING.sm,
   },
   optionsContainer: {
-    marginTop: 40,
+    marginTop: 70,
     gap: 12,
     paddingBottom: SPACING.xxxl,
   },
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#FFFAF6",
     borderRadius: 16,
-    padding: SPACING.md,
+    padding: SPACING.lg,
     borderWidth: 1.5,
     borderColor: "#F0DED0",
     shadowColor: "#F47B20",
@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.06,
     shadowRadius: 8,
     elevation: 2,
+    fontSize: 14,
   },
   optionRowSelected: {
     borderColor: COLORS.primary,
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   optionLabel: {
     ...TYPOGRAPHY.body,
     color: COLORS.text,
-    fontWeight: "500",
+    fontWeight: "600",
     flex: 1,
   },
   optionLabelSelected: {

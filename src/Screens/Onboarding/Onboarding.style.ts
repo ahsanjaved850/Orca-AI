@@ -746,12 +746,12 @@ export const onboardingStyles = StyleSheet.create({
   // Continue button — brand orange pill
   nextButton: {
     backgroundColor: COLORS.primary,
-    paddingVertical: SPACING.md + 2,
+    paddingVertical: SPACING.lg,
     borderRadius: 50,
     ...SHADOWS.button,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 58,
+    minHeight: 68,
   },
   button: {
     backgroundColor: COLORS.primary,
@@ -776,8 +776,8 @@ export const onboardingStyles = StyleSheet.create({
   },
   buttonText: {
     color: COLORS.textOnDark,
-    fontSize: 17,
-    fontWeight: "700",
+    fontSize: 19,
+    fontWeight: "800",
     letterSpacing: 0.3,
   },
   buttonTextDisabled: {

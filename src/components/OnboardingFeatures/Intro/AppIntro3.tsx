@@ -203,7 +203,7 @@ const row = StyleSheet.create({
   },
   value: {
     fontSize: 15,
-    fontWeight: "700",
+    fontWeight: "900",
     color: "#0F1A22",
     letterSpacing: -0.5,
   },
@@ -453,7 +453,7 @@ const s = StyleSheet.create({
   // Title
   title: {
     fontSize: 26,
-    fontWeight: "700",
+    fontWeight: "900",
     color: COLORS.textDark,
     letterSpacing: -0.8,
     lineHeight: 34,
@@ -471,6 +471,8 @@ const s = StyleSheet.create({
     shadowOpacity: 0.18,
     shadowRadius: 20,
     elevation: 8,
+    borderWidth: 8,
+    borderColor: "#F47B20",
   },
   cardHeader: {
     backgroundColor: COLORS.primary,
@@ -479,7 +481,7 @@ const s = StyleSheet.create({
   },
   cardHeaderText: {
     fontSize: 22,
-    fontWeight: "700",
+    fontWeight: "900",
     color: "#FFFFFF",
     letterSpacing: -0.5,
   },

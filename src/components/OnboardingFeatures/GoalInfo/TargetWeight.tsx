@@ -4,6 +4,7 @@ import {
   SPACING,
 } from "@/src/Screens/Onboarding/Onboarding.style";
 import { getGlobalCurrentWeight } from "@/src/components/OnboardingFeatures/GoalInfo/CurrentWeight";
+import { saveOnboardingData } from "@/src/utils/onboardingStorage";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -238,7 +239,7 @@ const s = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textDark,
     textAlign: "center",
     lineHeight: 36,
@@ -282,7 +283,7 @@ const s = StyleSheet.create({
   },
   valueBig: {
     fontSize: 56,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textDark,
     letterSpacing: -2,
   },
@@ -346,7 +347,7 @@ const s = StyleSheet.create({
   },
   itemTextSel: {
     fontSize: 32,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.primary,
     letterSpacing: -0.5,
   },

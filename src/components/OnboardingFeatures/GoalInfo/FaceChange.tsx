@@ -79,7 +79,7 @@ export const FaceChange: React.FC = () => {
           }}
         >
           <Text style={s.headline}>
-            A young glow at {"\n"}your faceas you transform{"\n"} your body.
+            A young glow at {"\n"}your face as you transform{"\n"} your body.
           </Text>
         </Animated.View>
         <Image

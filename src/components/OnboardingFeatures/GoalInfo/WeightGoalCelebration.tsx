@@ -1,6 +1,6 @@
 import { COLORS, SPACING } from "@/src/Screens/Onboarding/Onboarding.style";
-import { getGlobalCurrentWeight } from "@/src/components/OnboardingFeatures/GoalInfo/CurrentWeight";
-import { getGlobalTargetWeight } from "@/src/components/OnboardingFeatures/GoalInfo/TargetWeight";
+// import { getGlobalCurrentWeight } from "@/src/components/OnboardingFeatures/GoalInfo/CurrentWeight";
+// import { getGlobalTargetWeight } from "@/src/components/OnboardingFeatures/GoalInfo/TargetWeight";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useRef } from "react";
 import {
@@ -14,6 +14,8 @@ import {
 } from "react-native";
 
 const { width: SW, height: SH } = Dimensions.get("window");
+// import { getGlobalCurrentWeight } from "@/src/components/OnboardingFeatures/GoalInfo/CurrentWeight";
+// import { getGlobalTargetWeight } from "@/src/components/OnboardingFeatures/GoalInfo/TargetWeight";
 // ─── Single firework burst ─────────────────────────────────────────────────
 // Each burst has N spokes that expand outward from a center point.
 // The spoke color cycles through brand-adjacent warm tones.
@@ -124,8 +126,10 @@ export const WeightGoalCelebration: React.FC = () => {
   const titleAnim = useRef(new Animated.Value(0)).current;
   const subAnim = useRef(new Animated.Value(0)).current;
 
-  const currentW = getGlobalCurrentWeight();
-  const targetW = getGlobalTargetWeight?.() ?? currentW - 5;
+  // const currentW = getGlobalCurrentWeight();
+  // const targetW = getGlobalTargetWeight?.() ?? currentW - 5;
+  const currentW = 94;
+  const targetW = 80;
   const diff = Math.abs(currentW - targetW);
   const isLosing = targetW < currentW;
   const isGaining = targetW > currentW;
@@ -259,25 +263,6 @@ export const WeightGoalCelebration: React.FC = () => {
           89% of users see visible results with Orca's plan and find it easy to
           maintain their progress
         </Animated.Text>
-
-        {/* Weight diff summary pill */}
-        {diff > 0 && (
-          <Animated.View style={[s.diffPill, { opacity: subAnim }]}>
-            <View style={s.diffItem}>
-              <Text style={s.diffLabel}>Current</Text>
-              <Text style={s.diffValue}>{currentW} kg</Text>
-            </View>
-            <View style={s.diffArrow}>
-              <Text style={s.diffArrowText}>{isLosing ? "↓" : "↑"}</Text>
-            </View>
-            <View style={s.diffItem}>
-              <Text style={s.diffLabel}>Target</Text>
-              <Text style={[s.diffValue, { color: COLORS.primary }]}>
-                {targetW} kg
-              </Text>
-            </View>
-          </Animated.View>
-        )}
       </View>
     </View>
   );
@@ -316,7 +301,7 @@ const s = StyleSheet.create({
   },
   titleHighlight: {
     color: COLORS.primary, // #F47B20 — orange weight number
-    fontWeight: "700",
+    fontWeight: "900",
   },
 
   subtitle: {
@@ -358,7 +343,7 @@ const s = StyleSheet.create({
   },
   diffValue: {
     fontSize: 22,
-    fontWeight: "700",
+    fontWeight: "900",
     color: COLORS.textDark,
     letterSpacing: -0.5,
   },
@@ -374,7 +359,7 @@ const s = StyleSheet.create({
   },
   diffArrowText: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: "900",
     color: COLORS.primary,
   },
 });

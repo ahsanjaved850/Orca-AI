@@ -9,11 +9,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
+  Image,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 
 // ────────────────────────────────────────────────────────────────────
@@ -39,33 +40,27 @@ interface FinalYesProps {
 
 export const FinalYes: React.FC<FinalYesProps> = ({ onValidationChange }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isComplete, setIsComplete] = useState(false);
-
   const cardAnim = useRef(new Animated.Value(0)).current;
 
+  const isComplete = currentIndex >= STATEMENTS.length;
   const currentStatement = STATEMENTS[currentIndex];
-  const isLastStatement = currentIndex === STATEMENTS.length - 1;
-
-  const onValidationChangeRef = useRef(onValidationChange);
 
   useEffect(() => {
-    onValidationChangeRef.current = onValidationChange;
-  }, [onValidationChange]);
-
-  useEffect(() => {
-    onValidationChangeRef.current?.(isComplete);
+    onValidationChange?.(isComplete);
   }, [isComplete]);
 
   useEffect(() => {
-    cardAnim.setValue(0);
+    if (!isComplete) {
+      cardAnim.setValue(0);
 
-    Animated.spring(cardAnim, {
-      toValue: 1,
-      tension: 50,
-      friction: 8,
-      useNativeDriver: true,
-    }).start();
-  }, [currentIndex, cardAnim]);
+      Animated.spring(cardAnim, {
+        toValue: 1,
+        tension: 50,
+        friction: 8,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [currentIndex, isComplete, cardAnim]);
 
   const handleAnswer = useCallback(
     async (answer: boolean) => {
@@ -75,11 +70,6 @@ export const FinalYes: React.FC<FinalYesProps> = ({ onValidationChange }) => {
           : Haptics.ImpactFeedbackStyle.Light,
       );
 
-      if (isLastStatement) {
-        setIsComplete(true);
-        return;
-      }
-
       Animated.timing(cardAnim, {
         toValue: 2,
         duration: 250,
@@ -88,12 +78,12 @@ export const FinalYes: React.FC<FinalYesProps> = ({ onValidationChange }) => {
         setCurrentIndex((prev) => prev + 1);
       });
     },
-    [cardAnim, isLastStatement],
+    [currentIndex, cardAnim],
   );
 
   const progressDots = STATEMENTS.map((_, i) => {
-    const isAnswered = isComplete || i < currentIndex;
-    const isCurrent = !isComplete && i === currentIndex;
+    const isAnswered = i < currentIndex;
+    const isCurrent = i === currentIndex;
 
     return (
       <View
@@ -106,6 +96,10 @@ export const FinalYes: React.FC<FinalYesProps> = ({ onValidationChange }) => {
       />
     );
   });
+
+  // All 3 answered — mark valid so Continue button enables.
+  // User taps Continue → Completion slide. No summary shown.
+  if (isComplete) return null;
 
   return (
     <View style={styles.safeArea}>
@@ -127,8 +121,9 @@ export const FinalYes: React.FC<FinalYesProps> = ({ onValidationChange }) => {
       <View style={styles.screenContainer}>
         <View style={styles.headerSection}>
           <Text style={styles.headerTitle}>
-            Do you relate to the{"\n"}statement below?
+            Do you relate to the{"\n"}image below?
           </Text>
+
           <View style={styles.progressRow}>{progressDots}</View>
         </View>
 
@@ -157,35 +152,30 @@ export const FinalYes: React.FC<FinalYesProps> = ({ onValidationChange }) => {
             },
           ]}
         >
-          {/* Quote marks */}
-          <Text
-            style={[styles.quoteMark, { color: currentStatement.accentColor }]}
-          >
-            "
-          </Text>
-          <Text style={styles.statementText}>{currentStatement.text}</Text>
-          <Text style={styles.statementEmoji}>{currentStatement.emoji}</Text>
+          <Image
+            source={currentStatement.image}
+            style={styles.statementImage}
+            resizeMode="contain"
+          />
         </Animated.View>
 
-        {!isComplete && (
-          <View style={styles.buttonRow}>
-            <TouchableOpacity
-              style={styles.noButton}
-              onPress={() => handleAnswer(false)}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.noButtonText}>No</Text>
-            </TouchableOpacity>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={styles.noButton}
+            onPress={() => handleAnswer(false)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.noButtonText}>No</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.yesButton}
-              onPress={() => handleAnswer(true)}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.yesButtonText}>Yes</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+          <TouchableOpacity
+            style={styles.yesButton}
+            onPress={() => handleAnswer(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.yesButtonText}>Yes</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -248,7 +238,7 @@ const styles = StyleSheet.create({
   },
 
   statementImage: {
-    width: "110%",
+    width: "150%",
     height: "100%",
   },
 

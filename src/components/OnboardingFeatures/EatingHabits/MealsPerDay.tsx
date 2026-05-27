@@ -1,6 +1,9 @@
-import { COLORS, SPACING } from "@/src/Screens/Onboarding/Onboarding.style";
-import * as Haptics from "expo-haptics";
+import {
+  COLORS,
+  SPACING,
+} from "@/src/Screens/Onboarding/Onboarding.style";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Haptics from "expo-haptics";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ScrollView,
@@ -16,11 +19,11 @@ interface MealsPerDayProps {
 }
 
 const OPTIONS = [
-  { label: "2 meals per day", value: "2" },
-  { label: "3 meals per day", value: "3" },
-  { label: "4 meals per day", value: "4" },
-  { label: "5 meals per day", value: "5" },
-  { label: "It depends", value: "depends" },
+  { label: "2 meals per day",  value: "2" },
+  { label: "3 meals per day",  value: "3" },
+  { label: "4 meals per day",  value: "4" },
+  { label: "5 meals per day",  value: "5" },
+  { label: "It depends",       value: "depends" },
 ] as const;
 
 const BEHIND_TEXT =
@@ -45,10 +48,7 @@ export const MealsPerDay: React.FC<MealsPerDayProps> = ({
 
   return (
     <View style={s.root}>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor={COLORS.backgroundGradientTop}
-      />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.backgroundGradientTop} />
 
       {/* Peach → cream → white gradient */}
       <LinearGradient
@@ -80,7 +80,9 @@ export const MealsPerDay: React.FC<MealsPerDayProps> = ({
             <Text style={s.behindTitle}>Behind the question</Text>
             <Text style={s.behindText}>
               {expanded ? BEHIND_TEXT : previewText}
-              {!expanded && <Text style={s.behindMore}> More</Text>}
+              {!expanded && (
+                <Text style={s.behindMore}> More</Text>
+              )}
             </Text>
           </View>
         </TouchableOpacity>
@@ -92,7 +94,10 @@ export const MealsPerDay: React.FC<MealsPerDayProps> = ({
             return (
               <TouchableOpacity
                 key={opt.value}
-                style={[s.optionRow, isSelected && s.optionRowSelected]}
+                style={[
+                  s.optionRow,
+                  isSelected && s.optionRowSelected,
+                ]}
                 onPress={() => handlePress(opt.value)}
                 activeOpacity={0.75}
               >
@@ -100,15 +105,14 @@ export const MealsPerDay: React.FC<MealsPerDayProps> = ({
                 <View
                   style={[
                     s.accentBar,
-                    {
-                      backgroundColor: isSelected
-                        ? COLORS.primary
-                        : "transparent",
-                    },
+                    { backgroundColor: isSelected ? COLORS.primary : "transparent" },
                   ]}
                 />
                 <Text
-                  style={[s.optionLabel, isSelected && s.optionLabelSelected]}
+                  style={[
+                    s.optionLabel,
+                    isSelected && s.optionLabelSelected,
+                  ]}
                 >
                   {opt.label}
                 </Text>
@@ -141,7 +145,7 @@ const s = StyleSheet.create({
   // ─── Title ───────────────────────────────────────────────────────
   title: {
     fontSize: 30,
-    fontWeight: "700",
+    fontWeight: "900",
     color: COLORS.textDark,
     letterSpacing: -0.8,
     lineHeight: 38,

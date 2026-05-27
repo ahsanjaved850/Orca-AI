@@ -162,7 +162,7 @@ const s = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textDark,
     textAlign: "center",
     letterSpacing: -0.4,
@@ -205,7 +205,7 @@ const s = StyleSheet.create({
   },
   itemTextSelected: {
     fontSize: 32,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.primary,
     letterSpacing: -1,
   },

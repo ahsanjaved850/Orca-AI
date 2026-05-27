@@ -171,7 +171,7 @@ export const GenderSelection: React.FC<GenderSelectionProps> = ({
                       s.optionLabel,
                       isSelected && {
                         color: COLORS.textDark,
-                        fontWeight: "800",
+                        fontWeight: "600",
                       },
                     ]}
                   >
@@ -240,7 +240,7 @@ const s = StyleSheet.create({
 
   // ─── Options ─────────────────────────────────────────────────────
   optionsContainer: {
-    gap: SPACING.md,
+    gap: SPACING.lg,
     marginTop: 180,
   },
 
