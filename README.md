@@ -13,11 +13,13 @@ Orca AI is a cross-platform mobile application built with **React Native (Expo)*
 ## ✨ Features
 
 ### 🔐 Authentication
+
 - Email and password sign-in and sign-up
 - Persistent session management with AsyncStorage
 - Secure, Supabase-backed authentication
 
 ### 🚀 Onboarding
+
 - Multi-step onboarding flow (11 screens) collecting:
   - Name, gender, age, height, weight, goal weight
   - Fitness goal (e.g. lose weight, maintain, gain muscle)
@@ -26,6 +28,7 @@ Orca AI is a cross-platform mobile application built with **React Native (Expo)*
 - Smooth horizontal scroll with dot indicators
 
 ### 🏠 Home Screen
+
 - **Today's Summary** card showing real-time calorie consumption vs. goal
 - **Macronutrient breakdown** Protein, Carbs, Fats, Sugar, Sodium, Fiber each with color-coded progress bars
 - **Recent Meals** list with meal images, timestamps, and inline macro tags
@@ -33,6 +36,7 @@ Orca AI is a cross-platform mobile application built with **React Native (Expo)*
 - Add Meal floating action button
 
 ### 📸 AI Meal Analysis (ImageExamine)
+
 - Take a photo with the camera or pick from the gallery
 - Image is converted to JPEG, compressed, and encoded as Base64
 - Sent to an AI model via a **Supabase Edge Function** (keeps API keys server-side and secure)
@@ -41,6 +45,7 @@ Orca AI is a cross-platform mobile application built with **React Native (Expo)*
 - Full meal record is saved to the database automatically
 
 ### 🍽️ Meal Details Screen
+
 - Full-screen meal image
 - Total calorie display
 - Macronutrient grid (Protein, Carbs, Fats)
@@ -49,12 +54,14 @@ Orca AI is a cross-platform mobile application built with **React Native (Expo)*
 - AI-generated disclaimer notice
 
 ### 📊 Data Overview Screen
+
 - Current weight and goal weight with update/log modals
 - BMI score and category badge (Underweight / Normal / Overweight / Obese) with color coding
 - Weight progress bar showing distance to goal
 - Recalculates daily nutrition targets on weight update using `dataAnalysis` utility
 
 ### ⚙️ Settings Screen
+
 - Profile card with user initials avatar
 - Personal information display (name, age, gender)
 - Physical details display (weight, height, goal weight)
@@ -65,18 +72,18 @@ Orca AI is a cross-platform mobile application built with **React Native (Expo)*
 
 ## 🏗️ Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | React Native with Expo |
-| Navigation | Expo Router + React Navigation |
-| Backend / Auth | Supabase (Auth, Database, Storage) |
-| AI Analysis | Supabase Edge Functions (server-side API key) |
-| State Management | React Hooks (useState, useEffect, useFocusEffect) |
-| Session Persistence | AsyncStorage |
-| Image Handling | expo-image-picker, expo-image-manipulator |
-| Haptics | expo-haptics |
-| Icons | @expo/vector-icons (Ionicons) |
-| Styling | React Native StyleSheet |
+| Layer               | Technology                                        |
+| ------------------- | ------------------------------------------------- |
+| Framework           | React Native with Expo                            |
+| Navigation          | Expo Router + React Navigation                    |
+| Backend / Auth      | Supabase (Auth, Database, Storage)                |
+| AI Analysis         | Supabase Edge Functions (server-side API key)     |
+| State Management    | React Hooks (useState, useEffect, useFocusEffect) |
+| Session Persistence | AsyncStorage                                      |
+| Image Handling      | expo-image-picker, expo-image-manipulator         |
+| Haptics             | expo-haptics                                      |
+| Icons               | @expo/vector-icons (Ionicons)                     |
+| Styling             | React Native StyleSheet                           |
 
 ---
 
@@ -143,6 +150,7 @@ backend/
 ```
 
 Each screen follows a consistent **three-file pattern**:
+
 - `*.tsx` => pure UI, no business logic
 - `*.logic.tsx` => custom hook encapsulating all state and handlers
 - `*.static.ts` => constants, interfaces, and config objects
@@ -152,9 +160,9 @@ Each screen follows a consistent **three-file pattern**:
 
 ## 🗄️ Database Schema (Supabase)
 
-| Table | Key Columns |
-|---|---|
-| `profile` | id, full_name, age, gender, weight, height, target_weight, goal, onboarding |
-| `initial_details` | id, calories, protein, carbs, fat, sugar, sodium, fiber, bmi, bmi_category |
-| `daily_meals` | id, user_id, name, calories, protein, carbs, fat, sugar, sodium, fiber, ingredients, meal_image, created_at |
-| `daily_intake` | id, user_id, total_calories, total_protein, total_carbs, total_fat, total_sugar, total_sodium, total_fiber, created_at |
+| Table             | Key Columns                                                                                                            |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `profile`         | id, full_name, age, gender, weight, height, target_weight, goal, onboarding                                            |
+| `initial_details` | id, calories, protein, carbs, fat, sugar, sodium, fiber, bmi, bmi_category                                             |
+| `daily_meals`     | id, user_id, name, calories, protein, carbs, fat, sugar, sodium, fiber, ingredients, meal_image, created_at            |
+| `daily_intake`    | id, user_id, total_calories, total_protein, total_carbs, total_fat, total_sugar, total_sodium, total_fiber, created_at |
