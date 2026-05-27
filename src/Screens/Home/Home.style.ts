@@ -2,39 +2,53 @@ import { Dimensions, StyleSheet } from "react-native";
 
 const { width: SW } = Dimensions.get("window");
 
-// ─── Warm Theme Colors ─────────────────────────────────────────────
-const C = {
-  bg: "#FFFDF7",
-  bgWarm: "#FFF9ED",
-  bgCard: "#FFFFFF",
-  bgGray: "#F5F3EE",
+// ─── Theme Palette ──────────────────────────────────────────────────────────
+// Mirrors Login screen: peach #FFE0C2 → white #FFFFFF gradient language
+// Primary accent: #F47B20 (vibrant warm orange)
+// Cards: warm off-white surfaces, peach-tinted borders, orange-glow shadows
 
-  textDark: "#0F1923",
-  text: "#1B2838",
-  textSec: "#5A6B7E",
-  textLight: "#9CA8B7",
+export const GRADIENT = {
+  top: "#FFE0C2",
+  mid: "#FFF0E4",
+  bottom: "#FFFFFF",
+};
+
+const C = {
+  bg: "#FFFFFF",
+  bgCard: "#FFFAF6",
+  bgCardAlt: "#FFF5EC",
+  bgGray: "#F5EDE0",
+  bgPeach: "#FFE0C2",
+
+  textDark: "#0F1A22",
+  text: "#1C2B36",
+  textSec: "#7A8A98",
+  textLight: "#B0BECA",
   textOnDark: "#FFFFFF",
 
-  primary: "#F5A623",
-  primaryLight: "#FFF8EC",
-  primaryMuted: "#FFE8C2",
+  primary: "#F47B20",
+  primaryDark: "#D96A12",
+  primaryLight: "#FFF3E8",
+  primaryMuted: "#FFE0C2",
 
-  secondary: "#1B2838",
-  accent: "#FF6B35",
+  secondary: "#1C2B36",
+  accent: "#F47B20",
 
-  border: "#EDE8DF",
-  borderLight: "#F5F0E8",
-  divider: "#F0EBE3",
+  border: "#F0DED0",
+  borderLight: "#FAF0E8",
+  divider: "#F5E8DC",
 
   success: "#2ECC71",
   error: "#EF4444",
+  warning: "#F59E0B",
+  info: "#3B82F6",
 };
 
 export const homeStyles = StyleSheet.create({
-  // ─── Shell ─────────────────────────────────────────────────────
+  // ─── Shell ───────────────────────────────────────────────────────────────
   container: {
     flex: 1,
-    backgroundColor: C.bg,
+    backgroundColor: C.bgPeach,
   },
   body: {
     flex: 1,
@@ -45,12 +59,12 @@ export const homeStyles = StyleSheet.create({
     paddingBottom: 120,
   },
 
-  // ─── Header ────────────────────────────────────────────────────
+  // ─── Header ──────────────────────────────────────────────────────────────
   headerContainer: {
     paddingHorizontal: 20,
     paddingTop: 8,
-    paddingBottom: 8,
-    backgroundColor: C.bg,
+    paddingBottom: 16,
+    backgroundColor: C.bgPeach,
   },
   headerRow: {
     flexDirection: "row",
@@ -60,25 +74,25 @@ export const homeStyles = StyleSheet.create({
   logoContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-  },
-  logo: {},
-  logoName: {
-    fontWeight: "800",
-    fontSize: 22,
-    color: C.textDark,
-    letterSpacing: -0.5,
-  },
-  notificationButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: C.bgGray,
-    alignItems: "center",
-    justifyContent: "center",
+    gap: 10,
   },
 
-  // Kept for compatibility
+  notificationButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "rgba(255,255,255,0.7)",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: C.border,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+
   greetingContainer: { marginTop: 4 },
   greeting: {
     fontSize: 28,
@@ -93,32 +107,35 @@ export const homeStyles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  // ─── Daily Summary Card ────────────────────────────────────────
+  // ─── Daily Summary Card ──────────────────────────────────────────────────
   dailySummaryCard: {
     backgroundColor: C.bgCard,
-    borderRadius: 24,
+    borderRadius: 28,
     marginTop: 12,
-    padding: 20,
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 16,
-    elevation: 4,
+    padding: 22,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: C.border,
   },
   summaryHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 20,
   },
   summaryTitle: {
-    fontSize: 17,
-    fontWeight: "700",
-    color: C.primary,
+    fontSize: 18,
+    fontWeight: "800",
+    color: C.textDark,
+    letterSpacing: -0.3,
   },
   summaryTitleEmoji: {
-    fontSize: 16,
-    marginRight: 6,
+    fontSize: 18,
+    marginRight: 7,
   },
   streakBadge: {
     flexDirection: "row",
@@ -126,18 +143,20 @@ export const homeStyles = StyleSheet.create({
     backgroundColor: C.primaryLight,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: C.primaryMuted,
   },
   streakText: {
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: "700",
     color: C.primary,
     marginLeft: 4,
   },
   moreButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     backgroundColor: C.bgGray,
     alignItems: "center",
     justifyContent: "center",
@@ -149,36 +168,42 @@ export const homeStyles = StyleSheet.create({
     letterSpacing: 2,
   },
 
-  // ─── Calorie Ring (centered) ───────────────────────────────────
+  // ─── Calorie Ring ────────────────────────────────────────────────────────
   progressContainer: {
     alignItems: "center",
     justifyContent: "center",
     paddingBottom: 8,
   },
   calorieRingOuter: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    borderWidth: 10,
+    width: 170,
+    height: 170,
+    borderRadius: 85,
+    borderWidth: 12,
     borderColor: C.borderLight,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: C.bgCard,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.18,
+    shadowRadius: 22,
+    elevation: 8,
   },
   calorieRingInner: {
     alignItems: "center",
   },
   calorieCount: {
-    fontSize: 40,
+    fontSize: 44,
     fontWeight: "800",
     color: C.textDark,
-    letterSpacing: -1.5,
+    letterSpacing: -2,
   },
   calorieCanEatLabel: {
     fontSize: 13,
     color: C.textLight,
-    fontWeight: "500",
+    fontWeight: "600",
     marginTop: 2,
+    letterSpacing: 0.3,
   },
   calorieTarget: {
     fontSize: 12,
@@ -187,48 +212,48 @@ export const homeStyles = StyleSheet.create({
     marginTop: 2,
   },
   progressLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: C.textLight,
-    fontWeight: "600",
+    fontWeight: "700",
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
     marginTop: 4,
   },
 
-  // Consumed / Goal row under ring
   calorieSubRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 16,
-    gap: 24,
+    marginTop: 20,
+    gap: 32,
   },
   calorieSubItem: {
     alignItems: "center",
   },
   calorieSubValue: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "800",
     color: C.textDark,
     letterSpacing: -0.5,
   },
   calorieSubLabel: {
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: "600",
     color: C.textLight,
     marginTop: 2,
+    letterSpacing: 0.2,
   },
   calorieSubDivider: {
     width: 1,
-    height: 28,
+    height: 32,
     backgroundColor: C.border,
   },
 
-  // ─── Macro Summary Row ─────────────────────────────────────────
+  // ─── Macro Summary Row ───────────────────────────────────────────────────
   macroSummaryRow: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 16,
-    paddingTop: 16,
+    marginTop: 20,
+    paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: C.borderLight,
   },
@@ -237,48 +262,49 @@ export const homeStyles = StyleSheet.create({
     flex: 1,
   },
   macroSummaryLabel: {
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 13,
+    fontWeight: "700",
     color: C.textDark,
-    marginBottom: 6,
+    marginBottom: 8,
   },
   macroSummaryDotRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
-    marginTop: 4,
+    gap: 5,
+    marginTop: 6,
   },
   macroSummaryDot: {
-    width: 8,
-    height: 8,
+    width: 7,
+    height: 7,
     borderRadius: 4,
   },
   macroSummaryBar: {
-    height: 5,
+    height: 8,
     backgroundColor: C.borderLight,
-    borderRadius: 3,
+    borderRadius: 6,
     width: "90%",
     overflow: "hidden",
   },
   macroSummaryBarFill: {
     height: "100%",
-    borderRadius: 3,
+    borderRadius: 6,
   },
   macroSummaryValue: {
-    fontSize: 12,
+    fontSize: 11,
     color: C.textLight,
-    fontWeight: "500",
+    fontWeight: "600",
   },
 
-  // ─── Macronutrients Grid (Sugar, Sodium, Fiber) ────────────────
+  // ─── Nutrient Cards ──────────────────────────────────────────────────────
   macroSection: {
     marginTop: 0,
   },
   macroHeader: {
-    fontSize: 16,
-    fontWeight: "700",
+    fontSize: 17,
+    fontWeight: "800",
     color: C.textDark,
-    marginBottom: 14,
+    marginBottom: 16,
+    letterSpacing: -0.3,
   },
   macroNutrients: {
     flexDirection: "row",
@@ -288,20 +314,36 @@ export const homeStyles = StyleSheet.create({
   nutrientsCard: {
     flex: 1,
     minWidth: "30%",
-    backgroundColor: C.bgWarm,
-    borderRadius: 18,
+    backgroundColor: C.bgCardAlt,
+    borderRadius: 20,
     padding: 14,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: C.borderLight,
+    borderColor: C.border,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  // 3D image icon — replaces the coloured Ionicons square
+  nutrientIcon3d: {
+    width: 52,
+    height: 52,
+    marginBottom: 10,
   },
   nutrientIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
+    width: 44,
+    height: 44,
+    borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 8,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 4,
   },
   proteinIcon: { backgroundColor: "#FEE2E2" },
   carbsIcon: { backgroundColor: "#DBEAFE" },
@@ -310,18 +352,19 @@ export const homeStyles = StyleSheet.create({
   sodiumIcon: { backgroundColor: "#E9D5FF" },
   fiberIcon: { backgroundColor: "#D1FAE5" },
   nutrientsLabel: {
-    fontSize: 11,
+    fontSize: 10,
     color: C.textSec,
     fontWeight: "700",
     marginBottom: 4,
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
   },
   nutrientsValue: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "800",
     color: C.textDark,
     marginBottom: 2,
+    letterSpacing: -0.5,
   },
   nutrientsTotal: {
     fontSize: 11,
@@ -329,57 +372,59 @@ export const homeStyles = StyleSheet.create({
     fontWeight: "500",
   },
   nutrientsProgress: {
-    marginTop: 8,
+    marginTop: 10,
     width: "100%",
-    height: 5,
+    height: 6,
     backgroundColor: C.border,
-    borderRadius: 3,
+    borderRadius: 4,
     overflow: "hidden",
   },
   nutrientsProgressBar: {
     height: "100%",
-    borderRadius: 3,
+    borderRadius: 4,
   },
 
-  // ─── Floating AI Scan Button ───────────────────────────────────
+  // ─── Floating AI Scan FAB — right-bottom, pill with icon + text ──────────
   floatingButtonWrap: {
     position: "absolute",
-    bottom: 24,
-    left: 0,
-    right: 0,
-    alignItems: "center",
+    right: 20,
+    // bottom set inline via useSafeAreaInsets in Home.tsx
     pointerEvents: "box-none",
   },
   floatingAiButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: C.secondary,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
+    backgroundColor: C.primary,
+    paddingVertical: 15,
+    paddingHorizontal: 22,
     borderRadius: 50,
     gap: 10,
-    shadowColor: C.secondary,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
+    // Orange glow shadow for lift
+    shadowColor: "#C05010",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.45,
     shadowRadius: 16,
-    elevation: 10,
+    elevation: 14,
+    // Semi-transparent white inner ring — premium edge detail
+    borderWidth: 2,
+    borderColor: "rgba(255,255,255,0.3)",
   },
   floatingAiIconWrap: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "rgba(255,255,255,0.15)",
+    backgroundColor: "rgba(255,255,255,0.22)",
     alignItems: "center",
     justifyContent: "center",
   },
   floatingAiText: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: "700",
     color: C.textOnDark,
-    letterSpacing: 0.2,
+    letterSpacing: 0.3,
   },
 
-  // ─── Legacy Add Meal (kept for compatibility) ──────────────────
+  // ─── Legacy Add Meal ─────────────────────────────────────────────────────
   addMealContainer: {
     alignItems: "center",
     marginVertical: 12,
@@ -393,7 +438,7 @@ export const homeStyles = StyleSheet.create({
     justifyContent: "center",
   },
   addMealButtonPressed: {
-    backgroundColor: C.accent,
+    backgroundColor: C.primaryDark,
     transform: [{ scale: 0.95 }],
   },
   addMealIcon: {
@@ -408,7 +453,7 @@ export const homeStyles = StyleSheet.create({
     color: C.textSec,
   },
 
-  // ─── Meal History ──────────────────────────────────────────────
+  // ─── Meal History ────────────────────────────────────────────────────────
   mealHistorySection: {
     marginTop: 16,
   },
@@ -427,35 +472,48 @@ export const homeStyles = StyleSheet.create({
   },
   viewAllButton: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "700",
     color: C.primary,
   },
 
   // Meal Card
   mealItem: {
     backgroundColor: C.bgCard,
-    borderRadius: 20,
+    borderRadius: 22,
     marginBottom: 12,
     overflow: "hidden",
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.09,
+    shadowRadius: 14,
+    elevation: 4,
     borderWidth: 1,
-    borderColor: C.borderLight,
+    borderColor: C.border,
   },
   mealItemContent: {
     flexDirection: "row",
     padding: 14,
+    alignItems: "center",
+  },
+  mealAccentBar: {
+    width: 4,
+    backgroundColor: C.primary,
+    borderRadius: 4,
+    marginRight: 12,
+    alignSelf: "stretch",
   },
   mealImageContainer: {
-    width: 76,
-    height: 76,
-    borderRadius: 16,
+    width: 78,
+    height: 78,
+    borderRadius: 18,
     marginRight: 14,
     overflow: "hidden",
     backgroundColor: C.bgGray,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   mealImage: {
     width: "100%",
@@ -476,26 +534,27 @@ export const homeStyles = StyleSheet.create({
   mealTime: {
     fontSize: 11,
     color: C.textLight,
-    fontWeight: "500",
+    fontWeight: "600",
     marginBottom: 3,
+    letterSpacing: 0.2,
   },
   mealName: {
     fontSize: 16,
     color: C.textDark,
-    fontWeight: "700",
+    fontWeight: "800",
     marginBottom: 3,
-    letterSpacing: -0.2,
+    letterSpacing: -0.3,
   },
   mealCalories: {
     fontSize: 14,
     fontWeight: "700",
-    color: C.accent,
-    marginBottom: 6,
+    color: C.primary,
+    marginBottom: 7,
   },
   macrosInline: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: 10,
     flexWrap: "wrap",
   },
   macroInlineItem: {
@@ -511,53 +570,61 @@ export const homeStyles = StyleSheet.create({
   macroInlineText: {
     fontSize: 12,
     color: C.textSec,
-    fontWeight: "500",
+    fontWeight: "600",
   },
 
-  // ─── Empty State ───────────────────────────────────────────────
+  // ─── Empty State ─────────────────────────────────────────────────────────
   emptyStateContainer: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 44,
+    paddingVertical: 48,
     paddingHorizontal: 32,
     backgroundColor: C.primaryLight,
-    borderRadius: 20,
+    borderRadius: 24,
     borderWidth: 1.5,
     borderColor: C.primaryMuted,
     borderStyle: "dashed",
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.07,
+    shadowRadius: 12,
+    elevation: 2,
   },
   emptyStateIcon: {
-    fontSize: 56,
-    marginBottom: 12,
+    fontSize: 60,
+    marginBottom: 14,
   },
   emptyStateTitle: {
     fontSize: 17,
-    fontWeight: "700",
+    fontWeight: "800",
     color: C.textDark,
     marginBottom: 6,
     textAlign: "center",
+    letterSpacing: -0.3,
   },
   emptyStateText: {
     fontSize: 14,
     color: C.textSec,
     textAlign: "center",
-    lineHeight: 20,
+    lineHeight: 21,
   },
 
-  // ─── Modal ─────────────────────────────────────────────────────
+  // ─── Modal ───────────────────────────────────────────────────────────────
   modalOverlay: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(15, 25, 35, 0.5)",
+    backgroundColor: "rgba(15, 26, 34, 0.55)",
   },
   modalContent: {
     backgroundColor: C.bgCard,
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
     paddingTop: 4,
     paddingBottom: 34,
     paddingHorizontal: 20,
     maxHeight: "90%",
+    borderTopWidth: 1,
+    borderColor: C.border,
   },
   modalHandle: {
     alignItems: "center",
@@ -565,10 +632,10 @@ export const homeStyles = StyleSheet.create({
     paddingTop: 12,
   },
   modalHandleBar: {
-    width: 40,
+    width: 44,
     height: 5,
     backgroundColor: C.border,
-    borderRadius: 3,
+    borderRadius: 4,
   },
   modalTitle: {
     fontSize: 22,
@@ -582,47 +649,51 @@ export const homeStyles = StyleSheet.create({
     marginTop: 16,
   },
   cancelButton: {
-    paddingVertical: 16,
+    paddingVertical: 17,
     borderRadius: 50,
     backgroundColor: C.bgGray,
     alignItems: "center",
   },
   cancelButtonText: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "700",
     color: C.textSec,
   },
 
-  // ─── Loading ───────────────────────────────────────────────────
+  // ─── Loading ─────────────────────────────────────────────────────────────
   loadingOverlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(15, 25, 35, 0.8)",
+    backgroundColor: "rgba(15, 26, 34, 0.8)",
   },
   loadingContainer: {
     backgroundColor: C.bgCard,
-    padding: 32,
-    borderRadius: 24,
+    padding: 34,
+    borderRadius: 28,
     alignItems: "center",
     minWidth: 220,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    elevation: 10,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 28,
+    elevation: 14,
+    borderWidth: 1,
+    borderColor: C.border,
   },
   loadingText: {
     marginTop: 16,
     fontSize: 17,
     color: C.textDark,
-    fontWeight: "700",
+    fontWeight: "800",
+    letterSpacing: -0.3,
   },
   loadingSubtext: {
     marginTop: 6,
     fontSize: 13,
     color: C.textLight,
     textAlign: "center",
+    lineHeight: 18,
   },
   refreshText: {
     fontSize: 13,

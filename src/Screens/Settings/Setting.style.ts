@@ -1,27 +1,38 @@
 import { StyleSheet } from "react-native";
 
-const C = {
-  bg: "#FFFDF7",
-  bgWarm: "#FFF9ED",
-  bgCard: "#FFFFFF",
-  bgGray: "#F5F3EE",
+// ─── Theme Palette ────────────────────────────────────────────────────────────
+// Identical to Home / Data screens: peach gradient, warm surfaces, orange accent
+// Primary: #F47B20 | Cards: #FFFAF6 | Borders: #F0DED0 | Shadow: #F47B20
 
-  textDark: "#0F1923",
-  text: "#1B2838",
-  textSec: "#5A6B7E",
-  textLight: "#9CA8B7",
+export const GRADIENT = {
+  top: "#FFE0C2",
+  mid: "#FFF0E4",
+  bottom: "#FFFFFF",
+};
+
+const C = {
+  bg: "#FFFFFF",
+  bgCard: "#FFFAF6",
+  bgCardAlt: "#FFF5EC",
+  bgGray: "#F5EDE0",
+  bgPeach: "#FFE0C2",
+
+  textDark: "#0F1A22",
+  text: "#1C2B36",
+  textSec: "#7A8A98",
+  textLight: "#B0BECA",
   textOnDark: "#FFFFFF",
 
-  primary: "#F5A623",
-  primaryLight: "#FFF8EC",
-  primaryMuted: "#FFE8C2",
+  primary: "#F47B20",
+  primaryDark: "#D96A12",
+  primaryLight: "#FFF3E8",
+  primaryMuted: "#FFE0C2",
 
-  secondary: "#1B2838",
-  accent: "#FF6B35",
+  secondary: "#1C2B36",
 
-  border: "#EDE8DF",
-  borderLight: "#F5F0E8",
-  divider: "#F0EBE3",
+  border: "#F0DED0",
+  borderLight: "#FAF0E8",
+  divider: "#F5E8DC",
 
   danger: "#DC2626",
   dangerLight: "#FEF2F2",
@@ -29,30 +40,33 @@ const C = {
 };
 
 export const settingStyles = StyleSheet.create({
-  // ─── Shell ─────────────────────────────────────────────────────
+  // ─── Shell ───────────────────────────────────────────────────────────────
   container: {
     flex: 1,
-    backgroundColor: C.bg,
+    backgroundColor: C.bgPeach,
   },
   body: {
     flex: 1,
+    backgroundColor: C.bg,
   },
   contentContainer: {
     paddingHorizontal: 16,
     paddingBottom: 110,
+    paddingTop: 8,
   },
 
-  // ─── Header ────────────────────────────────────────────────────
+  // ─── Header (wrapped in LinearGradient in Setting.tsx) ───────────────────
   headerContainer: {
     paddingHorizontal: 20,
     paddingTop: 8,
-    paddingBottom: 8,
+    paddingBottom: 20,
+    backgroundColor: C.bgPeach,
   },
   headerTitle: {
-    fontSize: 28,
-    fontWeight: "800",
+    fontSize: 30,
+    fontWeight: "700",
     color: C.textDark,
-    letterSpacing: -0.5,
+    letterSpacing: -1,
   },
   headerSubtitle: {
     fontSize: 14,
@@ -61,30 +75,39 @@ export const settingStyles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  // ─── Profile Card ──────────────────────────────────────────────
+  // ─── Profile Card ────────────────────────────────────────────────────────
   profileCard: {
     backgroundColor: C.bgCard,
-    borderRadius: 24,
+    borderRadius: 28,
     marginTop: 12,
-    padding: 24,
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 16,
-    elevation: 4,
+    padding: 26,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: C.border,
     alignItems: "center",
   },
   profileImageContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 84,
+    height: 84,
+    borderRadius: 42,
     backgroundColor: C.primaryMuted,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 14,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 5,
+    borderWidth: 2,
+    borderColor: "#FFD4A8",
   },
   profileInitials: {
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: "800",
     color: C.primary,
   },
@@ -106,6 +129,8 @@ export const settingStyles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: C.bgGray,
     borderRadius: 50,
+    borderWidth: 1,
+    borderColor: C.border,
   },
   editProfileText: {
     fontSize: 14,
@@ -113,17 +138,19 @@ export const settingStyles = StyleSheet.create({
     color: C.text,
   },
 
-  // ─── Section ───────────────────────────────────────────────────
+  // ─── Section Card ────────────────────────────────────────────────────────
   section: {
     backgroundColor: C.bgCard,
-    borderRadius: 20,
-    marginTop: 16,
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 10,
-    elevation: 2,
+    borderRadius: 24,
+    marginTop: 12,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    elevation: 4,
     overflow: "hidden",
+    borderWidth: 1,
+    borderColor: C.border,
   },
   sectionHeader: {
     paddingHorizontal: 20,
@@ -131,14 +158,14 @@ export const settingStyles = StyleSheet.create({
     paddingBottom: 10,
   },
   sectionTitle: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "700",
-    color: C.textLight,
+    color: C.primary, // orange section labels — matches Login/Data
     textTransform: "uppercase",
-    letterSpacing: 0.8,
+    letterSpacing: 1.2,
   },
 
-  // ─── Setting Item ──────────────────────────────────────────────
+  // ─── Setting Item ────────────────────────────────────────────────────────
   settingItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -157,20 +184,25 @@ export const settingStyles = StyleSheet.create({
     flex: 1,
   },
   settingIconContainer: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
-    backgroundColor: C.bgGray,
+    width: 40,
+    height: 40,
+    borderRadius: 13,
+    backgroundColor: C.bgGray, // warm gray — matches Home nutrient icons
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.07,
+    shadowRadius: 4,
+    elevation: 2,
   },
   settingItemContent: {
     flex: 1,
   },
   settingItemLabel: {
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: "700",
     color: C.textDark,
     marginBottom: 2,
   },
@@ -193,16 +225,16 @@ export const settingStyles = StyleSheet.create({
     color: C.textLight,
   },
 
-  // ─── Danger Zone ───────────────────────────────────────────────
+  // ─── Danger Zone ────────────────────────────────────────────────────────
   dangerSection: {
     backgroundColor: C.bgCard,
-    borderRadius: 20,
-    marginTop: 16,
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 10,
-    elevation: 2,
+    borderRadius: 24,
+    marginTop: 12,
+    shadowColor: "#DC2626",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    elevation: 4,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: C.dangerBorder,
@@ -214,11 +246,11 @@ export const settingStyles = StyleSheet.create({
     backgroundColor: C.dangerLight,
   },
   dangerSectionTitle: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "700",
     color: C.danger,
     textTransform: "uppercase",
-    letterSpacing: 0.8,
+    letterSpacing: 1.2,
   },
   dangerItem: {
     flexDirection: "row",
@@ -234,9 +266,9 @@ export const settingStyles = StyleSheet.create({
     flex: 1,
   },
   dangerIconContainer: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 13,
     backgroundColor: C.dangerLight,
     alignItems: "center",
     justifyContent: "center",
@@ -244,27 +276,28 @@ export const settingStyles = StyleSheet.create({
   },
   dangerItemLabel: {
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: "700",
     color: C.danger,
   },
 
-  // ─── Action Buttons ────────────────────────────────────────────
+  // ─── Action Buttons ──────────────────────────────────────────────────────
   actionButton: {
-    backgroundColor: C.secondary,
-    paddingVertical: 16,
+    backgroundColor: C.primary,
+    paddingVertical: 17,
     borderRadius: 50,
     alignItems: "center",
     marginTop: 24,
-    shadowColor: C.secondary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowColor: "#D96A12",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 14,
+    elevation: 7,
   },
   actionButtonText: {
     fontSize: 15,
     fontWeight: "700",
     color: C.textOnDark,
+    letterSpacing: 0.3,
   },
   logoutButton: {
     backgroundColor: C.bgGray,
@@ -275,7 +308,7 @@ export const settingStyles = StyleSheet.create({
     color: C.text,
   },
 
-  // ─── App Info ──────────────────────────────────────────────────
+  // ─── App Info ────────────────────────────────────────────────────────────
   appInfoSection: {
     alignItems: "center",
     marginTop: 32,
@@ -285,7 +318,7 @@ export const settingStyles = StyleSheet.create({
     fontSize: 13,
     color: C.textLight,
     fontWeight: "500",
-    marginTop: 8,
+    marginTop: 6,
   },
   appLogo: {
     width: 32,
@@ -293,18 +326,29 @@ export const settingStyles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
   },
+  // Text wordmark replacing image logo
+  appWordmark: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: C.textDark,
+    letterSpacing: -1,
+    includeFontPadding: false,
+    marginBottom: 4,
+  },
 
-  // ─── Stats Card ────────────────────────────────────────────────
+  // ─── Stats Card ──────────────────────────────────────────────────────────
   statsCard: {
     backgroundColor: C.bgCard,
-    borderRadius: 20,
-    marginTop: 16,
+    borderRadius: 24,
+    marginTop: 12,
     padding: 20,
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 10,
-    elevation: 2,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: C.border,
   },
   statsGrid: {
     flexDirection: "row",
@@ -312,24 +356,137 @@ export const settingStyles = StyleSheet.create({
   },
   statItem: {
     flex: 1,
-    backgroundColor: C.bgWarm,
-    borderRadius: 16,
+    backgroundColor: C.bgCardAlt,
+    borderRadius: 18,
     padding: 14,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: C.borderLight,
+    borderColor: C.border,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
   },
   statValue: {
     fontSize: 24,
     fontWeight: "800",
     color: C.textDark,
     marginBottom: 4,
+    letterSpacing: -0.5,
   },
   statLabel: {
     fontSize: 11,
     color: C.textSec,
     fontWeight: "700",
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
+  },
+
+  // ─── Disclaimer Modal (moved from inline in Setting.tsx) ──────────────────
+  disclaimerContainer: {
+    flex: 1,
+    backgroundColor: C.bgCard,
+  },
+  disclaimerHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: C.border,
+    backgroundColor: C.bgCard,
+  },
+  disclaimerHeaderTitle: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: C.textDark,
+    letterSpacing: -0.3,
+  },
+  disclaimerScrollContent: {
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 40,
+  },
+  disclaimerIconWrap: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    backgroundColor: C.primaryLight,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: C.primaryMuted,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  disclaimerText: {
+    fontSize: 14,
+    color: C.textSec,
+    lineHeight: 23,
+    textAlign: "center",
+    marginBottom: 28,
+  },
+  disclaimerSourcesSection: {
+    marginBottom: 20,
+  },
+  disclaimerSourcesTitle: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: C.primary,
+    marginBottom: 14,
+    textTransform: "uppercase",
+    letterSpacing: 1.2,
+  },
+  disclaimerSourceCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: C.bgCardAlt,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: C.border,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  disclaimerSourceContent: {
+    flex: 1,
+    marginRight: 12,
+  },
+  disclaimerSourceLabel: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: C.textDark,
+    marginBottom: 3,
+  },
+  disclaimerSourceName: {
+    fontSize: 12,
+    color: C.textSec,
+    fontWeight: "500",
+  },
+  disclaimerNoteCard: {
+    flexDirection: "row",
+    backgroundColor: C.primaryLight,
+    borderRadius: 16,
+    padding: 14,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: C.primaryMuted,
+  },
+  disclaimerNoteText: {
+    fontSize: 12,
+    color: C.textSec,
+    lineHeight: 19,
+    flex: 1,
   },
 });

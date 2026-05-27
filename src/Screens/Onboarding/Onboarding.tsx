@@ -44,10 +44,13 @@ export function OnboardingScreen() {
     return (
       <View style={{ width }}>
         <PageComponent
+          isActive={index === currentIndex}
           onValidationChange={(isValid: boolean) =>
             handleUpdateValidation(index, isValid)
           }
-          startAnimation={index === PAGES.length - 1 ? startCompletionAnimation : false}
+          startAnimation={
+            index === PAGES.length - 1 ? startCompletionAnimation : false
+          }
           onAnimationComplete={
             index === PAGES.length - 1
               ? handleCompletionAnimationFinished
@@ -63,7 +66,7 @@ export function OnboardingScreen() {
     !isCurrentPageValid || isFinishing || startCompletionAnimation;
 
   return (
-    <SafeAreaView style={onboardingStyles.container} edges={["top", "bottom"]}>
+    <SafeAreaView style={onboardingStyles.container} edges={["top"]}>
       <View style={onboardingStyles.topBar}>
         <TouchableOpacity
           onPress={handleBack}

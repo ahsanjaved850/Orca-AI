@@ -2,17 +2,17 @@ import { ConfigContext, ExpoConfig } from "@expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "BiteLens",
-  slug: "calai_vegan",
-  scheme: "bitelens",
-  version: "1.1",
+  name: "Orca AI",
+  slug: "orca_ai",
+  scheme: "orca",
+  version: "1.1.2",
   orientation: "portrait",
   userInterfaceStyle: "light",
 
-  icon: "./assets/images/nutritrack-app-icon-1024.png",
+  icon: "@/assets/images/icons/app-logo.png",
 
   splash: {
-    image: "./assets/images/nutritrack-splash.png",
+    image: "@/assets/images/icons/splashscreen.png",
     resizeMode: "contain",
     backgroundColor: "#ffffff",
   },
@@ -20,13 +20,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.nutritrackapp",
-    icon: "./assets/images/nutritrack-ios-icon.png",
+    usesAppleSignIn: true,
+    icon: "@/assets/images/icons/app-logo.png",
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
       NSCameraUsageDescription:
-        "BiteLens uses your camera to capture photos of your meals so our AI can analyze food and estimate calories, macros, and nutritional information. For example, you can take a photo of your meal to track your daily intake.",
+        "Orca uses your camera to capture photos of your meals so our AI can analyze food and estimate calories, macros, and nutritional information. For example, you can take a photo of your meal to track your daily intake.",
       NSPhotoLibraryUsageDescription:
-        "BiteLens accesses your photo library so you can select existing meal photos for AI-based nutrition analysis. For example, you can upload a saved food image to calculate calories and monitor your diet.",
+        "Orca accesses your photo library so you can select existing meal photos for AI-based nutrition analysis. For example, you can upload a saved food image to calculate calories and monitor your diet.",
     },
   },
 
@@ -34,16 +35,21 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     package: "com.nutritrackapp",
     versionCode: 1,
     adaptiveIcon: {
-      foregroundImage: "./assets/images/nutritrack-adaptive-icon.png",
+      foregroundImage: "@/assets/images/icons/app-logo.png",
       backgroundColor: "#ffffff",
     },
   },
 
   web: {
-    favicon: "./assets/images/nutritrack-favicon.png",
+    favicon: "@/assets/images/icons/app-logo.png",
   },
 
-  plugins: ["expo-router", "expo-camera", "expo-image-picker"],
+  plugins: [
+    "expo-router",
+    "expo-camera",
+    "expo-image-picker",
+    "expo-apple-authentication",
+  ],
 
   extra: {
     supabaseUrl: "https://zfwtxejwsuqibjjolfmh.supabase.co",

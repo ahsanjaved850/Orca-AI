@@ -27,42 +27,45 @@ export const INITIAL_NUTRITION_STATE: DailyNutrition = {
   fiber: 0,
 };
 
+export const NUTRITION_ICONS = {
+  fat: require("@/assets/images/icons/fats.png"),
+  calories: require("@/assets/images/icons/calories.png"),
+  protein: require("@/assets/images/icons/protein.png"),
+  carbs: require("@/assets/images/icons/carbs.png"),
+  sugar: require("@/assets/images/icons/sugar.png"),
+  sodium: require("@/assets/images/icons/sodium.png"),
+  fiber: require("@/assets/images/icons/fiber.png"),
+  food: require("@/assets/images/icons/food.png"),
+} as const;
+
 export const MACRO_CARDS_CONFIG = {
   PROTEIN: {
     label: "Protein",
-    iconName: "barbell-outline",
-    iconColor: "#EF4444",
-    iconBgColor: "#FEE2E2",
+    iconKey: "protein" as keyof typeof NUTRITION_ICONS,
   },
   CARBS: {
     label: "Carbs",
-    iconName: "nutrition-outline",
-    iconColor: "#3B82F6",
-    iconBgColor: "#DBEAFE",
+    iconKey: "carbs" as keyof typeof NUTRITION_ICONS,
   },
   FATS: {
     label: "Fats",
-    iconName: "water",
-    iconColor: "#F59E0B",
-    iconBgColor: "#FEF3C7",
+    iconKey: "fat" as keyof typeof NUTRITION_ICONS,
   },
   SUGAR: {
     label: "Sugar",
-    iconName: "ice-cream-outline",
-    iconColor: "#E11D48",
-    iconBgColor: "#FDE2E4",
+    iconKey: "sugar" as keyof typeof NUTRITION_ICONS,
   },
   SODIUM: {
     label: "Sodium",
-    iconName: "diamond",
-    iconColor: "#8B5CF6",
-    iconBgColor: "#E9D5FF",
+    iconKey: "sodium" as keyof typeof NUTRITION_ICONS,
   },
   FIBER: {
     label: "Fiber",
-    iconName: "leaf",
-    iconColor: "#059669",
-    iconBgColor: "#D1FAE5",
+    iconKey: "fiber" as keyof typeof NUTRITION_ICONS,
+  },
+  FOOD: {
+    label: "Food",
+    iconKey: "food" as keyof typeof NUTRITION_ICONS,
   },
 } as const;
 

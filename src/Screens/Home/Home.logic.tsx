@@ -5,6 +5,7 @@ import {
   getTodayNutrition,
   MealData,
 } from "@/src/utils/supabase";
+import { useDailyReset } from "@/src/utils/useDailyReset";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import { useCallback, useRef, useState } from "react";
@@ -28,7 +29,7 @@ export const useHome = () => {
   const [initialDetails, setInitialDetails] = useState<DailyNutrition>();
   const [meals, setMeals] = useState<MealData[]>([]);
   const [todayNutrition, setTodayNutrition] = useState<DailyNutrition>(
-    INITIAL_NUTRITION_STATE
+    INITIAL_NUTRITION_STATE,
   );
 
   const hasLoadedOnceRef = useRef(false);
@@ -73,7 +74,10 @@ export const useHome = () => {
         if (nutritionResult.status === "fulfilled") {
           setTodayNutrition(nutritionResult.value || INITIAL_NUTRITION_STATE);
         } else {
-          console.error("Error loading today nutrition:", nutritionResult.reason);
+          console.error(
+            "Error loading today nutrition:",
+            nutritionResult.reason,
+          );
         }
       } finally {
         if (showLoader) setLoading(false);
@@ -81,7 +85,7 @@ export const useHome = () => {
         isFetchingRef.current = false;
       }
     },
-    []
+    [],
   );
 
   useFocusEffect(
@@ -93,8 +97,15 @@ export const useHome = () => {
         // Silent refresh when returning to Home
         loadMeals();
       }
-    }, [loadMeals])
+    }, [loadMeals]),
   );
+
+  // ── Daily reset — when date changes, refetch so all values show 0 ──
+  useDailyReset(() => {
+    setTodayNutrition(INITIAL_NUTRITION_STATE);
+    setMeals([]);
+    loadMeals();
+  });
 
   const handleRefresh = () => {
     loadMeals({ showRefresh: true });
@@ -118,7 +129,7 @@ export const useHome = () => {
         mealData.fat,
         mealData.sugar || 0,
         mealData.sodium || 0,
-        mealData.fiber || 0
+        mealData.fiber || 0,
       );
     } catch (error) {
       console.error("Error updating daily intake:", error);
@@ -152,17 +163,17 @@ export const useHome = () => {
     const dateOnly = new Date(
       date.getFullYear(),
       date.getMonth(),
-      date.getDate()
+      date.getDate(),
     );
     const todayOnly = new Date(
       today.getFullYear(),
       today.getMonth(),
-      today.getDate()
+      today.getDate(),
     );
     const yesterdayOnly = new Date(
       yesterday.getFullYear(),
       yesterday.getMonth(),
-      yesterday.getDate()
+      yesterday.getDate(),
     );
 
     if (dateOnly.getTime() === todayOnly.getTime()) {
@@ -186,17 +197,17 @@ export const useHome = () => {
     const dateOnly = new Date(
       date.getFullYear(),
       date.getMonth(),
-      date.getDate()
+      date.getDate(),
     );
     const todayOnly = new Date(
       today.getFullYear(),
       today.getMonth(),
-      today.getDate()
+      today.getDate(),
     );
     const yesterdayOnly = new Date(
       yesterday.getFullYear(),
       yesterday.getMonth(),
-      yesterday.getDate()
+      yesterday.getDate(),
     );
 
     const time = date.toLocaleTimeString("en-US", {

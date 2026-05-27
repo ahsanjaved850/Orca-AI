@@ -1,81 +1,55 @@
 import { StyleSheet } from "react-native";
 
-const C = {
-  bg: "#FFFDF7",
-  bgWarm: "#FFF9ED",
-  bgCard: "#FFFFFF",
-  bgGray: "#F5F3EE",
+// ─── Theme Palette ─────────────────────────────────────────────────────────
+export const GRADIENT = {
+  top: "#FFE0C2",
+  mid: "#FFF0E4",
+  bottom: "#FFFFFF",
+};
 
-  textDark: "#0F1923",
-  text: "#1B2838",
-  textSec: "#5A6B7E",
-  textLight: "#9CA8B7",
+const C = {
+  bg: "#FFFFFF",
+  bgCard: "#FFFAF6",
+  bgCardAlt: "#FFF5EC",
+  bgGray: "#F5EDE0",
+
+  textDark: "#0F1A22",
+  text: "#1C2B36",
+  textSec: "#7A8A98",
+  textLight: "#B0BECA",
   textOnDark: "#FFFFFF",
 
-  primary: "#F5A623",
-  primaryLight: "#FFF8EC",
-  primaryMuted: "#FFE8C2",
+  primary: "#F47B20",
+  primaryDark: "#D96A12",
+  primaryLight: "#FFF3E8",
+  primaryMuted: "#FFE0C2",
 
-  secondary: "#1B2838",
-  accent: "#FF6B35",
-
-  border: "#EDE8DF",
-  borderLight: "#F5F0E8",
-  divider: "#F0EBE3",
+  border: "#F0DED0",
+  borderLight: "#FAF0E8",
 };
 
 export const mealDetailStyles = StyleSheet.create({
+  // ─── Shell ─────────────────────────────────────────────────────────────
   container: {
     flex: 1,
     backgroundColor: C.bg,
   },
 
-  // Header
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    backgroundColor: C.bg,
-  },
-  backButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 14,
-    backgroundColor: C.bgGray,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: C.textDark,
-    letterSpacing: -0.3,
-  },
-  deleteButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 14,
-    backgroundColor: "#FEF2F2",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  // Scroll
+  // ─── Scroll ────────────────────────────────────────────────────────────
   scrollView: {
     flex: 1,
   },
   contentContainer: {
-    paddingBottom: 40,
+    paddingBottom: 48,
   },
 
-  // Image
+  // ─── Hero Image — full bleed to top of screen ──────────────────────────
+  // The image goes edge-to-edge including behind the status bar.
+  // The back button floats absolutely on top of it.
   imageContainer: {
     width: "100%",
-    height: 260,
-    backgroundColor: C.bgGray,
+    height: 320,
+    backgroundColor: C.bgCardAlt,
   },
   mealImage: {
     width: "100%",
@@ -87,29 +61,68 @@ export const mealDetailStyles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: C.bgGray,
+    backgroundColor: C.bgCardAlt,
+  },
+  imagePlaceholderIcon: {
+    width: 88,
+    height: 88,
+    borderRadius: 28,
+    backgroundColor: C.primaryLight,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: C.primaryMuted,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    elevation: 4,
   },
 
-  // Info Card
+  // ─── Back Button — absolutely over the image ──────────────────────────
+  // position: absolute + top set inline from insets in the component.
+  // zIndex: 20 ensures it's always above the image and info card overlap.
+  backButton: {
+    position: "absolute",
+    left: 16,
+    zIndex: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "rgba(255,255,255,0.95)",
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: "rgba(240,222,208,0.8)",
+  },
+
+  // ─── Info Card — overlaps image from below ────────────────────────────
   infoCard: {
     backgroundColor: C.bgCard,
-    padding: 20,
+    padding: 22,
     marginHorizontal: 16,
-    borderRadius: 24,
-    marginTop: -28,
+    borderRadius: 28,
+    marginTop: -40,
     marginBottom: 12,
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
-    elevation: 5,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.13,
+    shadowRadius: 24,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: C.border,
   },
   mealName: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "800",
     color: C.textDark,
-    marginBottom: 8,
-    letterSpacing: -0.4,
+    marginBottom: 10,
+    letterSpacing: -0.5,
   },
   timeContainer: {
     flexDirection: "row",
@@ -122,31 +135,38 @@ export const mealDetailStyles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  // Calories Card
+  // ─── Calories Card ─────────────────────────────────────────────────────
   caloriesCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: C.primaryLight,
+    backgroundColor: C.bgCardAlt,
     marginHorizontal: 16,
     marginBottom: 12,
-    padding: 18,
-    borderRadius: 20,
+    padding: 20,
+    borderRadius: 24,
     borderWidth: 1,
-    borderColor: C.primaryMuted,
+    borderColor: C.border,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 14,
+    elevation: 4,
   },
   caloriesIconContainer: {
-    width: 52,
-    height: 52,
-    borderRadius: 16,
-    backgroundColor: C.bgCard,
+    width: 56,
+    height: 56,
+    borderRadius: 18,
+    backgroundColor: C.primaryLight,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 14,
-    shadowColor: C.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 2,
+    marginRight: 16,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 3,
+    borderWidth: 1.5,
+    borderColor: C.primaryMuted,
   },
   caloriesInfo: {
     flex: 1,
@@ -154,32 +174,39 @@ export const mealDetailStyles = StyleSheet.create({
   caloriesLabel: {
     fontSize: 11,
     fontWeight: "700",
-    color: C.textSec,
+    color: C.primary,
     textTransform: "uppercase",
-    letterSpacing: 0.8,
+    letterSpacing: 1.2,
     marginBottom: 4,
   },
   caloriesValue: {
-    fontSize: 30,
+    fontSize: 38,
     fontWeight: "800",
     color: C.textDark,
-    letterSpacing: -0.8,
+    letterSpacing: -1.5,
+    lineHeight: 42,
+  },
+  caloriesUnit: {
+    fontSize: 14,
+    color: C.textSec,
+    fontWeight: "600",
   },
 
-  // Section
+  // ─── Section ───────────────────────────────────────────────────────────
   section: {
     paddingHorizontal: 16,
     marginTop: 16,
   },
   sectionTitle: {
-    fontSize: 17,
-    fontWeight: "800",
-    color: C.textDark,
+    fontSize: 11,
+    fontWeight: "700",
+    color: C.primary,
+    textTransform: "uppercase",
+    letterSpacing: 1.2,
     marginBottom: 12,
-    letterSpacing: -0.2,
   },
 
-  // Macro Grid
+  // ─── Macro Cards ───────────────────────────────────────────────────────
   macroGrid: {
     flexDirection: "row",
     gap: 10,
@@ -187,51 +214,63 @@ export const mealDetailStyles = StyleSheet.create({
   macroCard: {
     flex: 1,
     backgroundColor: C.bgCard,
-    borderRadius: 20,
+    borderRadius: 22,
     padding: 16,
     alignItems: "center",
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 2,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.09,
+    shadowRadius: 12,
+    elevation: 4,
     borderWidth: 1,
-    borderColor: C.borderLight,
+    borderColor: C.border,
+  },
+  // 3D image replacing the Ionicons coloured square
+  macroIcon3d: {
+    width: 52,
+    height: 52,
+    marginBottom: 10,
   },
   macroIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 14,
+    width: 48,
+    height: 48,
+    borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
   },
   macroLabel: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: "700",
-    color: C.textLight,
+    color: C.textSec,
     textTransform: "uppercase",
-    letterSpacing: 0.6,
+    letterSpacing: 0.8,
     marginBottom: 4,
   },
   macroValue: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "800",
     color: C.textDark,
+    letterSpacing: -0.5,
   },
 
-  // Nutrients List
+  // ─── Additional Nutrients ───────────────────────────────────────────────
   nutrientsList: {
     backgroundColor: C.bgCard,
-    borderRadius: 20,
+    borderRadius: 22,
     overflow: "hidden",
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 2,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.09,
+    shadowRadius: 14,
+    elevation: 4,
     borderWidth: 1,
-    borderColor: C.borderLight,
+    borderColor: C.border,
   },
   nutrientRow: {
     flexDirection: "row",
@@ -247,25 +286,78 @@ export const mealDetailStyles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
+  nutrientAccentBar: {
+    width: 4,
+    height: 36,
+    borderRadius: 4,
+    backgroundColor: C.primary,
+    marginRight: 4,
+  },
+  // 3D image for additional nutrients rows
+  nutrientIcon3d: {
+    width: 40,
+    height: 40,
+  },
   nutrientIconSmall: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 13,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
   },
   nutrientLabel: {
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: "700",
     color: C.textDark,
   },
   nutrientValue: {
     fontSize: 16,
-    fontWeight: "700",
-    color: C.textSec,
+    fontWeight: "800",
+    color: C.primary,
   },
 
-  // Ingredients (kept for compatibility but not used)
+  // ─── AI Notice ─────────────────────────────────────────────────────────
+  aiNotice: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: C.primaryLight,
+    marginHorizontal: 16,
+    marginTop: 20,
+    padding: 14,
+    borderRadius: 16,
+    gap: 10,
+    borderWidth: 1,
+    borderColor: C.primaryMuted,
+    borderLeftWidth: 4,
+    borderLeftColor: C.primary,
+  },
+  aiNoticeText: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: "500",
+    color: C.textSec,
+    lineHeight: 18,
+  },
+
+  // ─── Error ─────────────────────────────────────────────────────────────
+  errorContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 32,
+  },
+  errorText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: C.textLight,
+  },
+
+  // ─── Ingredients (compatibility) ────────────────────────────────────────
   ingredientsHeader: {
     flexDirection: "row",
     alignItems: "center",
@@ -274,13 +366,15 @@ export const mealDetailStyles = StyleSheet.create({
   },
   ingredientsContainer: {
     backgroundColor: C.bgCard,
-    borderRadius: 20,
-    padding: 16,
-    shadowColor: "#1B2838",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 2,
+    borderRadius: 22,
+    padding: 18,
+    shadowColor: "#F47B20",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.09,
+    shadowRadius: 14,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: C.border,
   },
   ingredientItem: {
     flexDirection: "row",
@@ -308,39 +402,5 @@ export const mealDetailStyles = StyleSheet.create({
     color: C.textLight,
     fontStyle: "italic",
     textAlign: "center",
-  },
-
-  // AI Notice
-  aiNotice: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: C.primaryLight,
-    marginHorizontal: 16,
-    marginTop: 20,
-    padding: 14,
-    borderRadius: 16,
-    gap: 10,
-    borderWidth: 1,
-    borderColor: C.primaryMuted,
-  },
-  aiNoticeText: {
-    flex: 1,
-    fontSize: 12,
-    fontWeight: "500",
-    color: C.primary,
-    lineHeight: 17,
-  },
-
-  // Error
-  errorContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 32,
-  },
-  errorText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: C.textLight,
   },
 });

@@ -1,7 +1,14 @@
+import { NUTRITION_ICONS } from "@/src/Screens/Home/Home.static";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useMealDetails } from "./MealDetails.logic";
 import { MACROS_CONFIG, SECTION_TITLES, UI_TEXT } from "./MealDetails.static";
 import { mealDetailStyles } from "./mealDetails.style";
@@ -9,42 +16,44 @@ import { mealDetailStyles } from "./mealDetails.style";
 export const MealDetails = () => {
   const { meal, handleBack, formatTime, getNutrients } = useMealDetails();
 
+  /*
+   * insets.top = exact pixel height of the status bar / notch.
+   * We use it to position the back button so it sits just below
+   * the status bar on every device — no hardcoded values needed.
+   */
+  const insets = useSafeAreaInsets();
+
   if (!meal) {
     return (
-      <SafeAreaView style={mealDetailStyles.container}>
-        <View style={mealDetailStyles.errorContainer}>
-          <Text style={mealDetailStyles.errorText}>
-            {UI_TEXT.ERROR_NOT_FOUND}
-          </Text>
-        </View>
-      </SafeAreaView>
+      <View style={[mealDetailStyles.container, mealDetailStyles.errorContainer]}>
+        <Text style={mealDetailStyles.errorText}>{UI_TEXT.ERROR_NOT_FOUND}</Text>
+      </View>
     );
   }
 
   const nutrients = getNutrients();
 
   return (
-    <SafeAreaView style={mealDetailStyles.container}>
-      {/* Header */}
-      <View style={mealDetailStyles.header}>
-        <TouchableOpacity
-          style={mealDetailStyles.backButton}
-          onPress={handleBack}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="arrow-back" size={22} color="#0F1923" />
-        </TouchableOpacity>
-        <Text style={mealDetailStyles.headerTitle}>
-          {SECTION_TITLES.MEAL_DETAILS}
-        </Text>
-      </View>
+    /*
+     * Layout strategy:
+     * ─ Root View fills the screen including under the status bar.
+     * ─ ScrollView starts at top:0 — image is full bleed to the very top.
+     * ─ Back button is position:absolute over the image, top = insets.top + 8.
+     *   This means it physically overlaps the image but is rendered AFTER the
+     *   ScrollView in the tree, so it gets its own touch layer above it.
+     * ─ No SafeAreaView needed — we handle insets manually for full control.
+     */
+    <View style={mealDetailStyles.container}>
 
       <ScrollView
         style={mealDetailStyles.scrollView}
-        contentContainerStyle={mealDetailStyles.contentContainer}
+        contentContainerStyle={[
+          mealDetailStyles.contentContainer,
+          { paddingBottom: insets.bottom + 48 },
+        ]}
         showsVerticalScrollIndicator={false}
       >
-        {/* Meal Image */}
+        {/* ── Full-bleed Hero Image — goes all the way to top of screen ── */}
         <View style={mealDetailStyles.imageContainer}>
           {meal.meal_image ? (
             <Image
@@ -53,26 +62,32 @@ export const MealDetails = () => {
             />
           ) : (
             <View style={mealDetailStyles.imagePlaceholder}>
-              <Ionicons name="image-outline" size={64} color="#9CA8B7" />
+              <View style={mealDetailStyles.imagePlaceholderIcon}>
+                <Ionicons name="restaurant" size={38} color="#F47B20" />
+              </View>
             </View>
           )}
         </View>
 
-        {/* Meal Info Card — overlaps image */}
+        {/* ── Info Card — surfaces over image ── */}
         <View style={mealDetailStyles.infoCard}>
           <Text style={mealDetailStyles.mealName}>{meal.name}</Text>
           <View style={mealDetailStyles.timeContainer}>
-            <Ionicons name="time-outline" size={16} color="#9CA8B7" />
+            <Ionicons name="time-outline" size={15} color="#B0BECA" />
             <Text style={mealDetailStyles.timeText}>
               {formatTime(meal.created_at)}
             </Text>
           </View>
         </View>
 
-        {/* Calories Card */}
+        {/* ── Calories Card ── */}
         <View style={mealDetailStyles.caloriesCard}>
           <View style={mealDetailStyles.caloriesIconContainer}>
-            <Ionicons name="flame" size={28} color="#F5A623" />
+            <Image
+              source={NUTRITION_ICONS.calories}
+              style={{ width: 44, height: 44 }}
+              resizeMode="contain"
+            />
           </View>
           <View style={mealDetailStyles.caloriesInfo}>
             <Text style={mealDetailStyles.caloriesLabel}>
@@ -80,11 +95,12 @@ export const MealDetails = () => {
             </Text>
             <Text style={mealDetailStyles.caloriesValue}>
               {Math.round(meal.calories)}
+              <Text style={mealDetailStyles.caloriesUnit}> kcal</Text>
             </Text>
           </View>
         </View>
 
-        {/* Macronutrients */}
+        {/* ── Macronutrients ── */}
         <View style={mealDetailStyles.section}>
           <Text style={mealDetailStyles.sectionTitle}>
             {SECTION_TITLES.MACRONUTRIENTS}
@@ -92,18 +108,11 @@ export const MealDetails = () => {
           <View style={mealDetailStyles.macroGrid}>
             {MACROS_CONFIG.map((macro) => (
               <View key={macro.key} style={mealDetailStyles.macroCard}>
-                <View
-                  style={[
-                    mealDetailStyles.macroIcon,
-                    { backgroundColor: macro.iconBgColor },
-                  ]}
-                >
-                  <Ionicons
-                    name={macro.icon as any}
-                    size={22}
-                    color={macro.iconColor}
-                  />
-                </View>
+                <Image
+                  source={NUTRITION_ICONS[macro.iconKey]}
+                  style={mealDetailStyles.macroIcon3d}
+                  resizeMode="contain"
+                />
                 <Text style={mealDetailStyles.macroLabel}>{macro.label}</Text>
                 <Text style={mealDetailStyles.macroValue}>
                   {Math.round(meal[macro.key])}g
@@ -113,7 +122,7 @@ export const MealDetails = () => {
           </View>
         </View>
 
-        {/* Additional Nutrients */}
+        {/* ── Additional Nutrients ── */}
         <View style={mealDetailStyles.section}>
           <Text style={mealDetailStyles.sectionTitle}>
             {SECTION_TITLES.ADDITIONAL_NUTRIENTS}
@@ -128,18 +137,12 @@ export const MealDetails = () => {
                 ]}
               >
                 <View style={mealDetailStyles.nutrientLeft}>
-                  <View
-                    style={[
-                      mealDetailStyles.nutrientIconSmall,
-                      { backgroundColor: nutrient.iconBgColor },
-                    ]}
-                  >
-                    <Ionicons
-                      name={nutrient.icon as any}
-                      size={18}
-                      color={nutrient.iconColor}
-                    />
-                  </View>
+                  <View style={mealDetailStyles.nutrientAccentBar} />
+                  <Image
+                    source={NUTRITION_ICONS[nutrient.iconKey]}
+                    style={mealDetailStyles.nutrientIcon3d}
+                    resizeMode="contain"
+                  />
                   <Text style={mealDetailStyles.nutrientLabel}>
                     {nutrient.label}
                   </Text>
@@ -152,14 +155,37 @@ export const MealDetails = () => {
           </View>
         </View>
 
-        {/* AI Notice */}
+        {/* ── AI Notice ── */}
         <View style={mealDetailStyles.aiNotice}>
-          <Ionicons name="sparkles" size={16} color="#F5A623" />
+          <Ionicons name="sparkles" size={16} color="#F47B20" />
           <Text style={mealDetailStyles.aiNoticeText}>
             {UI_TEXT.AI_NOTICE}
           </Text>
         </View>
       </ScrollView>
-    </SafeAreaView>
+
+      {/*
+       * ── Back Button — rendered AFTER ScrollView so it sits above it in z-order.
+       *
+       * Key insight: in React Native, siblings rendered later in JSX paint on top.
+       * By placing this View after <ScrollView>, it naturally overlays the image
+       * without needing zIndex fighting.
+       *
+       * top = insets.top + 8 → always clears the status bar / notch precisely.
+       * This is the ONLY correct way to do a floating action button on a
+       * full-bleed image screen in React Native.
+       */}
+      <TouchableOpacity
+        style={[
+          mealDetailStyles.backButton,
+          { top: insets.top + 8 },
+        ]}
+        onPress={handleBack}
+        activeOpacity={0.85}
+      >
+        <Ionicons name="arrow-back" size={22} color="#0F1A22" />
+      </TouchableOpacity>
+
+    </View>
   );
 };

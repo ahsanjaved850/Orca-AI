@@ -1,5 +1,7 @@
 import { ImageExamine } from "@/src/components/ImageExamine/ImageExamine";
+import { imageExamineStyles } from "@/src/components/ImageExamine/imageExamine.style";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import {
   ActivityIndicator,
@@ -11,10 +13,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { useHome } from "./Home.logic";
-import { MACRO_CARDS_CONFIG } from "./Home.static";
-import { homeStyles } from "./Home.style";
+import { MACRO_CARDS_CONFIG, NUTRITION_ICONS } from "./Home.static";
+import { GRADIENT, homeStyles } from "./Home.style";
 
 export const Home = () => {
   const {
@@ -35,24 +40,24 @@ export const Home = () => {
     setLoadingAI,
   } = useHome();
 
+  const insets = useSafeAreaInsets();
+
   const renderMacroCard = (
     label: string,
     value: number,
     goal: number,
-    iconName: string,
-    iconColor: string,
-    iconBgColor: string,
+    iconKey: keyof typeof NUTRITION_ICONS,
   ) => {
     const percentage = Math.min((value / goal) * 100, 100);
     const progressColor = getProgressColor(value, goal);
 
     return (
       <View style={homeStyles.nutrientsCard} key={label}>
-        <View
-          style={[homeStyles.nutrientIcon, { backgroundColor: iconBgColor }]}
-        >
-          <Ionicons name={iconName as any} size={18} color={iconColor} />
-        </View>
+        <Image
+          source={NUTRITION_ICONS[iconKey]}
+          style={homeStyles.nutrientIcon3d}
+          resizeMode="contain"
+        />
         <Text style={homeStyles.nutrientsLabel}>{label}</Text>
         <Text style={homeStyles.nutrientsValue}>{Math.round(value)}</Text>
         <Text style={homeStyles.nutrientsTotal}>of {Math.round(goal)}g</Text>
@@ -73,25 +78,23 @@ export const Home = () => {
   const caloriesConsumed = Math.round(todayNutrition.calories);
   const caloriesRemaining = Math.max(0, calorieGoal - caloriesConsumed);
   const caloriePercent =
-    calorieGoal > 0
-      ? Math.min((caloriesConsumed / calorieGoal) * 100, 100)
-      : 0;
+    calorieGoal > 0 ? Math.min((caloriesConsumed / calorieGoal) * 100, 100) : 0;
 
   const ringColor =
     caloriePercent < 50
-      ? "#E8E4DD"
+      ? "#F47B20" // brand orange when just starting out
       : caloriePercent < 80
-      ? "#F5A623"
-      : caloriePercent < 100
-      ? "#2ECC71"
-      : "#EF4444";
+        ? "#F5A623" // warm amber mid-way
+        : caloriePercent < 100
+          ? "#2ECC71" // green when nearly at goal
+          : "#EF4444"; // red if exceeded
 
   if (loading) {
     return (
-      <View style={homeStyles.container}>
+      <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <View style={homeStyles.loadingOverlay}>
           <View style={homeStyles.loadingContainer}>
-            <ActivityIndicator size="large" color="#F5A623" />
+            <ActivityIndicator size="large" color="#F47B20" />
             <Text style={homeStyles.loadingText}>Loading...</Text>
           </View>
         </View>
@@ -100,384 +103,453 @@ export const Home = () => {
   }
 
   return (
-    <SafeAreaView style={homeStyles.container} edges={["top"]}>
-      {/* ── Header ── */}
-      <View style={homeStyles.headerContainer}>
-        <View style={homeStyles.headerRow}>
-          <View style={homeStyles.logoContainer}>
-            <Image
-              source={require("@/assets/images/nutritrack-app-icon-1024.png")}
-              style={{ width: 40, height: 40 }}
-              resizeMode="contain"
-            />
-            <Text style={homeStyles.logoName}>BiteLens AI</Text>
-          </View>
-        </View>
-      </View>
-
-      <ScrollView
-        style={homeStyles.body}
-        contentContainerStyle={homeStyles.contentContainer}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor="#F5A623"
-            colors={["#F5A623"]}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-      >
-        {/* ── Calorie Card ── */}
-        <View style={homeStyles.dailySummaryCard}>
-          {/* Card Header */}
-          <View style={homeStyles.summaryHeader}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text style={homeStyles.summaryTitleEmoji}>🔥</Text>
-              <Text style={homeStyles.summaryTitle}>Calorie</Text>
-            </View>
-         
-          </View>
-
-          {/* Calorie Ring — centered, clean */}
-          <View style={homeStyles.progressContainer}>
-            <View
-              style={[
-                homeStyles.calorieRingOuter,
-                {
-                  borderColor: caloriePercent > 5 ? ringColor : "#E8E4DD",
-                },
-              ]}
+    /*
+     * Same pattern as LoginScreen:
+     * Outer View = white → owns the bottom home-indicator area (no peach bar)
+     * SafeAreaView edges={["top"]} = peach → top status bar stays on-brand
+     * LinearGradient on header: peach → cream → white, blends into scroll body
+     */
+    <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
+      <SafeAreaView style={homeStyles.container} edges={["top"]}>
+        {/* ── Header: gradient background, 3D logo ── */}
+        <LinearGradient
+          colors={[GRADIENT.top, GRADIENT.mid, GRADIENT.bottom]}
+          locations={[0, 0.5, 1]}
+          style={homeStyles.headerContainer}
+        >
+          <View style={homeStyles.headerRow}>
+            {/*
+             * Logo wordmark — transparent background so it sits naturally
+             * on the peach gradient. Wide landscape ratio (180×56) lets
+             * the "orca" text read clearly. The orange drop shadow gives
+             * it a subtle lifted look without needing a card container.
+             */}
+            <Text
+              style={{
+                fontSize: 40,
+                fontWeight: "900",
+                color: "#0F1A22",
+                letterSpacing: -2,
+                includeFontPadding: false,
+                lineHeight: 48,
+              }}
             >
-              <View style={homeStyles.calorieRingInner}>
-                <Text style={homeStyles.calorieCount}>{caloriesRemaining}</Text>
-                <Text style={homeStyles.calorieCanEatLabel}>Can Eat</Text>
-              </View>
-            </View>
-
-            {/* Consumed / Goal underneath the ring */}
-            <View style={homeStyles.calorieSubRow}>
-              <View style={homeStyles.calorieSubItem}>
-                <Text style={homeStyles.calorieSubValue}>
-                  {caloriesConsumed}
-                </Text>
-                <Text style={homeStyles.calorieSubLabel}>Consumed</Text>
-              </View>
-              <View style={homeStyles.calorieSubDivider} />
-              <View style={homeStyles.calorieSubItem}>
-                <Text style={homeStyles.calorieSubValue}>{calorieGoal}</Text>
-                <Text style={homeStyles.calorieSubLabel}>Goal</Text>
-              </View>
-            </View>
+              orca
+            </Text>
           </View>
+        </LinearGradient>
 
-          {/* Macro Summary Row (Fat, Carbs, Protein) */}
-          <View style={homeStyles.macroSummaryRow}>
-            {/* Fat */}
-            <View style={homeStyles.macroSummaryItem}>
-              <Text style={homeStyles.macroSummaryLabel}>Fat</Text>
-              <View style={homeStyles.macroSummaryBar}>
-                <View
-                  style={[
-                    homeStyles.macroSummaryBarFill,
-                    {
-                      width: `${Math.min(
-                        (todayNutrition.fat / (initialDetails?.fat || 1)) * 100,
-                        100
-                      )}%`,
-                      backgroundColor: "#F59E0B",
-                    },
-                  ]}
+        <ScrollView
+          style={homeStyles.body}
+          contentContainerStyle={homeStyles.contentContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor="#F47B20"
+              colors={["#F47B20"]}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+        >
+          {/* ── Calorie Card ── */}
+          <View style={homeStyles.dailySummaryCard}>
+            <View style={homeStyles.summaryHeader}>
+              <View
+                style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
+              >
+                <Image
+                  source={NUTRITION_ICONS.calories}
+                  style={{ width: 45, height: 45 }}
+                  resizeMode="contain"
                 />
-              </View>
-              <View style={homeStyles.macroSummaryDotRow}>
-                <View
-                  style={[
-                    homeStyles.macroSummaryDot,
-                    { backgroundColor: "#F59E0B" },
-                  ]}
-                />
-                <Text style={homeStyles.macroSummaryValue}>
-                  {Math.round(todayNutrition.fat)}/
-                  {Math.round(initialDetails?.fat || 0)}g
-                </Text>
+                <Text style={homeStyles.summaryTitle}>Calories</Text>
               </View>
             </View>
 
-            {/* Net Carbs */}
-            <View style={homeStyles.macroSummaryItem}>
-              <Text style={homeStyles.macroSummaryLabel}>Net Carbs</Text>
-              <View style={homeStyles.macroSummaryBar}>
-                <View
-                  style={[
-                    homeStyles.macroSummaryBarFill,
-                    {
-                      width: `${Math.min(
-                        (todayNutrition.carbs /
-                          (initialDetails?.carbs || 1)) *
+            {/* Ring */}
+            <View style={homeStyles.progressContainer}>
+              <View
+                style={[
+                  homeStyles.calorieRingOuter,
+                  { borderColor: caloriePercent > 5 ? ringColor : "#F0DED0" },
+                ]}
+              >
+                <View style={homeStyles.calorieRingInner}>
+                  <Text style={homeStyles.calorieCount}>
+                    {caloriesRemaining}
+                  </Text>
+                  <Text style={homeStyles.calorieCanEatLabel}>Can Eat</Text>
+                </View>
+              </View>
+
+              {/* Consumed / Goal */}
+              <View style={homeStyles.calorieSubRow}>
+                <View style={homeStyles.calorieSubItem}>
+                  <Text style={homeStyles.calorieSubValue}>
+                    {caloriesConsumed}
+                  </Text>
+                  <Text style={homeStyles.calorieSubLabel}>Consumed</Text>
+                </View>
+                <View style={homeStyles.calorieSubDivider} />
+                <View style={homeStyles.calorieSubItem}>
+                  <Text style={homeStyles.calorieSubValue}>{calorieGoal}</Text>
+                  <Text style={homeStyles.calorieSubLabel}>Goal</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Macro bars (Fat / Net Carbs / Protein) */}
+            <View style={homeStyles.macroSummaryRow}>
+              {/* Fat */}
+              <View style={homeStyles.macroSummaryItem}>
+                <Text style={homeStyles.macroSummaryLabel}>Fat</Text>
+                <View style={homeStyles.macroSummaryBar}>
+                  <View
+                    style={[
+                      homeStyles.macroSummaryBarFill,
+                      {
+                        width: `${Math.min(
+                          (todayNutrition.fat / (initialDetails?.fat || 1)) *
+                            100,
                           100,
-                        100
-                      )}%`,
-                      backgroundColor: "#2ECC71",
-                    },
-                  ]}
-                />
+                        )}%`,
+                        backgroundColor: "#F59E0B",
+                      },
+                    ]}
+                  />
+                </View>
+                <View style={homeStyles.macroSummaryDotRow}>
+                  <View
+                    style={[
+                      homeStyles.macroSummaryDot,
+                      { backgroundColor: "#F59E0B" },
+                    ]}
+                  />
+                  <Text style={homeStyles.macroSummaryValue}>
+                    {Math.round(todayNutrition.fat)}/
+                    {Math.round(initialDetails?.fat || 0)}g
+                  </Text>
+                </View>
               </View>
-              <View style={homeStyles.macroSummaryDotRow}>
-                <View
-                  style={[
-                    homeStyles.macroSummaryDot,
-                    { backgroundColor: "#2ECC71" },
-                  ]}
-                />
-                <Text style={homeStyles.macroSummaryValue}>
-                  {Math.round(todayNutrition.carbs)}/
-                  {Math.round(initialDetails?.carbs || 0)}g
-                </Text>
-              </View>
-            </View>
 
-            {/* Protein */}
-            <View style={homeStyles.macroSummaryItem}>
-              <Text style={homeStyles.macroSummaryLabel}>Protein</Text>
-              <View style={homeStyles.macroSummaryBar}>
-                <View
-                  style={[
-                    homeStyles.macroSummaryBarFill,
-                    {
-                      width: `${Math.min(
-                        (todayNutrition.protein /
-                          (initialDetails?.protein || 1)) *
+              {/* Net Carbs */}
+              <View style={homeStyles.macroSummaryItem}>
+                <Text style={homeStyles.macroSummaryLabel}>Net Carbs</Text>
+                <View style={homeStyles.macroSummaryBar}>
+                  <View
+                    style={[
+                      homeStyles.macroSummaryBarFill,
+                      {
+                        width: `${Math.min(
+                          (todayNutrition.carbs /
+                            (initialDetails?.carbs || 1)) *
+                            100,
                           100,
-                        100
-                      )}%`,
-                      backgroundColor: "#3B82F6",
-                    },
-                  ]}
-                />
+                        )}%`,
+                        backgroundColor: "#2ECC71",
+                      },
+                    ]}
+                  />
+                </View>
+                <View style={homeStyles.macroSummaryDotRow}>
+                  <View
+                    style={[
+                      homeStyles.macroSummaryDot,
+                      { backgroundColor: "#2ECC71" },
+                    ]}
+                  />
+                  <Text style={homeStyles.macroSummaryValue}>
+                    {Math.round(todayNutrition.carbs)}/
+                    {Math.round(initialDetails?.carbs || 0)}g
+                  </Text>
+                </View>
               </View>
-              <View style={homeStyles.macroSummaryDotRow}>
-                <View
-                  style={[
-                    homeStyles.macroSummaryDot,
-                    { backgroundColor: "#3B82F6" },
-                  ]}
-                />
-                <Text style={homeStyles.macroSummaryValue}>
-                  {Math.round(todayNutrition.protein)}/
-                  {Math.round(initialDetails?.protein || 0)}g
+
+              {/* Protein */}
+              <View style={homeStyles.macroSummaryItem}>
+                <Text style={homeStyles.macroSummaryLabel}>Protein</Text>
+                <View style={homeStyles.macroSummaryBar}>
+                  <View
+                    style={[
+                      homeStyles.macroSummaryBarFill,
+                      {
+                        width: `${Math.min(
+                          (todayNutrition.protein /
+                            (initialDetails?.protein || 1)) *
+                            100,
+                          100,
+                        )}%`,
+                        backgroundColor: "#3B82F6",
+                      },
+                    ]}
+                  />
+                </View>
+                <View style={homeStyles.macroSummaryDotRow}>
+                  <View
+                    style={[
+                      homeStyles.macroSummaryDot,
+                      { backgroundColor: "#3B82F6" },
+                    ]}
+                  />
+                  <Text style={homeStyles.macroSummaryValue}>
+                    {Math.round(todayNutrition.protein)}/
+                    {Math.round(initialDetails?.protein || 0)}g
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* ── Other Nutrients Card ── */}
+          <View style={[homeStyles.dailySummaryCard, { marginTop: 16 }]}>
+            <View style={homeStyles.macroSection}>
+              <Text style={homeStyles.macroHeader}>Other Nutrients</Text>
+              <View style={homeStyles.macroNutrients}>
+                {renderMacroCard(
+                  MACRO_CARDS_CONFIG.SUGAR.label,
+                  todayNutrition.sugar,
+                  initialDetails?.sugar || 0,
+                  MACRO_CARDS_CONFIG.SUGAR.iconKey,
+                )}
+                {renderMacroCard(
+                  MACRO_CARDS_CONFIG.SODIUM.label,
+                  todayNutrition.sodium,
+                  initialDetails?.sodium || 0,
+                  MACRO_CARDS_CONFIG.SODIUM.iconKey,
+                )}
+                {renderMacroCard(
+                  MACRO_CARDS_CONFIG.FIBER.label,
+                  todayNutrition.fiber,
+                  initialDetails?.fiber || 0,
+                  MACRO_CARDS_CONFIG.FIBER.iconKey,
+                )}
+              </View>
+            </View>
+          </View>
+
+          {/* ── Daily Log ── */}
+          <View style={homeStyles.mealHistorySection}>
+            <View style={homeStyles.sectionHeader}>
+              <Text style={homeStyles.sectionTitle}>Daily Log</Text>
+            </View>
+
+            {meals.length === 0 ? (
+              <View style={homeStyles.emptyStateContainer}>
+                <Text style={homeStyles.emptyStateIcon}>
+                  <Image
+                    style={{
+                      width: 65,
+                      height: 44,
+                    }}
+                    source={NUTRITION_ICONS.food}
+                  />
+                </Text>
+                <Text style={homeStyles.emptyStateTitle}>
+                  You haven't logged any food.
+                </Text>
+                <Text style={homeStyles.emptyStateText}>
+                  Tap the AI Scan button to track your first meal.
                 </Text>
               </View>
-            </View>
-          </View>
-        </View>
+            ) : (
+              meals.map((meal, index) => {
+                const mealKey =
+                  meal.id ??
+                  `${meal.created_at ?? "no-date"}-${meal.name ?? "meal"}-${index}`;
 
-        {/* ── Other Nutrients (Sugar, Sodium, Fiber only) ── */}
-        <View style={[homeStyles.dailySummaryCard, { marginTop: 16 }]}>
-          <View style={homeStyles.macroSection}>
-            <Text style={homeStyles.macroHeader}>Other Nutrients</Text>
-            <View style={homeStyles.macroNutrients}>
-              {renderMacroCard(
-                MACRO_CARDS_CONFIG.SUGAR.label,
-                todayNutrition.sugar,
-                initialDetails?.sugar || 0,
-                MACRO_CARDS_CONFIG.SUGAR.iconName,
-                MACRO_CARDS_CONFIG.SUGAR.iconColor,
-                MACRO_CARDS_CONFIG.SUGAR.iconBgColor,
-              )}
-              {renderMacroCard(
-                MACRO_CARDS_CONFIG.SODIUM.label,
-                todayNutrition.sodium,
-                initialDetails?.sodium || 0,
-                MACRO_CARDS_CONFIG.SODIUM.iconName,
-                MACRO_CARDS_CONFIG.SODIUM.iconColor,
-                MACRO_CARDS_CONFIG.SODIUM.iconBgColor,
-              )}
-              {renderMacroCard(
-                MACRO_CARDS_CONFIG.FIBER.label,
-                todayNutrition.fiber,
-                initialDetails?.fiber || 0,
-                MACRO_CARDS_CONFIG.FIBER.iconName,
-                MACRO_CARDS_CONFIG.FIBER.iconColor,
-                MACRO_CARDS_CONFIG.FIBER.iconBgColor,
-              )}
-            </View>
-          </View>
-        </View>
+                return (
+                  <TouchableOpacity
+                    key={mealKey}
+                    style={homeStyles.mealItem}
+                    onPress={() => handleMealPress(meal)}
+                    activeOpacity={0.75}
+                  >
+                    <View style={homeStyles.mealItemContent}>
+                      {/*
+                       * Left orange accent bar — a designer detail that
+                       * ties each meal card back to the brand orange.
+                       * Creates visual rhythm down the list.
+                       */}
+                      <View style={homeStyles.mealAccentBar} />
 
-        {/* ── Daily Log ── */}
-        <View style={homeStyles.mealHistorySection}>
-          <View style={homeStyles.sectionHeader}>
-            <Text style={homeStyles.sectionTitle}>Daily Log</Text>
-          </View>
-
-          {meals.length === 0 ? (
-            <View style={homeStyles.emptyStateContainer}>
-              <Text style={homeStyles.emptyStateIcon}>🍽️</Text>
-              <Text style={homeStyles.emptyStateTitle}>
-                You haven't logged any food.
-              </Text>
-              <Text style={homeStyles.emptyStateText}>
-                Tap the AI Scan button below to track your first meal.
-              </Text>
-            </View>
-          ) : (
-            meals.map((meal, index) => {
-              const mealKey =
-                meal.id ??
-                `${meal.created_at ?? "no-date"}-${meal.name ?? "meal"}-${index}`;
-
-              return (
-                <TouchableOpacity
-                  key={mealKey}
-                  style={homeStyles.mealItem}
-                  onPress={() => handleMealPress(meal)}
-                  activeOpacity={0.7}
-                >
-                  <View style={homeStyles.mealItemContent}>
-                    <View style={homeStyles.mealImageContainer}>
-                      {meal.meal_image ? (
-                        <Image
-                          source={{ uri: meal.meal_image }}
-                          style={homeStyles.mealImage}
-                        />
-                      ) : (
-                        <View style={homeStyles.mealPlaceholder}>
-                          <Ionicons
-                            name="restaurant"
-                            size={28}
-                            color="#9CA8B7"
+                      {/* Food image / placeholder with 3D shadow */}
+                      <View style={homeStyles.mealImageContainer}>
+                        {meal.meal_image ? (
+                          <Image
+                            source={{ uri: meal.meal_image }}
+                            style={homeStyles.mealImage}
                           />
-                        </View>
-                      )}
-                    </View>
+                        ) : (
+                          <View style={homeStyles.mealPlaceholder}>
+                            {/*
+                             * 3D icon effect: coloured icon on a warm bg
+                             * inside a rounded square with inner shadow.
+                             */}
+                            <View
+                              style={{
+                                width: 44,
+                                height: 44,
+                                borderRadius: 12,
+                                backgroundColor: "#FFF3E8",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                shadowColor: "#F47B20",
+                                shadowOffset: { width: 0, height: 3 },
+                                shadowOpacity: 0.2,
+                                shadowRadius: 6,
+                                elevation: 3,
+                              }}
+                            >
+                              <Ionicons
+                                name="restaurant"
+                                size={22}
+                                color="#F47B20"
+                              />
+                            </View>
+                          </View>
+                        )}
+                      </View>
 
-                    <View style={homeStyles.mealInfo}>
-                      <Text style={homeStyles.mealTime}>
-                        {meal.created_at
-                          ? formatFullDateTime(meal.created_at)
-                          : "Unknown time"}
-                      </Text>
-                      <Text style={homeStyles.mealName}>{meal.name}</Text>
-                      <Text style={homeStyles.mealCalories}>
-                        {Math.round(meal.calories)} kcal
-                      </Text>
-
-                      <View style={homeStyles.macrosInline}>
-                        <View style={homeStyles.macroInlineItem}>
-                          <View
-                            style={[
-                              homeStyles.macroDot,
-                              { backgroundColor: "#EF4444" },
-                            ]}
-                          />
-                          <Text style={homeStyles.macroInlineText}>
-                            {Math.round(meal.protein)}g protein
-                          </Text>
-                        </View>
-
-                        <View style={homeStyles.macroInlineItem}>
-                          <View
-                            style={[
-                              homeStyles.macroDot,
-                              { backgroundColor: "#3B82F6" },
-                            ]}
-                          />
-                          <Text style={homeStyles.macroInlineText}>
-                            {Math.round(meal.carbs)}g carbs
-                          </Text>
-                        </View>
-
-                        <View style={homeStyles.macroInlineItem}>
-                          <View
-                            style={[
-                              homeStyles.macroDot,
-                              { backgroundColor: "#F59E0B" },
-                            ]}
-                          />
-                          <Text style={homeStyles.macroInlineText}>
-                            {Math.round(meal.fat)}g fats
-                          </Text>
+                      <View style={homeStyles.mealInfo}>
+                        <Text style={homeStyles.mealTime}>
+                          {meal.created_at
+                            ? formatFullDateTime(meal.created_at)
+                            : "Unknown time"}
+                        </Text>
+                        <Text style={homeStyles.mealName}>{meal.name}</Text>
+                        <Text style={homeStyles.mealCalories}>
+                          {Math.round(meal.calories)} kcal
+                        </Text>
+                        <View style={homeStyles.macrosInline}>
+                          <View style={homeStyles.macroInlineItem}>
+                            <View
+                              style={[
+                                homeStyles.macroDot,
+                                { backgroundColor: "#EF4444" },
+                              ]}
+                            />
+                            <Text style={homeStyles.macroInlineText}>
+                              {Math.round(meal.protein)}g protein
+                            </Text>
+                          </View>
+                          <View style={homeStyles.macroInlineItem}>
+                            <View
+                              style={[
+                                homeStyles.macroDot,
+                                { backgroundColor: "#3B82F6" },
+                              ]}
+                            />
+                            <Text style={homeStyles.macroInlineText}>
+                              {Math.round(meal.carbs)}g carbs
+                            </Text>
+                          </View>
+                          <View style={homeStyles.macroInlineItem}>
+                            <View
+                              style={[
+                                homeStyles.macroDot,
+                                { backgroundColor: "#F59E0B" },
+                              ]}
+                            />
+                            <Text style={homeStyles.macroInlineText}>
+                              {Math.round(meal.fat)}g fats
+                            </Text>
+                          </View>
                         </View>
                       </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })
-          )}
-        </View>
-      </ScrollView>
-
-      {/* ── Floating AI Scan Button — sticky bottom ── */}
-      <View style={homeStyles.floatingButtonWrap}>
-        <TouchableOpacity
-          style={homeStyles.floatingAiButton}
-          onPress={handleAddMealPress}
-          activeOpacity={0.85}
-        >
-          <View style={homeStyles.floatingAiIconWrap}>
-            <Ionicons name="camera" size={22} color="#FFFFFF" />
+                  </TouchableOpacity>
+                );
+              })
+            )}
           </View>
-          <Text style={homeStyles.floatingAiText}>AI Scan</Text>
-        </TouchableOpacity>
-      </View>
+        </ScrollView>
 
-      {/* ── Modal (unchanged) ── */}
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={loadingAI ? undefined : handleModalClose}
-      >
-        <TouchableOpacity
-          style={homeStyles.modalOverlay}
-          activeOpacity={1}
-          onPress={loadingAI ? undefined : handleModalClose}
-          disabled={loadingAI}
+        {/* ── Floating AI Scan FAB — right-bottom corner ── */}
+        <View
+          style={[
+            homeStyles.floatingButtonWrap,
+            { bottom: insets.bottom > 0 ? insets.bottom + 16 : 32 },
+          ]}
+          pointerEvents="box-none"
         >
           <TouchableOpacity
-            style={homeStyles.modalContent}
-            activeOpacity={1}
-            onPress={(e) => e.stopPropagation()}
+            style={homeStyles.floatingAiButton}
+            onPress={handleAddMealPress}
+            activeOpacity={0.8}
+            accessibilityLabel="Scan meal with AI camera"
+            accessibilityRole="button"
           >
-            <View style={homeStyles.modalHandle}>
-              <View style={homeStyles.modalHandleBar} />
+            <View style={homeStyles.floatingAiIconWrap}>
+              <Ionicons name="camera" size={20} color="#FFFFFF" />
             </View>
-            <Text style={homeStyles.modalTitle}>Add Meal</Text>
-
-            <ImageExamine
-              onSuccess={handleMealSuccess}
-              onLoading={setLoadingAI}
-              onClose={handleModalClose}
-            />
-
-            <View style={homeStyles.modalButtonContainer}>
-              <TouchableOpacity
-                style={homeStyles.cancelButton}
-                onPress={handleModalClose}
-                activeOpacity={0.7}
-                disabled={loadingAI}
-              >
-                <Text style={homeStyles.cancelButtonText}>Cancel</Text>
-              </TouchableOpacity>
-            </View>
+            <Text style={homeStyles.floatingAiText}>AI Scan</Text>
           </TouchableOpacity>
-        </TouchableOpacity>
-      </Modal>
-
-      {/* ── Loading Overlay (unchanged) ── */}
-      {loadingAI && !modalVisible && (
-        <View style={homeStyles.loadingOverlay}>
-          <View style={homeStyles.loadingContainer}>
-            <ActivityIndicator size="large" color="#F5A623" />
-            <Text style={homeStyles.loadingText}>Analyzing Your Meal</Text>
-            <Text style={homeStyles.loadingSubtext}>
-              This may take a few moments...
-            </Text>
-          </View>
         </View>
-      )}
-    </SafeAreaView>
+
+        {/* ── Modal ── */}
+        <Modal
+          visible={modalVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={loadingAI ? undefined : handleModalClose}
+        >
+          <TouchableOpacity
+            style={homeStyles.modalOverlay}
+            activeOpacity={1}
+            onPress={loadingAI ? undefined : handleModalClose}
+            disabled={loadingAI}
+          >
+            <TouchableOpacity
+              style={homeStyles.modalContent}
+              activeOpacity={1}
+              onPress={(e) => e.stopPropagation()}
+            >
+              <View style={homeStyles.modalHandle}>
+                <View style={homeStyles.modalHandleBar} />
+              </View>
+              <Text style={homeStyles.modalTitle}>Add Meal</Text>
+              <ImageExamine
+                onSuccess={handleMealSuccess}
+                onLoading={setLoadingAI}
+                onClose={handleModalClose}
+              />
+              <View style={homeStyles.modalButtonContainer}>
+                <TouchableOpacity
+                  style={[
+                    imageExamineStyles.cancelButton,
+                    loadingAI && imageExamineStyles.cancelButtonDisabled,
+                  ]}
+                  onPress={handleModalClose}
+                  disabled={loadingAI}
+                >
+                  <Text
+                    style={[
+                      imageExamineStyles.cancelButtonText,
+                      loadingAI && imageExamineStyles.cancelButtonTextDisabled,
+                    ]}
+                  >
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </Modal>
+
+        {/* ── AI Loading Overlay ── */}
+        {loadingAI && !modalVisible && (
+          <View style={homeStyles.loadingOverlay}>
+            <View style={homeStyles.loadingContainer}>
+              <ActivityIndicator size="large" color="#F47B20" />
+              <Text style={homeStyles.loadingText}>Analyzing Your Meal</Text>
+              <Text style={homeStyles.loadingSubtext}>
+                This may take a few moments...
+              </Text>
+            </View>
+          </View>
+        )}
+      </SafeAreaView>
+    </View>
   );
 };
